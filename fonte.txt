@@ -4,8 +4,8 @@ PartDesign/InitGui.py|self.__class__.MenuText = "Part Design"|self.__class__.Men
 PartDesign/InitGui.py|self.__class__.ToolTip = "Part Design workbench"|self.__class__.ToolTip = "Bancada de modelagem 3D"*
 Path/InitGui.py|self.__class__.MenuText = "Path"|self.__class__.MenuText = "Usinagem"*
 Path/InitGui.py|self.__class__.ToolTip = "Path workbench"|self.__class__.ToolTip = "Bancada de usinagem"*
-Sketcher/InitGui.py|self.__class__.MenuText = "Sketcher"|self.__class__.MenuText = "Croqui"*
-Sketcher/InitGui.py|self.__class__.ToolTip = "Sketcher workbench"|self.__class__.ToolTip = "Bancada de Croqui"*
+Sketcher/InitGui.py|self.__class__.MenuText = "Sketcher"|self.__class__.MenuText = "Esboço"*
+Sketcher/InitGui.py|self.__class__.ToolTip = "Sketcher workbench"|self.__class__.ToolTip = "Bancada de Esboço"*
 Spreadsheet/InitGui.py|self.__class__.MenuText = "Spreadsheet"|self.__class__.MenuText = "Tabela"*
 Spreadsheet/InitGui.py|self.__class__.ToolTip = "Spreadsheet workbench"|self.__class__.ToolTip = "Bancada de tabela"*
 Start/InitGui.py|self.__class__.MenuText = "Start"|self.__class__.MenuText = "Inicio"*
@@ -14,8 +14,8 @@ Surface/InitGui.py|MenuText = "Surface"|MenuText = "Superficies"*
 Surface/InitGui.py|ToolTip = "Surface workbench: Create and edit complex surfaces"|ToolTip = "Crie e edite superficies"*
 TechDraw/InitGui.py|self.__class__.MenuText = "TechDraw"|self.__class__.MenuText = "Detalhamento"*
 TechDraw/InitGui.py|self.__class__.ToolTip = "Technical Drawing workbench"|self.__class__.ToolTip = "Bancada de detalhamento"*
-Robot/InitGui.py|self.__class__.MenuText = "Robot"|self.__class__.MenuText = "Robo"*
-Robot/InitGui.py|self.__class__.ToolTip = "Robot workbench"|self.__class__.ToolTip = "Bancada para simular robos"*
+Robot/InitGui.py|self.__class__.MenuText = "Robot"|self.__class__.MenuText = "Rôbo"*
+Robot/InitGui.py|self.__class__.ToolTip = "Robot workbench"|self.__class__.ToolTip = "Bancada para simular robôs"*
 A2plus/InitGui.py|self.__class__.MenuText = 'A2plus '+A2P_VERSION|self.__class__.MenuText = 'Montagem'*
 A2plus/InitGui.py|self.__class__.ToolTip  = 'An other assembly workbench for FreeCAD.'|self.__class__.ToolTip  = 'Bancada de montagem'*
 A2plus/InitGui.py|            'A2plus',|            'Montagem',*
