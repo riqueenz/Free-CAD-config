@@ -9,6 +9,7 @@ pasta_bin = pasta+'bin/'
 pasta_Mod = pasta+'Mod/'
 urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/fonte.txt', pasta+'fonte.txt')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/baixar.txt', pasta+'baixar.txt')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/macros.txt', pasta+'macros.txt')
 #Arquivos
 fonte = 'fonte.txt'
 baixar = 'baixar.txt'
