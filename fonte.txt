@@ -1,0 +1,48 @@
+Part/InitGui.py|self.__class__.MenuText = "Part"|self.__class__.MenuText = "Modelo 3D antigo"*
+Part/InitGui.py|self.__class__.ToolTip = "Part workbench"|self.__class__.ToolTip = "Bancada de modelagem 3D"*
+PartDesign/InitGui.py|self.__class__.MenuText = "Part Design"|self.__class__.MenuText = "Modelo 3D"*
+PartDesign/InitGui.py|self.__class__.ToolTip = "Part Design workbench"|self.__class__.ToolTip = "Bancada de modelagem 3D"*
+Path/InitGui.py|self.__class__.MenuText = "Path"|self.__class__.MenuText = "Usinagem"*
+Path/InitGui.py|self.__class__.ToolTip = "Path workbench"|self.__class__.ToolTip = "Bancada de usinagem"*
+Sketcher/InitGui.py|self.__class__.MenuText = "Sketcher"|self.__class__.MenuText = "Croqui"*
+Sketcher/InitGui.py|self.__class__.ToolTip = "Sketcher workbench"|self.__class__.ToolTip = "Bancada de Croqui"*
+Spreadsheet/InitGui.py|self.__class__.MenuText = "Spreadsheet"|self.__class__.MenuText = "Tabela"*
+Spreadsheet/InitGui.py|self.__class__.ToolTip = "Spreadsheet workbench"|self.__class__.ToolTip = "Bancada de tabela"*
+Start/InitGui.py|self.__class__.MenuText = "Start"|self.__class__.MenuText = "Inicio"*
+Start/InitGui.py|self.__class__.ToolTip = "Start workbench"|self.__class__.ToolTip = "Bancada inicial"*
+Surface/InitGui.py|MenuText = "Surface"|MenuText = "Superficies"*
+Surface/InitGui.py|ToolTip = "Surface workbench: Create and edit complex surfaces"|ToolTip = "Crie e edite superficies"*
+TechDraw/InitGui.py|self.__class__.MenuText = "TechDraw"|self.__class__.MenuText = "Detalhamento"*
+TechDraw/InitGui.py|self.__class__.ToolTip = "Technical Drawing workbench"|self.__class__.ToolTip = "Bancada de detalhamento"*
+Robot/InitGui.py|self.__class__.MenuText = "Robot"|self.__class__.MenuText = "Robo"*
+Robot/InitGui.py|self.__class__.ToolTip = "Robot workbench"|self.__class__.ToolTip = "Bancada para simular robos"*
+A2plus/InitGui.py|self.__class__.MenuText = 'A2plus '+A2P_VERSION|self.__class__.MenuText = 'Montagem'*
+A2plus/InitGui.py|self.__class__.ToolTip  = 'An other assembly workbench for FreeCAD.'|self.__class__.ToolTip  = 'Bancada de montagem'*
+A2plus/InitGui.py|            'A2plus',|            'Montagem',*
+A2plus/InitGui.py|            ['A2plus', 'Constraint'],|            ['Montagem', 'Restringir'],*
+A2plus/InitGui.py|            ['A2plus', 'Solver'],|            ['Montagem', 'Resolver'],*
+A2plus/InitGui.py|            ['A2plus', 'View'],|            ['Montagem', 'Visualizar'],*
+A2plus/InitGui.py|            ['A2plus', 'Misc'],|            ['Montagem', 'Outros'],*
+FCGear/freecad/gears/init_gui.py|    MenuText = "Gear"|    MenuText = "Engrenagem"*
+FCGear/freecad/gears/init_gui.py|    ToolTip = "Gear Workbench"|    ToolTip = "Bancada de engrenagem"*
+FCGear/freecad/gears/init_gui.py|        self.appendToolbar("Gear", self.commands)|        self.appendToolbar("Engrenagem", self.commands)*
+FCGear/freecad/gears/init_gui.py|        self.appendMenu("Gear", self.commands)|        self.appendMenu("Engrenagem", self.commands)*
+FCGear/freecad/gears/commands.py|    MenuText = 'Involute gear'|    MenuText = 'Engrenagem'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create an Involute gear'|    ToolTip = 'Cria uma engrenagem'*
+FCGear/freecad/gears/commands.py|    MenuText = 'Involute rack'|    MenuText = 'Cremalheira'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create an Involute rack'|    ToolTip = 'Cria uma cremalheira'*
+FCGear/freecad/gears/commands.py|    MenuText = 'Crown gear'|    MenuText = 'Engrenagem com dentes perpendiculares'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create a Crown gear'|    ToolTip = 'Criar uma engrenagem com dentes perpendiculares'*
+FCGear/freecad/gears/commands.py|    MenuText = 'Cycloide gear'|    MenuText = 'Engrenagem cicloidal'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create a Cycloide gear'|    ToolTip = 'Cria uma engrenagem cicloidal'*
+FCGear/freecad/gears/commands.py|    MenuText = 'Bevel gear'|    MenuText = 'Engrenagem conica'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create a Bevel gear'|    ToolTip = 'Cria uma engrenagem conica'*
+FCGear/freecad/gears/commands.py|    MenuText = 'Worm gear'|    MenuText = 'Parafuso de rosca sem fim'*
+FCGear/freecad/gears/commands.py|    ToolTip = 'Create a Worm gear'|    ToolTip = 'Cria um parafuso de rosca sem fim'*
+fasteners/InitGui.py|    MenuText = "Fasteners"|    MenuText = "Parafusos"*
+fasteners/InitGui.py|    ToolTip = "Create ISO Fasteners"|    ToolTip = "Criar parafusos ISO"*
+sheetmetal/InitGui.py|    MenuText = 'Sheet Metal '+SHEETMETALWB_VERSION|    MenuText = 'Chapas dobradas'*
+MOOC/InitGui.py|    ToolTip = "Learn FreeCAD"|    ToolTip = "Aprenda a usar o FreeCAD"*
+MOOC/InitGui.py|    MenuText = "MOOC"|    MenuText = "Primeiros passos"*
+MOOC/InitGui.py|        self.appendToolbar("MOOC", ["Mooc_Player", "Mooc_Grader"])|        self.appendToolbar("Primeiros passos", ["Mooc_Player", "Mooc_Grader"])*
+MOOC/InitGui.py|        self.appendMenu("MOOC", ["Mooc_Player", "Mooc_Grader"])|        self.appendMenu("Primeiros passos", ["Mooc_Player", "Mooc_Grader"])*

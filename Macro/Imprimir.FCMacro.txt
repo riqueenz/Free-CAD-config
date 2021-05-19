@@ -1,0 +1,7 @@
+# -*- coding: utf-8 -*-
+import FreeCAD
+import TechDrawGui
+Gui.Selection.addSelection(App.ActiveDocument.Name,'Page')
+__objs__=[]
+__objs__.append(FreeCAD.ActiveDocument.getObject("Page"))
+TechDrawGui.export(__objs__,u"/home/henrique/Documentos/chapa.pdf")
