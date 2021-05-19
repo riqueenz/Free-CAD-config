@@ -1,0 +1,4 @@
+https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/Macro/FCInfo.FCMacro|FCInfo.FCMacro*
+https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/Macro/FCInfoToMouse.FCMacro|FCInfoToMouse.FCMacro*
+https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/Macro/Imprimir.FCMacro|Imprimir.FCMacro*
+https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/Macro/MeasureCircle.FCMacro|MeasureCircle.FCMacro*

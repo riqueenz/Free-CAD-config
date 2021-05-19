@@ -3,10 +3,32 @@ import urllib.request
 import zipfile
 import shutil
 import os
-#Arquivos
+#Baixar arquivos
 pasta = os.getcwd()+'/'
+pasta_bin = pasta+'bin/'
+pasta_Mod = pasta+'Mod/'
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/fonte.txt', pasta+'fonte.txt')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/baixar.txt', pasta+'baixar.txt')
+#Arquivos
 fonte = 'fonte.txt'
 baixar = 'baixar.txt'
+macros = 'macros.txt'
+#Baixar as macros
+if not os.path.exists(pasta_bin+'/macros/'):
+    os.makedirs(pasta_bin+'/macros/')
+f = open(macros,'r')
+textoFonte = f.read()
+textoFonte = textoFonte.replace('\n','').split('*')
+tamanho = len(textoFonte) - 1
+x = 0
+while x<tamanho:
+	linha = textoFonte[x].split('|')
+	url = linha[0]
+	nome_macro = linha[1]
+	print('Instalando macro : '+nome_macro)
+	#Baixar as macros
+	urllib.request.urlretrieve(url, pasta_bin+'/macros/'+nome_macro)
+	x+=1
 #Baixar os mods
 f = open(baixar,'r')
 textoFonte = f.read()
@@ -17,15 +39,15 @@ while x<tamanho:
 	linha = textoFonte[x].split('|')
 	url = linha[0]
 	nomeMod = linha[1]
-	nomePasta = linha[2]
+	nomepasta_Mod = linha[2]
 	print('Instalando: '+nomeMod)
 	#Baixar os mod
-	urllib.request.urlretrieve(url, pasta+nomeMod+'.zip')
+	urllib.request.urlretrieve(url, pasta_Mod+nomeMod+'.zip')
 	#Extrair os mod
-	with zipfile.ZipFile(nomeMod+'.zip',"r") as zip_ref:
-	    zip_ref.extractall(pasta)
-	shutil.move(pasta+nomePasta, pasta+nomeMod)
-	os.remove(pasta+nomeMod+'.zip')
+	with zipfile.ZipFile(pasta_Mod+nomeMod+'.zip',"r") as zip_ref:
+	    zip_ref.extractall(pasta_Mod)
+	shutil.move(pasta_Mod+nomepasta_Mod, pasta_Mod+nomeMod)
+	os.remove(pasta_Mod+nomeMod+'.zip')
 	x+=1
 #Traduzir os arquivos dos mods
 f = open(fonte,'r')
@@ -35,7 +57,7 @@ tamanho = len(textoFonte) - 1
 x = 0
 while x<tamanho:
 	linha = textoFonte[x].split('|')
-	arquivo = pasta + linha[0]
+	arquivo = pasta_Mod + linha[0]
 	textoOriginal = linha[1]
 	textoNovo = linha[2]
 	#Lendo o arquivo
