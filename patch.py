@@ -3,10 +3,15 @@ import urllib.request
 import zipfile
 import shutil
 import os
-#Baixar arquivos
+#Definir as vars de pastas
 pasta = os.getcwd()+'/'
 pasta_bin = pasta+'bin/'
 pasta_Mod = pasta+'Mod/'
+#Baixar os arquivos de config
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/enzweiler.system.cfg', pasta+'enzweiler.system.cfg')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/enzweiler.user.cfg', pasta+'enzweiler.user.cfg')
+os.remove(pasta+'RunFreeCAD.bat')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/RunFreeCAD.bat', pasta+'RunFreeCAD.bat')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/fonte.txt', pasta+'fonte.txt')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/baixar.txt', pasta+'baixar.txt')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/riqueenz/Free-CAD-config/main/macros.txt', pasta+'macros.txt')
