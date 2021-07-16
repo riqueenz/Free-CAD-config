@@ -1,4 +1,4 @@
-https://github.com/kbwbe/A2plus/archive/master.zip|A2plus|A2plus-master*
+https://github.com/riqueenz/A2plus/archive/refs/heads/master.zip|A2plus|A2plus-master*
 https://github.com/shaise/FreeCAD_FastenersWB/archive/master.zip|fasteners|FreeCAD_FastenersWB-master*
 https://github.com/looooo/FCGear/archive/master.zip|FCGear|freecad.gears-master*
 https://github.com/jmplonka/InventorLoader/archive/master.zip|InventorLoader|InventorLoader-master*
