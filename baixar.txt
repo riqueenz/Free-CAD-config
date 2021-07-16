@@ -4,4 +4,4 @@ https://github.com/looooo/FCGear/archive/master.zip|FCGear|freecad.gears-master*
 https://github.com/jmplonka/InventorLoader/archive/master.zip|InventorLoader|InventorLoader-master*
 https://github.com/triplus/TabBar/archive/master.zip|TabBar|TabBar-master*
 https://github.com/shaise/FreeCAD_SheetMetal/archive/master.zip|sheetmetal|FreeCAD_SheetMetal-master*
-https://github.com/wood-galaxy/mooc-workbench/archive/master.zip|MOOC|mooc-workbench-master*
+https://github.com/riqueenz/mooc-workbench/archive/refs/heads/master.zip|MOOC|mooc-workbench-master*
