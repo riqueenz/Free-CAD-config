@@ -1,0 +1,142 @@
+import FreeCAD
+import os.path
+from shutil import copyfile
+
+def backupConfig():
+    userDir = FreeCAD.getUserAppDataDir()
+    src = userDir + "user.cfg"
+    des = userDir + "user_backup.cfg"
+    if(not os.path.isfile(des)):
+        copyfile(src, des)
+        print("Backup created on " + des)
+    else:
+        print("Backup already exist")
+
+def setParameter(group, parameter, value):
+    if type(value) is int:
+        if value > 255:
+            group.SetUnsigned(parameter, value)
+        else:
+            group.SetInt(parameter, value)
+    elif type(value) is float:
+        group.SetFloat(parameter, value)
+    elif type(value) is bool:
+        group.SetBool(parameter, value)
+    elif type(value) is str: 
+        group.SetString(parameter, value)
+
+dictionary = {
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/View'):
+    {
+        "BacklightColor" : 4294967295,
+        "BackgroundColor" : 336897023,
+        "BackgroundColor2" : 3857049087,
+        "BackgroundColor3" : 3469659903,
+        "BackgroundColor4" : 1869583359,
+        "HighlightColor" : 3789624575,
+        "SelectionColor" : 481107199,
+        "DefaultShapeColor" : 3435973887,
+        "DefaultShapeLineColor" : 421075455,
+        "DefaultShapeVertexColor" : 421075455,
+        "BoundingBoxColor" : 4294967295,
+        "AnnotationTextColor" : 3402287871,
+        "SketchEdgeColor" : 4294967295,
+        "SketchVertexColor" : 4294967295,
+        "EditedEdgeColor" : 5636095,
+        "EditedVertexColor" : 5636095,
+        "ConstructionColor" : 4294902015,
+        "ExternalColor" : 1442775295,
+        "InvalidSketchColor" : 4278190335,
+        "FullyConstrainedColor" : 1044266751,
+        "InternalAlignedGeoColor" : 5636095,
+        "FullyConstraintElementColor" : 1044266751,
+        "FullyConstraintConstructionElementColor" : 1044266751,
+        "FullyConstraintInternalAlignmentColor" : 1044266751,
+        "FullyConstraintConstructionPointColor" : 1044266751,
+        "ConstrainedIcoColor" : 4283760895,
+        "NonDrivingConstrDimColor" : 2555903,
+        "ConstrainedDimColor" : 4280680703,
+        "ExprBasedConstrDimColor" : 4286523135,
+        "DeactivatedConstrDimColor" : 2139062271,
+        "CursorTextColor" : 5636095,
+        "CursorCrosshairColor" : 4294967295,
+        "CreateLineColor" : 5636095,
+        "AntiAliasing" : 4,
+        "UseVBO" : True,
+
+    },
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/Mod/Part') : {"MeshDeviation" : 0.2},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/Mod/Mesh') : {"MaxDeviationExport" : 0.02},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/DockWindows/TreeView') : {"Enabled" : True},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/DockWindows/PropertyView') : {"Enabled" : False},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/DockWindows/DAGView') : {"Enabled" : False},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/DockWindows/ComboView') : {"Enabled" : False},
+    FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/DockWindows') :
+    {
+        "Std_ReportView" : False,
+        "Std_SelectionView" : False,
+        "Std_ComboView" : True,
+        "Std_PythonView" : False,
+        "Std_TreeView" : True,
+        "Std_PropertyView" : False,
+        "Std_ReportView" : False
+    },
+    FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/Toolbars') :
+    {
+        "File" : False,
+        "Workbench" : True,
+        "Macro" : False,
+        "View" : False,
+        "Structure" : True,
+        "Navigation" : False,
+        "Part Design Modeling" : True,
+        "Part Design Helper" : True,
+        "Sketcher" : True,
+        "Sketcher geometries" : True,
+        "Sketcher constraints" : True,
+        "Sketcher tools" : False,
+        "Sketcher B-spline tools" : False,
+        "Sketcher virtual space" : False
+    },
+    FreeCAD.ParamGet('User parameter:BaseApp/TabBar') :
+    {
+        "Enabled" : "SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,SurfaceWorkbench,",
+        "Orientation" : "South",
+        "Partially" : "ArchWorkbench,DraftWorkbench,DrawingWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,TestWorkbench,WebWorkbench",
+        "Position" : "SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,ArchWorkbench,DraftWorkbench,DrawingWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,SurfaceWorkbench,TestWorkbench,WebWorkbench",
+        "PrefButton" : "On",
+        "Style" : "IconText"
+    },
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/MainWindow') : {"StyleSheet" : "Light-blue.qss"},
+    FreeCAD.ParamGet('User parameter:BaseApp/Preferences/General') :
+    {
+        "AutoloadModule" : "PartDesignWorkbench",
+    }
+}
+
+# Toolbar placement left side
+# temporary excluded
+toolbar = {
+    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench') :
+    {
+        "Saved" : True,
+        "Top" : "Workbench",
+        "Left" : "Break,Structure,Part Design Helper,Break,Part Design Modeling",
+        "Right" : "",
+        "Bottom" : ""
+    },
+    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SketcherWorkbench') :
+    {
+        "Saved" : True,
+        "Top" : "Workbench,Sketcher,Sketcher tools,Sketcher B-spline tools,Sketcher virtual space",
+        "Left" : "Break,Structure,Sketcher geometries,Break,Sketcher constraints",
+        "Right" : "",
+        "Bottom" : ""
+    }
+}
+
+backupConfig()
+for group, items in dictionary.items():
+    for key in items:
+        setParameter(group, key, items[key])
+print("New parameters written")
