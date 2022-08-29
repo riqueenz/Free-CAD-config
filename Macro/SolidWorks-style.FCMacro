@@ -117,19 +117,27 @@ dictionary = {
 # Toolbar placement left side
 # temporary excluded
 toolbar = {
+    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/A2plusWorkbench') :
+    {
+        "Saved" : True,
+        "Top" : "Break,Tabs,Break,A2p_Part,A2p_Constraint,A2p_Solver,A2p_View,Break,File,A2p_Misc,A2Diagnostics,View,Macro,Structure",
+        "Left" : "",
+        "Right" : "",
+        "Bottom" : ""
+    },
     FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench') :
     {
         "Saved" : True,
-        "Top" : "Workbench",
-        "Left" : "Break,Structure,Part Design Helper,Break,Part Design Modeling",
+        "Top" : "Break,Tabs,Break,File,Structure,View,Macro,Measure,Break,Part Design Helper,Part Design Modeling",
+        "Left" : "",
         "Right" : "",
         "Bottom" : ""
     },
     FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SketcherWorkbench') :
     {
         "Saved" : True,
-        "Top" : "Workbench,Sketcher,Sketcher tools,Sketcher B-spline tools,Sketcher virtual space",
-        "Left" : "Break,Structure,Sketcher geometries,Break,Sketcher constraints",
+        "Top" : "Break,Tabs,Break,File,Sketcher,View,Break,Structure,Sketcher geometries,Sketcher constraints,Macro",
+        "Left" : "",
         "Right" : "",
         "Bottom" : ""
     }
@@ -139,4 +147,3 @@ backupConfig()
 for group, items in dictionary.items():
     for key in items:
         setParameter(group, key, items[key])
-print("New parameters written")
