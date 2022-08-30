@@ -104,26 +104,68 @@ dictionary = {
         "AutoloadModule" : "PartDesignWorkbench",
     }
 }
-
 #A2Plus
 param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/A2plusWorkbench')
-param.SetString("Top", "Break,Tabs,Break,A2p_Part,A2p_Constraint,A2p_Solver,A2p_View,Break,File,A2p_Misc,A2Diagnostics,View,Macro,Structure")
+param.SetString("Top", "Tabs,Break,File,Structure,Macro,View,Break,A2p_Part,A2p_Constraint,A2p_Misc,A2Diagnostics,A2p_Solver,Break,A2p_View")
 param.SetString("Left", "")
 param.SetString("Right", "")
-param.SetString("Bottom", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
+#MOOC
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/MoocWorkbench')
+param.SetString("Top", "Tabs,Break,File,Structure,View,Macro,Break,MOOC")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
 #PartDesign
 param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench')
 param.SetString("Top", "Break,Tabs,Break,File,View,Structure,Macro,Break,Part Design Helper,Part Design Modeling,Measure")
 param.SetString("Left", "")
 param.SetString("Right", "")
-param.SetString("Bottom", "")
+param.SetString("Bottom", "Workbench")
 param.SetBool("Saved", True)
 #Sketcher
 param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SketcherWorkbench')
-param.SetString("Top", "Break,Tabs,Break,File,Sketcher,View,Break,Structure,Sketcher geometries,Sketcher constraints,Macro")
+param.SetString("Top", "Tabs,Break,File,Structure,View,Macro,Break,Sketcher,Sketcher geometries,Sketcher constraints")
 param.SetString("Left", "")
 param.SetString("Right", "")
-param.SetString("Bottom", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
+#SheetMetal
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SMWorkbench')
+param.SetString("Top", "Tabs,Break,File,View,Macro,Structure,Break,Sheet Metal")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
+#Spreadsheet
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SpreadsheetWorkbench')
+param.SetString("Top", "Tabs,Break,File,View,Macro,Structure,Break,Spreadsheet")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
+#Surface
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SurfaceWorkbench')
+param.SetString("Top", "Tabs,Break,File,View,Macro,Structure,Break,Surface")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
+#TechDraw
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/TechDrawWorkbench')
+param.SetString("Top", "Tabs,Break,File,Structure,View,Macro,TechDraw Pages,TechDraw Views,TechDraw Clips,TechDraw Dimensions,TechDraw Attributes,TechDraw Centerlines,TechDraw Extend Dimensions,TechDraw File Access,TechDraw Decoration,Break,TechDraw Annotation")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "Workbench")
+param.SetBool("Saved", True)
 for group, items in dictionary.items():
     for key in items:
         setParameter(group, key, items[key])
+#Disable some toolbars
+param = FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/Toolbars')
+param.SetBool("File", False)
+param.SetBool("Workbench", False)
+param.SetBool("View", False)
+param.SetBool("Navigation", False)
