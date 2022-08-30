@@ -1,16 +1,5 @@
+# -*- coding: utf-8 -*-
 import FreeCAD
-import os.path
-from shutil import copyfile
-
-def backupConfig():
-    userDir = FreeCAD.getUserAppDataDir()
-    src = userDir + "user.cfg"
-    des = userDir + "user_backup.cfg"
-    if(not os.path.isfile(des)):
-        copyfile(src, des)
-        print("Backup created on " + des)
-    else:
-        print("Backup already exist")
 
 def setParameter(group, parameter, value):
     if type(value) is int:
@@ -84,7 +73,7 @@ dictionary = {
     FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/Toolbars') :
     {
         "File" : False,
-        "Workbench" : True,
+        "Workbench" : False,
         "Macro" : False,
         "View" : False,
         "Structure" : True,
@@ -96,14 +85,16 @@ dictionary = {
         "Sketcher constraints" : True,
         "Sketcher tools" : False,
         "Sketcher B-spline tools" : False,
+        "Mesure" : True,
+        "Tabs" : True,
         "Sketcher virtual space" : False
     },
     FreeCAD.ParamGet('User parameter:BaseApp/TabBar') :
     {
-        "Enabled" : "SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,SurfaceWorkbench,",
+        "Enabled" : "MoocWorkbench,SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,SMWorkbench,SurfaceWorkbench",
         "Orientation" : "South",
-        "Partially" : "ArchWorkbench,DraftWorkbench,DrawingWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,TestWorkbench,WebWorkbench",
-        "Position" : "SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,ArchWorkbench,DraftWorkbench,DrawingWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,SurfaceWorkbench,TestWorkbench,WebWorkbench",
+        "Partially" : "ArchWorkbench,DraftWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,TestWorkbench,WebWorkbench",
+        "Position" : "MoocWorkbench,SketcherWorkbench,PartDesignWorkbench,TechDrawWorkbench,A2plusWorkbench,SpreadsheetWorkbench,SMWorkbench,SurfaceWorkbench,ArchWorkbench,DraftWorkbench,FemWorkbench,ImageWorkbench,InspectionWorkbench,MeshWorkbench,NoneWorkbench,OpenSCADWorkbench,PartWorkbench,PathWorkbench,PointsWorkbench,RaytracingWorkbench,ReverseEngineeringWorkbench,RobotWorkbench,StartWorkbench,TestWorkbench,WebWorkbench",
         "PrefButton" : "On",
         "Style" : "IconText"
     },
@@ -114,36 +105,25 @@ dictionary = {
     }
 }
 
-# Toolbar placement left side
-# temporary excluded
-toolbar = {
-    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/A2plusWorkbench') :
-    {
-        "Saved" : True,
-        "Top" : "Break,Tabs,Break,A2p_Part,A2p_Constraint,A2p_Solver,A2p_View,Break,File,A2p_Misc,A2Diagnostics,View,Macro,Structure",
-        "Left" : "",
-        "Right" : "",
-        "Bottom" : ""
-    },
-    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench') :
-    {
-        "Saved" : True,
-        "Top" : "Break,Tabs,Break,File,Structure,View,Macro,Measure,Break,Part Design Helper,Part Design Modeling",
-        "Left" : "",
-        "Right" : "",
-        "Bottom" : ""
-    },
-    FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SketcherWorkbench') :
-    {
-        "Saved" : True,
-        "Top" : "Break,Tabs,Break,File,Sketcher,View,Break,Structure,Sketcher geometries,Sketcher constraints,Macro",
-        "Left" : "",
-        "Right" : "",
-        "Bottom" : ""
-    }
-}
-
-backupConfig()
+#A2Plus
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/A2plusWorkbench')
+param.SetString("Top", "Break,Tabs,Break,A2p_Part,A2p_Constraint,A2p_Solver,A2p_View,Break,File,A2p_Misc,A2Diagnostics,View,Macro,Structure")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "")
+#PartDesign
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench')
+param.SetString("Top", "Break,Tabs,Break,File,View,Structure,Macro,Break,Part Design Helper,Part Design Modeling,Measure")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "")
+param.SetBool("Saved", True)
+#Sketcher
+param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/SketcherWorkbench')
+param.SetString("Top", "Break,Tabs,Break,File,Sketcher,View,Break,Structure,Sketcher geometries,Sketcher constraints,Macro")
+param.SetString("Left", "")
+param.SetString("Right", "")
+param.SetString("Bottom", "")
 for group, items in dictionary.items():
     for key in items:
         setParameter(group, key, items[key])
