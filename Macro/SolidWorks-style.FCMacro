@@ -72,10 +72,10 @@ dictionary = {
     },
     FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/Toolbars') :
     {
-        "File" : False,
+        "File" : True,
         "Workbench" : False,
         "Macro" : False,
-        "View" : False,
+        "View" : True,
         "Structure" : True,
         "Navigation" : False,
         "Part Design Modeling" : True,
@@ -120,7 +120,7 @@ param.SetString("Bottom", "Workbench")
 param.SetBool("Saved", True)
 #PartDesign
 param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/PartDesignWorkbench')
-param.SetString("Top", "Break,Tabs,Break,File,View,Structure,Macro,Break,Part Design Helper,Part Design Modeling,Measure")
+param.SetString("Top", "Break,Tabs,Break,File,Structure,View,Break,Part Design Helper,Part Design Modeling,Measure")
 param.SetString("Left", "")
 param.SetString("Right", "")
 param.SetString("Bottom", "Workbench")
@@ -155,7 +155,7 @@ param.SetString("Bottom", "Workbench")
 param.SetBool("Saved", True)
 #TechDraw
 param = FreeCAD.ParamGet('User parameter:Tux/PersistentToolbars/User/TechDrawWorkbench')
-param.SetString("Top", "Tabs,Break,File,Structure,View,Macro,TechDraw Pages,TechDraw Views,TechDraw Clips,TechDraw Dimensions,TechDraw Attributes,TechDraw Centerlines,TechDraw Extend Dimensions,TechDraw File Access,TechDraw Decoration,Break,TechDraw Annotation")
+param.SetString("Top", "Break,Tabs,Break,File,Structure,View,Break,TechDraw Dimensions,TechDraw File Access,TechDraw Decoration,TechDraw Pages,TechDraw Annotation,TechDraw Stacking,TechDraw Views,TechDraw Clips,TechDraw Attributes,TechDraw Centerlines,TechDraw Extend Dimensions")
 param.SetString("Left", "")
 param.SetString("Right", "")
 param.SetString("Bottom", "Workbench")
