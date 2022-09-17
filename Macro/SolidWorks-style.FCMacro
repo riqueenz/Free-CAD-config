@@ -165,8 +165,9 @@ for group, items in dictionary.items():
         setParameter(group, key, items[key])
 #Disable some toolbars
 param = FreeCAD.ParamGet('User parameter:BaseApp/MainWindow/Toolbars')
-param.SetBool("File", False)
+param.SetBool("File", True)
 param.SetBool("Workbench", False)
-param.SetBool("View", False)
+param.SetBool("Macro", False)
+param.SetBool("View", True)
 param.SetBool("Navigation", False)
-param.SetBool("Structure", False)
+param.SetBool("Structure", True)
