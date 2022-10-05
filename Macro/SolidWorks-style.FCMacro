@@ -160,6 +160,9 @@ param.SetString("Left", "")
 param.SetString("Right", "")
 param.SetString("Bottom", "Workbench")
 param.SetBool("Saved", True)
+#Fasteners
+param = FreeCAD.ParamGet('User parameter:BaseApp/Preferences/Mod/Fasteners')
+param.SetInt("ScrewToolbarGroupMode", 2)
 for group, items in dictionary.items():
     for key in items:
         setParameter(group, key, items[key])
