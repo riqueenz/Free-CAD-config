@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+
+# Macro Begin: /home/henrique/snap/freecad/common/changeColor.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
+import FreeCAD
+
+# Gui.runCommand('Std_DlgMacroRecord',0)
+# Gui.Selection.addSelection('Unnamed','Furo')
+FreeCADGui.getDocument('Unnamed').getObject('Furo').ShapeColor = (1.00,0.00,0.00)
+
+# Gui.Selection.clearSelection()
+# Macro End: /home/henrique/snap/freecad/common/changeColor.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++

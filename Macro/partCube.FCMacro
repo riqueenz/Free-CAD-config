@@ -1,0 +1,32 @@
+
+
+
+
+
+
+
+# -*- coding: utf-8 -*-
+
+# Macro Begin: /home/henrique/snap/freecad/common/part.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
+import FreeCAD
+import Part
+import PartDesignGui
+
+# Gui.runCommand('Std_DlgMacroRecord',0)
+Gui.activateWorkbench("PartWorkbench")
+### Begin command Part_Box
+App.activeDocument().Label = "Bloco hidráulico"
+objectName = "Bloco_Faceado"
+App.ActiveDocument.addObject("Part::Box",objectName)
+App.ActiveDocument.getObject(objectName).Label = "Bloco Hidráulico"
+App.ActiveDocument.getObject(objectName).Length = '100.00 mm'
+App.ActiveDocument.getObject(objectName).Width = '100.00 mm'
+App.ActiveDocument.getObject(objectName).Height = '50.00 mm'
+App.ActiveDocument.recompute()
+
+objectName = "Furo"
+App.ActiveDocument.addObject("Part::Cylinder",objectName)
+App.ActiveDocument.ActiveObject.Label = "Furo de pressão"
+App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(9.00,9.00,40.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+#FreeCADGui.ActiveDocument.getObject('Furo').ShapeColor = (1.00,0.00,0.00)
+FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
