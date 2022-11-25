@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 # -*- coding: utf-8 -*-
 
 # Macro Begin: /home/henrique/snap/freecad/common/part.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -12,202 +5,19 @@ import FreeCAD
 import Part
 import PartDesignGui
 
-P101_Lado_1_Z = 50.00
-P102_Lado_1_X = 100.00
-P103_Lado_1_Y = 100.00
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
 
-App.newDocument()
-#App.activeDocument().addObject( 'PartDesign::CoordinateSystem', 'Lado_1' )
-#App.ActiveDocument.ActiveObject.Placement = App.Placement(App.Vector(0.00,0.00,P101_Lado_1_Z),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
-
-pastaPlanilhas = App.activeDocument().addObject('App::DocumentObjectGroup','Planilhas')
-
-planilhaSubProgramas = App.activeDocument().addObject('Spreadsheet::Sheet','Sub_programas')
-pastaPlanilhas.addObject(planilhaSubProgramas)
-planilhaSubProgramas.setColumnWidth('A',50)
-planilhaSubProgramas.setColumnWidth('B',300)
-planilhaSubProgramas.set('B1','INICIO DO BLOCO HIDRÁULICO')
-planilhaSubProgramas.set('B2','TROCA DE FERRAMENTA')
-planilhaSubProgramas.set('B3','APROXIMAR DO FURO')
-planilhaSubProgramas.set('B4','LIGAR REFRIGERAÇÃO')
-planilhaSubProgramas.set('B5','SAIR DO FURO')
-planilhaSubProgramas.set('B6','DESLIGAR REFRIGERAÇÃO')
-planilhaSubProgramas.set('A7','SUB 1')
-planilhaSubProgramas.set('B7','VERIFICAR K NA TABELA DE FERRAMENTAS')
-planilhaSubProgramas.set('A8','SUB 2')
-planilhaSubProgramas.set('B8','TROCAR LADO BLOCO HIDRAULICO')
-planilhaSubProgramas.set('A9','SUB 3')
-planilhaSubProgramas.set('B9','PICA-PAU SEM RETORNO')
-planilhaSubProgramas.set('A10','SUB 4')
-planilhaSubProgramas.set('B10','PICA-PAU COM RETORNO A Z2')
-planilhaSubProgramas.set('B11','FIM DO BLOCO HIDRÁULICO')
-planilhaSubProgramas.recompute()
-
-planilhaFerramentas = App.activeDocument().addObject('Spreadsheet::Sheet','Ferramentas')
-planilhaFerramentas.Label = "Ferramentas"
-planilhaFerramentas.setAlignment('A1:F25', 'center', 'keep')
-planilhaFerramentas.setAlignment('A1:F25', 'vcenter', 'keep')
-planilhaFerramentas.setBackground('A1:F1', (0.752941,0.752941,0.752941,1.000000))
-planilhaFerramentas.set('A1', 'T')
-planilhaFerramentas.set('B1', 'Ferramenta')
-planilhaFerramentas.mergeCells('C1:D1')
-planilhaFerramentas.set('C1', 'S')
-planilhaFerramentas.mergeCells('E1:F1')
-planilhaFerramentas.set('E1', 'F')
-planilhaFerramentas.setColumnWidth('A',30)
-planilhaFerramentas.setColumnWidth('B',200)
-planilhaFerramentas.setColumnWidth('C',30)
-planilhaFerramentas.setColumnWidth('D',30)
-planilhaFerramentas.setColumnWidth('E',30)
-planilhaFerramentas.setColumnWidth('F',30)
-planilhaFerramentas.set('C2:C25','S')
-planilhaFerramentas.set('E2:E25','F')
-x = 1
-while x<25:
-    planilhaFerramentas.set('A'+str(x+1), str(x))
-    x += 1
-planilhaFerramentas.recompute()
-pastaPlanilhas.addObject(planilhaFerramentas)
-
-planilhaProgramaCNC = App.activeDocument().addObject('Spreadsheet::Sheet','Programa_CNC')
-planilhaProgramaCNC.Label = "Programa CNC"
-pastaPlanilhas.addObject(planilhaProgramaCNC)
-planilhaProgramaCNC.setColumnWidth('A',50)
-planilhaProgramaCNC.setColumnWidth('B',30)
-planilhaProgramaCNC.setColumnWidth('C',30)
-planilhaProgramaCNC.setColumnWidth('D',30)
-planilhaProgramaCNC.setColumnWidth('E',200)
-planilhaProgramaCNC.setColumnWidth('F',30)
-planilhaProgramaCNC.setColumnWidth('G',40)
-planilhaProgramaCNC.setColumnWidth('H',30)
-planilhaProgramaCNC.setColumnWidth('I',50)
-planilhaProgramaCNC.setColumnWidth('J',30)
-planilhaProgramaCNC.setColumnWidth('K',40)
-planilhaProgramaCNC.setColumnWidth('L',30)
-planilhaProgramaCNC.setColumnWidth('M',50)
-planilhaProgramaCNC.setColumnWidth('N',30)
-planilhaProgramaCNC.setColumnWidth('O',40)
-planilhaProgramaCNC.setColumnWidth('P',30)
-planilhaProgramaCNC.setColumnWidth('Q',50)
-planilhaProgramaCNC.setColumnWidth('R',200)
-planilhaProgramaCNC.setAlignment('A1:R100', 'center', 'keep')
-planilhaProgramaCNC.setAlignment('A1:R100', 'vcenter', 'keep')
-planilhaProgramaCNC.setBackground('A2:R2', (0.752941,0.752941,0.752941,1.000000))
-planilhaProgramaCNC.setAlignment('A3:A30', 'right', 'keep')
-planilhaProgramaCNC.setAlignment('C3:C30', 'right', 'keep')
-planilhaProgramaCNC.setAlignment('D3:D30', 'left', 'keep')
-planilhaProgramaCNC.mergeCells('A1:D1')
-planilhaProgramaCNC.setAlias('A1', 'numPrograma')
-planilhaProgramaCNC.set('numPrograma', '1000')
-planilhaProgramaCNC.setAlias('E1', 'nomePrograma')
-planilhaProgramaCNC.set('nomePrograma', 'Nome do programa')
-planilhaProgramaCNC.mergeCells('A2:B2')
-planilhaProgramaCNC.mergeCells('C2:D2')
-planilhaProgramaCNC.mergeCells('F1:G1')
-planilhaProgramaCNC.mergeCells('F2:G2')
-planilhaProgramaCNC.mergeCells('H1:I1')
-planilhaProgramaCNC.setDisplayUnit('H1:I1', 'mm')
-planilhaProgramaCNC.setAlias('H1', 'Z_P101')
-planilhaProgramaCNC.mergeCells('H2:I2')
-planilhaProgramaCNC.mergeCells('J1:K1')
-planilhaProgramaCNC.setDisplayUnit('L1:K1', 'mm')
-planilhaProgramaCNC.setAlias('L1', 'X_P102')
-planilhaProgramaCNC.mergeCells('J2:K2')
-planilhaProgramaCNC.mergeCells('L1:M1')
-planilhaProgramaCNC.mergeCells('L2:M2')
-planilhaProgramaCNC.mergeCells('N1:O1')
-planilhaProgramaCNC.mergeCells('N2:O2')
-planilhaProgramaCNC.mergeCells('P1:Q1')
-planilhaProgramaCNC.setDisplayUnit('P1:Q1', 'mm')
-planilhaProgramaCNC.setAlias('P1', 'Y_P103')
-planilhaProgramaCNC.mergeCells('P2:Q2')
-planilhaProgramaCNC.set('A2:A30','Lado')
-planilhaProgramaCNC.set('C3:C30','- T')
-planilhaProgramaCNC.set('F3:F30','S')
-planilhaProgramaCNC.set('H3:H30','F')
-planilhaProgramaCNC.set('J3:J30','X+')
-planilhaProgramaCNC.set('L3:L30','Y')
-planilhaProgramaCNC.set('N3:N30','Zi')
-planilhaProgramaCNC.set('P3:P30','Zf')
-planilhaProgramaCNC.set('C2','T')
-planilhaProgramaCNC.set('E2','Descrição Ferramenta')
-planilhaProgramaCNC.set('G2','S')
-planilhaProgramaCNC.set('I2','F')
-planilhaProgramaCNC.set('J2','X')
-planilhaProgramaCNC.set('L2','Y')
-planilhaProgramaCNC.set('N2','Zi')
-planilhaProgramaCNC.set('P2','Zf')
-planilhaProgramaCNC.set('R2','Sub-programa')
-planilhaProgramaCNC.set('F1','Z P101 =')
-planilhaProgramaCNC.set('J1','X P102 =')
-planilhaProgramaCNC.set('N1','Y P103 =')
-planilhaProgramaCNC.recompute()
-
-#App.ActiveDocument.getObject('Sub_programas').ViewObject.doubleClicked()
-#App.ActiveDocument.getObject('Ferramentas').ViewObject.doubleClicked()
-#App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
-App.activeDocument().recompute(None,True,True)
-
-##################################################################################
-planilhaProgramaCNC.set('Z_P101', '97.00')
-planilhaProgramaCNC.set('X_P102', '100.00')
-planilhaProgramaCNC.set('Y_P103', '100.00')
-
-linha = 3
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'INICIO DO BLOCO HIDRÁULICO')
-
-linha = 4
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'APROXIMAR DO FURO')
-
-linha = 5
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'LIGAR REFRIGERAÇÃO')
-
-linha = 6
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '0')
-planilhaProgramaCNC.set('Q'+str(linha), '-25')
-planilhaProgramaCNC.set('R'+str(linha), 'PICA-PAU SEM RETORNO')
-planilhaProgramaCNC.recompute()
-##################################################################################
-
+print("lendo..")
 P101_Lado_1_Z = planilhaProgramaCNC.get('Z_P101')
 P102_Lado_1_X = planilhaProgramaCNC.get('X_P102')
 P103_Lado_1_Y = planilhaProgramaCNC.get('Y_P103')
 
+print(P101_Lado_1_Z)
+print(P102_Lado_1_X)
+print(P103_Lado_1_Y)
+
 Gui.activateWorkbench("PartWorkbench")
+'''
 App.activeDocument().Label = "Bloco hidráulico"
 objectName = "Bloco_Faceado"
 App.ActiveDocument.addObject("Part::Box",objectName)
@@ -218,8 +28,7 @@ App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
 App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
 App.ActiveDocument.recompute()
 
-objectName = "Furo"
-print(objectName)
+'''
 x = 6
 X = planilhaProgramaCNC.get('K'+str(x))
 print(X)
@@ -229,15 +38,29 @@ Zi = planilhaProgramaCNC.get('O'+str(x))
 print(Zi)
 Zf = planilhaProgramaCNC.get('Q'+str(x))
 print(Zf)
-App.ActiveDocument.addObject("Part::Cylinder",objectName)
-App.ActiveDocument.ActiveObject.Label = "Furo de pressão"
-App.ActiveDocument.getObject(objectName).Radius = '4.00 mm'
-App.ActiveDocument.getObject(objectName).Height = Zi - Zf
-X_Furo = X
-Y_Furo = Y
-Z_Furo = P101_Lado_1_Z + Zf
-App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
-FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+
+def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf):
+    objectName = "Furo" + str(numFuro)
+    print(objectName)
+    print("Lado = " + str(lado))
+    print("X = " + str(X))
+    print("Y = " + str(Y))
+    print("Zi = " + str(Zi))
+    print("Zf = " + str(Zf))
+    App.ActiveDocument.addObject("Part::Cylinder",objectName)
+    App.ActiveDocument.ActiveObject.Label = "Furo Ø" + str(diam)
+    App.ActiveDocument.getObject(objectName).Radius = diam/2
+    App.ActiveDocument.getObject(objectName).Height = Zi - Zf
+    X_Furo = X
+    Y_Furo = Y
+    Z_Furo = P101_Lado_1_Z + Zf
+    App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+    App.ActiveDocument.recompute()
+modelarFuro(1, 3, 8.0, 25,-67, Zi, Zf)
+modelarFuro(2, 3, 5.0, 55,-67, Zi, Zf)
+modelarFuro(3, 3, 5.0, 55,-17, Zi, Zf)
+'''
 
 App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
 App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
@@ -247,4 +70,4 @@ App.ActiveDocument.recompute()
 Gui.activeDocument().activeView().viewDefaultOrientation('Trimetric',0)
 Gui.SendMsgToActiveView("ViewFit")
 
-App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
+App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()'''

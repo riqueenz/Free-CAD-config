@@ -1,0 +1,6 @@
+#App.activeDocument().getObject('Programa_CNC')
+print("Here")
+print(App.activeDocument().getObject('Programa_CNC').get('A1'))
+print(App.activeDocument().getObject('Programa_CNC').get('E1'))
+print(App.activeDocument().getObject('Programa_CNC').get('F1'))
+print(App.activeDocument().getObject('Programa_CNC').get('H1'))
