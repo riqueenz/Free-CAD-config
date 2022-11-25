@@ -64,7 +64,6 @@ planilhaFerramentas.set('C2:C25','S')
 planilhaFerramentas.set('E2:E25','F')
 x = 1
 while x<25:
-    print(x)
     planilhaFerramentas.set('A'+str(x+1), str(x))
     x += 1
 planilhaFerramentas.recompute()
@@ -81,15 +80,15 @@ planilhaProgramaCNC.setColumnWidth('E',200)
 planilhaProgramaCNC.setColumnWidth('F',30)
 planilhaProgramaCNC.setColumnWidth('G',40)
 planilhaProgramaCNC.setColumnWidth('H',30)
-planilhaProgramaCNC.setColumnWidth('I',40)
+planilhaProgramaCNC.setColumnWidth('I',50)
 planilhaProgramaCNC.setColumnWidth('J',30)
 planilhaProgramaCNC.setColumnWidth('K',40)
 planilhaProgramaCNC.setColumnWidth('L',30)
-planilhaProgramaCNC.setColumnWidth('M',40)
+planilhaProgramaCNC.setColumnWidth('M',50)
 planilhaProgramaCNC.setColumnWidth('N',30)
 planilhaProgramaCNC.setColumnWidth('O',40)
 planilhaProgramaCNC.setColumnWidth('P',30)
-planilhaProgramaCNC.setColumnWidth('Q',40)
+planilhaProgramaCNC.setColumnWidth('Q',50)
 planilhaProgramaCNC.setColumnWidth('R',200)
 planilhaProgramaCNC.setAlignment('A1:R100', 'center', 'keep')
 planilhaProgramaCNC.setAlignment('A1:R100', 'vcenter', 'keep')
@@ -150,3 +149,102 @@ planilhaProgramaCNC.recompute()
 App.activeDocument().recompute(None,True,True)
 
 ##################################################################################
+planilhaProgramaCNC.set('Z_P101', '97.00')
+planilhaProgramaCNC.set('X_P102', '100.00')
+planilhaProgramaCNC.set('Y_P103', '100.00')
+
+linha = 3
+planilhaProgramaCNC.set('B'+str(linha), '5')
+planilhaProgramaCNC.set('D'+str(linha), '21')
+planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
+planilhaProgramaCNC.set('G'+str(linha), '1500')
+planilhaProgramaCNC.set('I'+str(linha), '1500')
+planilhaProgramaCNC.set('K'+str(linha), '25')
+planilhaProgramaCNC.set('M'+str(linha), '-67')
+planilhaProgramaCNC.set('O'+str(linha), '30')
+planilhaProgramaCNC.set('Q'+str(linha), '2')
+planilhaProgramaCNC.set('R'+str(linha), 'INICIO DO BLOCO HIDRÁULICO')
+
+linha = 4
+planilhaProgramaCNC.set('B'+str(linha), '5')
+planilhaProgramaCNC.set('D'+str(linha), '21')
+planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
+planilhaProgramaCNC.set('G'+str(linha), '1500')
+planilhaProgramaCNC.set('I'+str(linha), '1500')
+planilhaProgramaCNC.set('K'+str(linha), '25')
+planilhaProgramaCNC.set('M'+str(linha), '-67')
+planilhaProgramaCNC.set('O'+str(linha), '30')
+planilhaProgramaCNC.set('Q'+str(linha), '2')
+planilhaProgramaCNC.set('R'+str(linha), 'APROXIMAR DO FURO')
+
+linha = 5
+planilhaProgramaCNC.set('B'+str(linha), '5')
+planilhaProgramaCNC.set('D'+str(linha), '21')
+planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
+planilhaProgramaCNC.set('G'+str(linha), '1500')
+planilhaProgramaCNC.set('I'+str(linha), '1500')
+planilhaProgramaCNC.set('K'+str(linha), '25')
+planilhaProgramaCNC.set('M'+str(linha), '-67')
+planilhaProgramaCNC.set('O'+str(linha), '30')
+planilhaProgramaCNC.set('Q'+str(linha), '2')
+planilhaProgramaCNC.set('R'+str(linha), 'LIGAR REFRIGERAÇÃO')
+
+linha = 6
+planilhaProgramaCNC.set('B'+str(linha), '5')
+planilhaProgramaCNC.set('D'+str(linha), '21')
+planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
+planilhaProgramaCNC.set('G'+str(linha), '1500')
+planilhaProgramaCNC.set('I'+str(linha), '1500')
+planilhaProgramaCNC.set('K'+str(linha), '25')
+planilhaProgramaCNC.set('M'+str(linha), '-67')
+planilhaProgramaCNC.set('O'+str(linha), '0')
+planilhaProgramaCNC.set('Q'+str(linha), '-25')
+planilhaProgramaCNC.set('R'+str(linha), 'PICA-PAU SEM RETORNO')
+planilhaProgramaCNC.recompute()
+##################################################################################
+
+P101_Lado_1_Z = planilhaProgramaCNC.get('Z_P101')
+P102_Lado_1_X = planilhaProgramaCNC.get('X_P102')
+P103_Lado_1_Y = planilhaProgramaCNC.get('Y_P103')
+
+Gui.activateWorkbench("PartWorkbench")
+App.activeDocument().Label = "Bloco hidráulico"
+objectName = "Bloco_Faceado"
+App.ActiveDocument.addObject("Part::Box",objectName)
+App.ActiveDocument.getObject(objectName).Label = "Bloco Maciço"
+App.ActiveDocument.getObject(objectName).Length = P102_Lado_1_X
+App.ActiveDocument.getObject(objectName).Width = P103_Lado_1_Y
+App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
+App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+App.ActiveDocument.recompute()
+
+objectName = "Furo"
+print(objectName)
+x = 6
+X = planilhaProgramaCNC.get('K'+str(x))
+print(X)
+Y = planilhaProgramaCNC.get('M'+str(x))
+print(Y)
+Zi = planilhaProgramaCNC.get('O'+str(x))
+print(Zi)
+Zf = planilhaProgramaCNC.get('Q'+str(x))
+print(Zf)
+App.ActiveDocument.addObject("Part::Cylinder",objectName)
+App.ActiveDocument.ActiveObject.Label = "Furo de pressão"
+App.ActiveDocument.getObject(objectName).Radius = '4.00 mm'
+App.ActiveDocument.getObject(objectName).Height = Zi - Zf
+X_Furo = X
+Y_Furo = Y
+Z_Furo = P101_Lado_1_Z + Zf
+App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+
+App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
+App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
+App.activeDocument().Bloco_Hidraulico.Tool = App.activeDocument().Furo
+FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewDefaultOrientation('Trimetric',0)
+Gui.SendMsgToActiveView("ViewFit")
+
+App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
