@@ -5,69 +5,156 @@ import FreeCAD
 import Part
 import PartDesignGui
 
-planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
-
-print("lendo..")
-P101_Lado_1_Z = planilhaProgramaCNC.get('Z_P101')
-P102_Lado_1_X = planilhaProgramaCNC.get('X_P102')
-P103_Lado_1_Y = planilhaProgramaCNC.get('Y_P103')
-
-print(P101_Lado_1_Z)
-print(P102_Lado_1_X)
-print(P103_Lado_1_Y)
+print(" ")
+print("----------")
 
 Gui.activateWorkbench("PartWorkbench")
-'''
-App.activeDocument().Label = "Bloco hidráulico"
-objectName = "Bloco_Faceado"
-App.ActiveDocument.addObject("Part::Box",objectName)
-App.ActiveDocument.getObject(objectName).Label = "Bloco Maciço"
-App.ActiveDocument.getObject(objectName).Length = P102_Lado_1_X
-App.ActiveDocument.getObject(objectName).Width = P103_Lado_1_Y
-App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
-App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
-App.ActiveDocument.recompute()
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
 
-'''
-x = 6
-X = planilhaProgramaCNC.get('K'+str(x))
-print(X)
-Y = planilhaProgramaCNC.get('M'+str(x))
-print(Y)
-Zi = planilhaProgramaCNC.get('O'+str(x))
-print(Zi)
-Zf = planilhaProgramaCNC.get('Q'+str(x))
-print(Zf)
+def lerTamanhoBloco():
+    planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+    P101_Lado_1_Z = planilhaProgramaCNC.get('Z_P101')
+    P102_Lado_1_X = planilhaProgramaCNC.get('X_P102')
+    P103_Lado_1_Y = planilhaProgramaCNC.get('Y_P103')
+    print(" ")
+    print("Lendo tamanho do bloco")
+    print('P101 = '+str(P101_Lado_1_Z))
+    print('P102 = '+str(P102_Lado_1_X))
+    print('P103 = '+str(P103_Lado_1_Y))
+    return P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y
 
-def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf):
+def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    App.activeDocument().Label = "Bloco hidráulico"
+    objectName = "Bloco_Faceado"
+    App.ActiveDocument.addObject("Part::Box",objectName)
+    App.ActiveDocument.getObject(objectName).Label = "Bloco Maciço"
+    App.ActiveDocument.getObject(objectName).Length = P102_Lado_1_X
+    App.ActiveDocument.getObject(objectName).Width = P103_Lado_1_Y
+    App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
+    App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    FreeCADGui.ActiveDocument.getObject(objectName).Transparency = 70
+    App.ActiveDocument.recompute()
+
+def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     objectName = "Furo" + str(numFuro)
-    print(objectName)
+    print(" ")
+    print("Fazendo " + str(objectName))
     print("Lado = " + str(lado))
     print("X = " + str(X))
     print("Y = " + str(Y))
     print("Zi = " + str(Zi))
     print("Zf = " + str(Zf))
     App.ActiveDocument.addObject("Part::Cylinder",objectName)
-    App.ActiveDocument.ActiveObject.Label = "Furo Ø" + str(diam)
+    App.ActiveDocument.ActiveObject.Label = str(numFuro) + " - Furo Ø" + str(diam) + " - " + str(sub)
     App.ActiveDocument.getObject(objectName).Radius = diam/2
     App.ActiveDocument.getObject(objectName).Height = Zi - Zf
-    X_Furo = X
-    Y_Furo = Y
-    Z_Furo = P101_Lado_1_Z + Zf
-    App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
-    FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+    if lado == 1:
+        X_Furo = X
+        Y_Furo = -Y-P103_Lado_1_Y
+        Z_Furo = -Zi
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    elif lado == 2:
+        X_Furo = X
+        Y_Furo = -Zf-P103_Lado_1_Y
+        Z_Furo = P101_Lado_1_Z + Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+    elif lado == 3:
+        X_Furo = X
+        Y_Furo = Y
+        Z_Furo = P101_Lado_1_Z + Zf
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    elif lado == 4:
+        X_Furo = X
+        Y_Furo = Zi
+        Z_Furo = -Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+    elif lado == 5:
+        X_Furo = -Zi
+        Y_Furo = -P103_Lado_1_Y + X
+        Z_Furo = -Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+    elif lado == 6:
+        X_Furo = P102_Lado_1_X + Zf
+        Y_Furo = -P103_Lado_1_Y + X
+        Z_Furo = P101_Lado_1_Z + Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+    if L=="P":
+        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+    elif L=="T":
+        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,1.00,0.00)
+    elif L=="A":
+        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,1.00,0.00)
+    elif L=="B":
+        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,0.00,1.00)
     App.ActiveDocument.recompute()
-modelarFuro(1, 3, 8.0, 25,-67, Zi, Zf)
-modelarFuro(2, 3, 5.0, 55,-67, Zi, Zf)
-modelarFuro(3, 3, 5.0, 55,-17, Zi, Zf)
-'''
 
+def lerLinha(x):
+    Lado = planilhaProgramaCNC.get('B'+str(x))
+    T = planilhaProgramaCNC.get('D'+str(x))
+    descFerr = planilhaProgramaCNC.get('E'+str(x))
+    diam = planilhaProgramaCNC.get('F'+str(x))
+    S = planilhaProgramaCNC.get('H'+str(x))
+    F = planilhaProgramaCNC.get('J'+str(x))
+    X = planilhaProgramaCNC.get('L'+str(x))
+    Y = planilhaProgramaCNC.get('N'+str(x))
+    Zi = planilhaProgramaCNC.get('P'+str(x))
+    Zf = planilhaProgramaCNC.get('R'+str(x))
+    sub = planilhaProgramaCNC.get('S'+str(x))
+    L = planilhaProgramaCNC.get('T'+str(x))
+    print(" ")
+    print("Lendo linha " + str(x))
+    #print('Lado = '+str(Lado))
+    #print('T = '+str(T))
+    #print('descFerr = '+str(descFerr))
+    #print('diam = '+str(diam))
+    #print('S = '+str(S))
+    #print('F = '+str(F))
+    #print('X = '+str(X))
+    #print('Y = '+str(Y))
+    #print('Zi = '+str(Zi))
+    #print('Zf = '+str(Zf))
+    #print('sub = '+str(sub))
+    #print('L = '+str(L))
+    return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L
+
+#Iniciar programa
+P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
+modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+linhaAtual = 3
+Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L = lerLinha(3)
+
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L = lerLinha(linhaAtual)  
+    print(sub)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        print("INICIO DO BLOCO HIDRÁULICO OK")
+    elif sub == "TROCA DE FERRAMENTA":
+        print("TROCA DE FERRAMENTA OK")
+    elif sub == "APROXIMAR DO FURO":
+        print("APROXIMAR DO FURO OK")
+    elif sub == "LIGAR REFRIGERAÇÃO":
+        print("LIGAR REFRIGERAÇÃO OK")
+    elif sub == "SAIR DO FURO":
+        print("SAIR DO FURO OK")
+    elif sub == "DESLIGAR REFRIGERAÇÃO":
+        print("DESLIGAR REFRIGERAÇÃO OK")
+    elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        print("TROCAR LADO BLOCO HIDRAULICO OK")
+    elif sub == "PICA-PAU SEM RETORNO":
+        print("PICA-PAU SEM RETORNO OK")
+        modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+    elif sub == "PICA-PAU COM RETORNO A Z2":
+        print("PICA-PAU COM RETORNO A Z2 OK")
+        modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+    linhaAtual += 1
+#modelarFuro(1, Lado, 8.0, X, Y, Zi, Zf, sub, L)
+
+'''
 App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
 App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
 App.activeDocument().Bloco_Hidraulico.Tool = App.activeDocument().Furo
-FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90
+FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90'''
 App.ActiveDocument.recompute()
-Gui.activeDocument().activeView().viewDefaultOrientation('Trimetric',0)
 Gui.SendMsgToActiveView("ViewFit")
 
-App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()'''
+#App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()

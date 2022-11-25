@@ -9,53 +9,108 @@ import PartDesignGui
 
 print("preenchendo..")
 planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
-linha = 3
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'INICIO DO BLOCO HIDRÁULICO')
+def tabela(linha, lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L):
+    planilhaProgramaCNC.set('B'+str(linha), str(lado))
+    planilhaProgramaCNC.set('D'+str(linha), str(T))
+    planilhaProgramaCNC.set('E'+str(linha), str(descFerr))
+    planilhaProgramaCNC.set('F'+str(linha), str(diam))
+    planilhaProgramaCNC.set('H'+str(linha), str(S))
+    planilhaProgramaCNC.set('J'+str(linha), str(F))
+    planilhaProgramaCNC.set('L'+str(linha), str(X))
+    planilhaProgramaCNC.set('N'+str(linha), str(Y))
+    planilhaProgramaCNC.set('P'+str(linha), str(Zi))
+    planilhaProgramaCNC.set('R'+str(linha), str(Zf))
+    planilhaProgramaCNC.set('S'+str(linha), str(sub))
+    planilhaProgramaCNC.set('T'+str(linha), str(L))
+x = 3
+Lado = 3
+T = 21
+diam = 12
+X = 25
+Y = -67
+Zsr = -30
+Zcr = -40
+L = 'P'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'INICIO DO BLOCO HIDRÁULICO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+x+=1
 
-linha = 4
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'APROXIMAR DO FURO')
+T = 17
+diam = 8
+X = 50
+Y = -20
+L = 'T'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCA DE FERRAMENTA', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+x+=1
 
-linha = 5
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '30')
-planilhaProgramaCNC.set('Q'+str(linha), '2')
-planilhaProgramaCNC.set('R'+str(linha), 'LIGAR REFRIGERAÇÃO')
+T = 17
+diam = 12
+X = 50
+Y = -40
+L = 'A'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
 
-linha = 6
-planilhaProgramaCNC.set('B'+str(linha), '5')
-planilhaProgramaCNC.set('D'+str(linha), '21')
-planilhaProgramaCNC.set('E'+str(linha), 'BROCA 11.5 METAL DURO')
-planilhaProgramaCNC.set('G'+str(linha), '1500')
-planilhaProgramaCNC.set('I'+str(linha), '1500')
-planilhaProgramaCNC.set('K'+str(linha), '25')
-planilhaProgramaCNC.set('M'+str(linha), '-67')
-planilhaProgramaCNC.set('O'+str(linha), '0')
-planilhaProgramaCNC.set('Q'+str(linha), '-25')
-planilhaProgramaCNC.set('R'+str(linha), 'PICA-PAU SEM RETORNO')
+Lado = 4
+T = 17
+diam = 12
+X = 10
+Y = -10
+L = 'B'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCAR LADO BLOCO HIDRAULICO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+x+=1
+
+T = 17
+diam = 12
+X = 50
+Y = -40
+L = 'P'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'FIM DO BLOCO HIDRÁULICO', L)
 planilhaProgramaCNC.recompute()
 
 #App.ActiveDocument.getObject('Sub_programas').ViewObject.doubleClicked()
