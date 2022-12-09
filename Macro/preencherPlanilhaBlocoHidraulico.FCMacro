@@ -9,7 +9,11 @@ import PartDesignGui
 
 print("preenchendo..")
 planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
-def tabela(linha, lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L):
+planilhaProgramaCNC.set('nomePrograma', "Teste") 
+planilhaProgramaCNC.set('Z_P101', "100")
+planilhaProgramaCNC.set('X_P102', "100")
+planilhaProgramaCNC.set('Y_P103', "100")
+def tabela(linha, lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, var_X, var_Y, var_Zi, var_Zf,):
     planilhaProgramaCNC.set('B'+str(linha), str(lado))
     planilhaProgramaCNC.set('D'+str(linha), str(T))
     planilhaProgramaCNC.set('E'+str(linha), str(descFerr))
@@ -22,6 +26,10 @@ def tabela(linha, lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L):
     planilhaProgramaCNC.set('R'+str(linha), str(Zf))
     planilhaProgramaCNC.set('S'+str(linha), str(sub))
     planilhaProgramaCNC.set('T'+str(linha), str(L))
+    planilhaProgramaCNC.set('U'+str(linha), str(var_X))
+    planilhaProgramaCNC.set('V'+str(linha), str(var_Y))
+    planilhaProgramaCNC.set('X'+str(linha), str(var_Zi))
+    planilhaProgramaCNC.set('W'+str(linha), str(var_Zf))
 x = 3
 Lado = 3
 T = 21
@@ -31,17 +39,17 @@ Y = -67
 Zsr = -30
 Zcr = -40
 L = 'P'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'INICIO DO BLOCO HIDRÁULICO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'INICIO DO BLOCO HIDRÁULICO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
 x+=1
 
 T = 17
@@ -49,17 +57,13 @@ diam = 8
 X = 50
 Y = -20
 L = 'T'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCA DE FERRAMENTA', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
-x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
-x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
 x+=1
 
 T = 17
@@ -67,15 +71,14 @@ diam = 12
 X = 50
 Y = -40
 L = 'A'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
 
 Lado = 4
 T = 17
@@ -83,17 +86,17 @@ diam = 12
 X = 10
 Y = -10
 L = 'B'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCAR LADO BLOCO HIDRAULICO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCAR LADO BLOCO HIDRAULICO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
 x+=1
 
 T = 17
@@ -101,16 +104,15 @@ diam = 12
 X = 50
 Y = -40
 L = 'P'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L)
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'FIM DO BLOCO HIDRÁULICO', L)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'FIM DO BLOCO HIDRÁULICO', L, X, Y, 30, 2)
 planilhaProgramaCNC.recompute()
 
 #App.ActiveDocument.getObject('Sub_programas').ViewObject.doubleClicked()
