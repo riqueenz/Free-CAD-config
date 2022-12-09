@@ -45,7 +45,7 @@ tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR 
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
@@ -57,9 +57,9 @@ diam = 8
 X = 50
 Y = -20
 L = 'T'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, , 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
@@ -73,7 +73,7 @@ Y = -40
 L = 'A'
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
@@ -92,7 +92,7 @@ tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFR
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
@@ -106,7 +106,7 @@ Y = -40
 L = 'P'
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 2, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 2, Zsr)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
 x+=1
