@@ -1,0 +1,131 @@
+# -*- coding: utf-8 -*-
+
+# Macro Begin: /home/henrique/snap/freecad/common/part.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
+import FreeCAD
+import Part
+import PartDesignGui
+
+#App.activeDocument().getObject('Programa_CNC')
+
+print("preenchendo..")
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+planilhaProgramaCNC.set('nomePrograma', "Teste") 
+planilhaProgramaCNC.set('Z_P101', "100")
+planilhaProgramaCNC.set('X_P102', "100")
+planilhaProgramaCNC.set('Y_P103', "100")
+def tabela(linha, lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, var_X, var_Y, var_Zi, var_Zf,):
+    planilhaProgramaCNC.set('B'+str(linha), str(lado))
+    planilhaProgramaCNC.set('D'+str(linha), str(T))
+    planilhaProgramaCNC.set('E'+str(linha), str(descFerr))
+    planilhaProgramaCNC.set('F'+str(linha), str(diam))
+    planilhaProgramaCNC.set('H'+str(linha), str(S))
+    planilhaProgramaCNC.set('J'+str(linha), str(F))
+    planilhaProgramaCNC.set('L'+str(linha), str(X))
+    planilhaProgramaCNC.set('N'+str(linha), str(Y))
+    planilhaProgramaCNC.set('P'+str(linha), str(Zi))
+    planilhaProgramaCNC.set('R'+str(linha), str(Zf))
+    planilhaProgramaCNC.set('S'+str(linha), str(sub))
+    planilhaProgramaCNC.set('T'+str(linha), str(L))
+    planilhaProgramaCNC.set('U'+str(linha), str(var_X))
+    planilhaProgramaCNC.set('V'+str(linha), str(var_Y))
+    planilhaProgramaCNC.set('X'+str(linha), str(var_Zi))
+    planilhaProgramaCNC.set('W'+str(linha), str(var_Zf))
+x = 3
+Lado = 3
+T = 21
+diam = 12
+X = 25
+Y = -67
+Zsr = -30
+Zcr = -40
+L = 'P'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'INICIO DO BLOCO HIDRÁULICO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, -5, 'FURO DE CENTRO', L, X, Y, 0, -5)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
+x+=1
+
+T = 17
+diam = 8
+X = 50
+Y = -20
+L = 'T'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, -5, 'FURO DE CENTRO', L, X, Y, 0, -5)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
+x+=1
+
+T = 17
+diam = 12
+X = 50
+Y = -40
+L = 'A'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, -5, 'FURO DE CENTRO', L, X, Y, 0, -5)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
+x+=1
+
+Lado = 4
+T = 17
+diam = 12
+X = 10
+Y = -10
+L = 'B'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'TROCAR LADO BLOCO HIDRAULICO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'LIGAR REFRIGERAÇÃO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, -5, 'FURO DE CENTRO', L, X, Y, 0, -5)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
+x+=1
+
+T = 17
+diam = 12
+X = 50
+Y = -40
+L = 'P'
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, -5, 'FURO DE CENTRO', L, X, Y, 0, -5)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, Zsr, Zcr, 'PICA-PAU COM RETORNO A Z2', L, X, Y, Zsr, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, Zcr, 'SAIR DO FURO', L, X, Y, 30, Zcr)
+x+=1
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'FIM DO BLOCO HIDRÁULICO', L, X, Y, 30, 2)
+planilhaProgramaCNC.recompute()
+
+#App.ActiveDocument.getObject('Sub_programas').ViewObject.doubleClicked()
+#App.ActiveDocument.getObject('Ferramentas').ViewObject.doubleClicked()
+#App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
+App.activeDocument().recompute(None,True,True)

@@ -36,38 +36,51 @@ def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     App.ActiveDocument.recompute()
 
 def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    alturaPontaBroca = float(diam) * 0.3004
     objectName = "Furo" + str(numFuro)
-    #print(" ")
-    #print("Fazendo " + str(objectName))
-    #print("Lado = " + str(lado))
-    #print("X = " + str(X))
-    #print("Y = " + str(Y))
-    #print("Zi = " + str(Zi))
-    #print("Zf = " + str(Zf))
     App.ActiveDocument.addObject("Part::Cylinder",objectName)
     App.ActiveDocument.ActiveObject.Label = str(numFuro) + " - Furo Ø" + str(diam) + " - " + str(sub)
     App.ActiveDocument.getObject(objectName).Radius = diam/2
-    App.ActiveDocument.getObject(objectName).Height = Zi - Zf
+    App.ActiveDocument.getObject(objectName).Height = Zi - Zf - alturaPontaBroca
+    coneName = "Cone" + str(numFuro)
+    App.ActiveDocument.addObject("Part::Cone",coneName)
+    App.ActiveDocument.getObject(coneName).Height = alturaPontaBroca
     if lado == 1:
         X_Furo = X
         Y_Furo = -Y-P103_Lado_1_Y
         Z_Furo = -Zi
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        Z_Furo = Zi - Zf - alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
     elif lado == 2:
         X_Furo = X
-        Y_Furo = -Zf-P103_Lado_1_Y
-        Z_Furo = P101_Lado_1_Z + Y
+        Y_Furo = -Zf-P103_Lado_1_Y-alturaPontaBroca
+        Z_Furo = float(P101_Lado_1_Z) + float(Y)
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        Y_Furo = -Zf-P103_Lado_1_Y
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
     elif lado == 3:
         X_Furo = X
         Y_Furo = Y
-        Z_Furo = P101_Lado_1_Z + Zf
+        Z_Furo = P101_Lado_1_Z + Zf + alturaPontaBroca
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        Z_Furo = P101_Lado_1_Z + Zf
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
     elif lado == 4:
         X_Furo = X
         Y_Furo = Zi
         Z_Furo = -Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        Y_Furo = Zf + alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
     elif lado == 5:
         X_Furo = -Zi
         Y_Furo = -P103_Lado_1_Y + X
@@ -79,15 +92,20 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Z_Furo = P101_Lado_1_Z + Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
     if L=="P":
-        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,0.00,0.00)
     elif L=="T":
-        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,1.00,0.00)
     elif L=="A":
-        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,1.00,0.00)
     elif L=="B":
-        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,0.00,1.00)
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,1.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,1.00)
     elif L=="FuroCentro":
-        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,0.00)
     App.ActiveDocument.recompute()
 
 def lerLinha(x):
