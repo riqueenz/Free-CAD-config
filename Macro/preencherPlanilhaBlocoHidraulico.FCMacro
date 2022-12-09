@@ -57,7 +57,7 @@ diam = 8
 X = 50
 Y = -20
 L = 'T'
-tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, , 'APROXIMAR DO FURO', L, X, Y, 30, 2)
+tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 30, 2, 'APROXIMAR DO FURO', L, X, Y, 30, 2)
 x+=1
 tabela(x, Lado, T, 'BROCA METAL DURO', diam, 1500, 200, X, Y, 0, Zsr, 'PICA-PAU SEM RETORNO', L, X, Y, 0, Zsr)
 x+=1
