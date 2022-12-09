@@ -86,6 +86,8 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (1.00,1.00,0.00)
     elif L=="B":
         FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,0.00,1.00)
+    elif L=="FuroCentro":
+        FreeCADGui.ActiveDocument.ActiveObject.ShapeColor = (0.00,0.00,0.00)
     App.ActiveDocument.recompute()
 
 def lerLinha(x):
@@ -249,6 +251,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+    elif sub == "FURO DE CENTRO":
+        modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, "FuroCentro", P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
     linhaAtual += 1
 
 '''
