@@ -50,7 +50,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = -Y-P103_Lado_1_Y
         Z_Furo = -Zi
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
-        Z_Furo = Zi - Zf - alturaPontaBroca
+        Z_Furo = -Zf - alturaPontaBroca
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
         App.ActiveDocument.getObject(coneName).Radius1 = diam/2
         App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
@@ -86,11 +86,19 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = -P103_Lado_1_Y + X
         Z_Furo = -Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        X_Furo = -Zf - alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
     elif lado == 6:
-        X_Furo = P102_Lado_1_X + Zf
+        X_Furo = P102_Lado_1_X + Zf + alturaPontaBroca
         Y_Furo = -P103_Lado_1_Y + X
         Z_Furo = P101_Lado_1_Z + Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        X_Furo = P102_Lado_1_X + Zf
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
     if L=="P":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,0.00,0.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,0.00,0.00)
