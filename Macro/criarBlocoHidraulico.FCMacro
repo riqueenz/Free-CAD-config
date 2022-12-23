@@ -21,6 +21,7 @@ def lerTamanhoBloco():
     #print('P101 = '+str(P101_Lado_1_Z))
     #print('P102 = '+str(P102_Lado_1_X))
     #print('P103 = '+str(P103_Lado_1_Y))
+    #FreeCAD.ActiveDocument.getObject('Furos_de_centro').Label = "Furos de centro"
     return P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y
 
 def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
@@ -33,6 +34,7 @@ def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
     App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
     FreeCADGui.ActiveDocument.getObject(objectName).Transparency = 70
+    App.activeDocument().addObject('App::DocumentObjectGroup','Furos_de_centro').Label = "Furos de centro"
     App.ActiveDocument.recompute()
 
 def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
@@ -279,6 +281,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
     elif sub == "FURO DE CENTRO":
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, "FuroCentro", P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
     linhaAtual += 1
 
 '''
@@ -286,6 +290,12 @@ App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
 App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
 App.activeDocument().Bloco_Hidraulico.Tool = App.activeDocument().Furo
 FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90'''
+#Ocultar furos de centro
+Gui.Selection.clearSelection()
+Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos_de_centro"))
+Gui.runCommand('Std_ToggleVisibility',0)
+Gui.Selection.clearSelection()
+#Salvar arquivo CNC
 arquivo = "/home/henrique/Downloads/001000.pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
