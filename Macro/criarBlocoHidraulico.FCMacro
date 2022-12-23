@@ -58,13 +58,13 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
     elif lado == 2:
         X_Furo = X
-        Y_Furo = -Zf-P103_Lado_1_Y-alturaPontaBroca
-        Z_Furo = float(P101_Lado_1_Z) + float(Y)
+        Y_Furo = Zi
+        Z_Furo = -Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
-        Y_Furo = -Zf-P103_Lado_1_Y
+        Y_Furo = Zf + alturaPontaBroca
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
-        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
-        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
     elif lado == 3:
         X_Furo = X
         Y_Furo = Y
@@ -76,13 +76,13 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         App.ActiveDocument.getObject(coneName).Radius2 = diam/2
     elif lado == 4:
         X_Furo = X
-        Y_Furo = Zi
-        Z_Furo = -Y
+        Y_Furo = -Zf-P103_Lado_1_Y-alturaPontaBroca
+        Z_Furo = float(P101_Lado_1_Z) + float(Y)
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
-        Y_Furo = Zf + alturaPontaBroca
+        Y_Furo = -Zf-P103_Lado_1_Y
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
-        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
-        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
     elif lado == 5:
         X_Furo = -Zi
         Y_Furo = -P103_Lado_1_Y + X
