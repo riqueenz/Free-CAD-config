@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-
+import datetime
+horaInicio = datetime.datetime.now()
+print("Inicio: "+str(horaInicio))
 # Macro Begin: /home/henrique/snap/freecad/common/part.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
 import FreeCAD
 import Part
 import PartDesignGui
-
-print(" ")
-print("----------")
 
 Gui.activateWorkbench("PartWorkbench")
 planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
@@ -34,8 +33,21 @@ def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
     App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
     FreeCADGui.ActiveDocument.getObject(objectName).Transparency = 70
+    #Criar pastas dos furos
     App.activeDocument().addObject('App::DocumentObjectGroup','Furos_de_centro').Label = "Furos de centro"
+    App.activeDocument().addObject('App::DocumentObjectGroup','Furos').Label = "Furos"
     App.ActiveDocument.recompute()
+    
+def modelarNumeroLados(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    texto=Draft.make_shapestring(String="Henrique Enzweiler", FontFile="/usr/share/fonts/TTF/DejaVuSans.ttf", Size=10.0, Tracking=0.0)
+    posicionamento=FreeCAD.Placement()
+    posicionamento.Base=FreeCAD.Vector(0.0, 0.0, 0.0)
+    posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
+    texto.Placement=posicionamento
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Extrude')
+    f = FreeCAD.ActiveDocument.getObject('Extrude')
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString')
+    f.LengthFwd = 2.0
 
 def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     alturaPontaBroca = float(diam) * 0.3004
@@ -269,6 +281,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
     elif sub == "PICA-PAU COM RETORNO A Z2":
         prg +=  ";Pica-pau com retorno a Z2" + '\n'
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
@@ -279,6 +293,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
     elif sub == "FURO DE CENTRO":
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, "FuroCentro", P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
@@ -304,3 +320,8 @@ App.ActiveDocument.recompute()
 Gui.SendMsgToActiveView("ViewFit")
 
 #App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
+
+horaFim = datetime.datetime.now()
+print("Fim: "+str(horaFim))
+tempoExecucao = horaFim - horaInicio
+print("Tempo: "+str(tempoExecucao))

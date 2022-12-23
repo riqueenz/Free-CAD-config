@@ -1,6 +1,68 @@
-#App.activeDocument().getObject('Programa_CNC')
-print("Here")
-print(App.activeDocument().getObject('Programa_CNC').get('A1'))
-print(App.activeDocument().getObject('Programa_CNC').get('E1'))
-print(App.activeDocument().getObject('Programa_CNC').get('F1'))
-print(App.activeDocument().getObject('Programa_CNC').get('H1'))
+print("----------Inicio--------------")
+#App.activeDocument().addObject("Part::MultiFuse","Fusion")
+#App.activeDocument().Fusion.Shapes = Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group
+#lista = []
+
+#x=0
+#for i in App.ActiveDocument.getObject("Furos").Group:
+    #App.activeDocument().Fusion.Shapes += Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group[x])
+    #nome = App.ActiveDocument.getObject("Furos").Group[x].Name
+    #App.activeDocument().Fusion.Shapes += App.ActiveDocument.getObject(nome)
+    #lista += App.ActiveDocument.getObject(nome)
+    #Gui.Selection.addSelection(App.ActiveDocument.getObject(nome))
+    #Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group[x])
+    #x=x+1
+#print("----------Fim--------------")
+#App.activeDocument().addObject("Part::MultiFuse","Fusion")
+#App.activeDocument().Fusion.Shapes = [App.activeDocument().Furo7,App.activeDocument().Cone7,App.activeDocument().Furo14,App.activeDocument().Cone14,App.activeDocument().Furo21,App.activeDocument().Cone21,App.activeDocument().Furo28,App.activeDocument().Cone28,App.activeDocument().Furo29,App.activeDocument().Cone29,App.activeDocument().Furo34,App.activeDocument().Cone34,App.activeDocument().Furo35,App.activeDocument().Cone35,App.activeDocument().Furo40,App.activeDocument().Cone40,App.activeDocument().Furo41,App.activeDocument().Cone41,App.activeDocument().Furo46,App.activeDocument().Cone46,App.activeDocument().Furo47,App.activeDocument().Cone47,App.activeDocument().Furo54,App.activeDocument().Cone54,App.activeDocument().Furo55,App.activeDocument().Cone55,App.activeDocument().Furo60,App.activeDocument().Cone60,App.activeDocument().Furo61,App.activeDocument().Cone61,App.activeDocument().Furo66,App.activeDocument().Cone66,App.activeDocument().Furo67,App.activeDocument().Cone67,App.activeDocument().Furo72,App.activeDocument().Cone72,App.activeDocument().Furo73,App.activeDocument().Cone73,]
+#print(lista)
+#Gui.runCommand('Part_Fuse',0)
+'''
+from FreeCAD import Base
+d1_min = 10.0
+d2_max = 20.0
+h_max = 2.0
+Pnt0 = Base.Vector(d1_min / 2.0, 0.0, h_max)
+Pnt2 = Base.Vector(d2_max / 2.0, 0.0, h_max)
+Pnt3 = Base.Vector(d2_max / 2.0, 0.0, 0.0)
+Pnt4 = Base.Vector(d1_min / 2.0, 0.0, 0.0)
+Pnt1 = Base.Vector(d2_max / 2.0 - h_max / 4.0, 0.0, h_max)
+Pnt2 = Base.Vector(d2_max / 2.0, 0.0, h_max * 0.75)
+edge1 = Part.makeLine(Pnt0, Pnt1)
+edgeCham = Part.makeLine(Pnt1, Pnt2)
+edge1 = Part.Wire([edge1, edgeCham])
+edge2 = Part.makeLine(Pnt2, Pnt3)
+edge3 = Part.makeLine(Pnt3, Pnt4)
+edge4 = Part.makeLine(Pnt4, Pnt0)
+aWire = Part.Wire([edge1, edge2, edge3, edge4])
+Part.show(aWire)
+aFace = Part.Face(aWire)
+letra = aFace.extrude(App.Vector(0, 0, 10))
+Part.show(letra)
+'''
+def modelarNumeroLados(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y, tamanho, espessura):
+    fonte="/usr/share/fonts/TTF/DejaVuSans.ttf"
+    numLado="1"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    posicionamento=FreeCAD.Placement()
+    posicionamento.Base=FreeCAD.Vector(0.00,0.00,0.00)
+    posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
+    texto.Placement=posicionamento
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString')
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    numLado="3"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    posicionamento=FreeCAD.Placement()
+    posicionamento.Base=FreeCAD.Vector(P102_Lado_1_X-tamanho, -tamanho-1.0, P101_Lado_1_Z-espessura)
+    posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
+    texto.Placement=posicionamento
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString001')
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+modelarNumeroLados(44.0, 52.0, 71.0, 3.0, 1.0)
+print("----------Fim--------------")

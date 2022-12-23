@@ -1,0 +1,12 @@
+import FreeCAD
+import Draft
+
+texto=Draft.make_shapestring(String="Henrique Enzweiler", FontFile="/usr/share/fonts/TTF/DejaVuSans.ttf", Size=10.0, Tracking=0.0)
+posicionamento=FreeCAD.Placement()
+posicionamento.Base=FreeCAD.Vector(0.0, 0.0, 0.0)
+posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
+texto.Placement=posicionamento
+FreeCAD.ActiveDocument.addObject('Part::Extrusion','Extrude')
+f = FreeCAD.ActiveDocument.getObject('Extrude')
+f.Base = FreeCAD.ActiveDocument.getObject('ShapeString')
+f.LengthFwd = 2.0

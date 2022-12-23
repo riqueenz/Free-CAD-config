@@ -1,0 +1,10 @@
+import Part
+P1 = FreeCAD.Vector(0, 0, 0)
+P2 = FreeCAD.Vector(0, 10, 0)
+P3 = FreeCAD.Vector(10, 0, 0)
+meuPoligono = Part.makePolygon([P1, P2, P3, P1])
+#Part.show(meuPoligono)
+minhaFace = Part.Face(meuPoligono)
+#Part.show(minhaFace)
+meuSolido = minhaFace.extrude(App.Vector(0, 0, 2))
+Part.show(meuSolido)
