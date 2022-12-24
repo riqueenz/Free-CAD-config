@@ -40,29 +40,80 @@ aFace = Part.Face(aWire)
 letra = aFace.extrude(App.Vector(0, 0, 10))
 Part.show(letra)
 '''
+import Draft
 def modelarNumeroLados(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y, tamanho, espessura):
     fonte="/usr/share/fonts/TTF/DejaVuSans.ttf"
+    
     numLado="1"
     texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
-    posicionamento=FreeCAD.Placement()
-    posicionamento.Base=FreeCAD.Vector(0.00,0.00,0.00)
-    posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
-    texto.Placement=posicionamento
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-P103_Lado_1_Y+tamanho+1.0,0.00),App.Rotation(App.Vector(1.00,0.00,0.00),180.00))
     FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
     f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
     f.Base = FreeCAD.ActiveDocument.getObject('ShapeString')
     f.LengthFwd = espessura
     FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
-    numLado="3"
+    
+    numLado="2"
     texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
-    posicionamento=FreeCAD.Placement()
-    posicionamento.Base=FreeCAD.Vector(P102_Lado_1_X-tamanho, -tamanho-1.0, P101_Lado_1_Z-espessura)
-    posicionamento.Rotation.Q=(0.0, 0.0, 0.0, 1.0)
-    texto.Placement=posicionamento
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-espessura,tamanho+1.00),App.Rotation(App.Vector(1.00,0.00,0.00),270.00))
     FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
     f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
     f.Base = FreeCAD.ActiveDocument.getObject('ShapeString001')
+    f.Dir = (0.00, 1.00, 0.00)
     f.LengthFwd = espessura
     FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="3"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho, -tamanho-1.0, P101_Lado_1_Z-espessura),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString002')
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="4"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-P103_Lado_1_Y,P101_Lado_1_Z-tamanho-1.0),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString003')
+    f.Dir = (0.00, 1.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="5"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(0.00, -tamanho, tamanho+1.0),App.Rotation(App.Vector(0.58,0.58,-0.58),240.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString004')
+    f.Dir = (1.00, 0.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="6"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-espessura,-tamanho-1.0,P101_Lado_1_Z-tamanho-1.0),App.Rotation(App.Vector(0.58,0.58,0.58),120.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString005')
+    f.Dir = (1.00, 0.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    App.activeDocument().addObject("Part::MultiFuse","Numeros")
+    App.activeDocument().Numeros.Shapes = [App.activeDocument().Lado_1,App.activeDocument().Lado_2,App.activeDocument().Lado_3,App.activeDocument().Lado_4,App.activeDocument().Lado_5,App.activeDocument().Lado_6,]
+    Gui.activeDocument().Lado_1.Visibility=False
+    Gui.activeDocument().Lado_2.Visibility=False
+    Gui.activeDocument().Lado_3.Visibility=False
+    Gui.activeDocument().Lado_4.Visibility=False
+    Gui.activeDocument().Lado_5.Visibility=False
+    Gui.activeDocument().Lado_6.Visibility=False
+    
+    App.activeDocument().addObject("Part::Cut","Bloco_numerado")
+    App.activeDocument().Bloco_numerado.Base = App.activeDocument().Bloco_Faceado
+    App.activeDocument().Bloco_numerado.Tool = App.activeDocument().Numeros
+    App.activeDocument().recompute()
 modelarNumeroLados(44.0, 52.0, 71.0, 3.0, 1.0)
 print("----------Fim--------------")
