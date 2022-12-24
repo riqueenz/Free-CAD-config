@@ -373,11 +373,29 @@ App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
 App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
 App.activeDocument().Bloco_Hidraulico.Tool = App.activeDocument().Furo
 FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90'''
+
 #Ocultar furos de centro
 Gui.Selection.clearSelection()
 Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos_de_centro"))
 Gui.runCommand('Std_ToggleVisibility',0)
 Gui.Selection.clearSelection()
+
+#Unir todos furos
+x=0
+for i in App.ActiveDocument.getObject("Furos").Group:
+    Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group[x])
+    x=x+1
+Gui.runCommand('Part_Fuse',0)
+
+#Recortar os furos do bloco
+App.ActiveDocument.removeObject('Furos')
+App.ActiveDocument.recompute()
+App.activeDocument().addObject("Part::Cut","Bloco_hidraulico")
+App.activeDocument().Bloco_hidraulico.Base = App.activeDocument().Bloco_numerado
+App.activeDocument().Bloco_hidraulico.Tool = App.activeDocument().Fusion
+FreeCAD.ActiveDocument.getObject('Fusion').Label = "Furos"
+App.activeDocument().recompute()
+
 #Salvar arquivo CNC
 arquivo = "/home/henrique/Downloads/001000.pim"
 escrever = open(arquivo, "w")
