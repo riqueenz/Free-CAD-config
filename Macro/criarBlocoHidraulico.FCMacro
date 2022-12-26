@@ -126,11 +126,16 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
     coneName = "Cone" + str(numFuro)
     App.ActiveDocument.addObject("Part::Cone",coneName)
     App.ActiveDocument.getObject(coneName).Height = alturaPontaBroca
+    tapaCone = "tapaCone" + str(numFuro)
+    App.ActiveDocument.addObject("Part::Cylinder",tapaCone)
+    App.ActiveDocument.getObject(tapaCone).Radius = diam/2
+    App.ActiveDocument.getObject(tapaCone).Height = alturaPontaBroca
     if lado == 1:
         X_Furo = X
         Y_Furo = -Y-P103_Lado_1_Y
         Z_Furo = -Zi
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo-alturaPontaBroca),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
         Z_Furo = -Zf - alturaPontaBroca
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
         App.ActiveDocument.getObject(coneName).Radius1 = diam/2
@@ -140,6 +145,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = Zi
         Z_Furo = -Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo+alturaPontaBroca,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
         Y_Furo = Zf + alturaPontaBroca
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
         App.ActiveDocument.getObject(coneName).Radius1 = diam/2
@@ -149,6 +155,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = Y
         Z_Furo = P101_Lado_1_Z + Zf + alturaPontaBroca
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,P101_Lado_1_Z+Zi),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
         Z_Furo = P101_Lado_1_Z + Zf
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
         App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
@@ -158,6 +165,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = -Zf-P103_Lado_1_Y-alturaPontaBroca
         Z_Furo = float(P101_Lado_1_Z) + float(Y)
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo-Zi+Zf+alturaPontaBroca,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
         Y_Furo = -Zf-P103_Lado_1_Y
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
         App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
@@ -167,6 +175,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = -P103_Lado_1_Y + X
         Z_Furo = -Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo-alturaPontaBroca,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
         X_Furo = -Zf - alturaPontaBroca
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
         App.ActiveDocument.getObject(coneName).Radius1 = diam/2
@@ -176,6 +185,7 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         Y_Furo = -P103_Lado_1_Y + X
         Z_Furo = P101_Lado_1_Z + Y
         App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo+Zi-Zf-alturaPontaBroca,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
         X_Furo = P102_Lado_1_X + Zf
         App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
         App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
@@ -183,18 +193,23 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
     if L=="P":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,0.00,0.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (1.00,0.00,0.00)
     elif L=="T":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,1.00,0.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,1.00,0.00)
     elif L=="A":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,1.00,0.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (1.00,1.00,0.00)
     elif L=="B":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,1.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,1.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,0.00,1.00)
     elif L=="FuroCentro":
         FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,0.00)
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,0.00,0.00)
     App.ActiveDocument.recompute()
 
 def lerLinha(x):
@@ -349,6 +364,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";" + '\n'
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
     elif sub == "PICA-PAU COM RETORNO A Z2":
         prg +=  ";Pica-pau com retorno a Z2" + '\n'
@@ -361,11 +377,13 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";" + '\n'
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
     elif sub == "FURO DE CENTRO":
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, "FuroCentro", P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
+        App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
     linhaAtual += 1
 
 '''
