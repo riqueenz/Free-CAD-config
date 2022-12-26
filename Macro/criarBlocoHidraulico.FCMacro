@@ -24,7 +24,7 @@ def lerTamanhoBloco():
     return P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y
 
 def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
-    App.activeDocument().Label = "Bloco hidráulico"
+    App.activeDocument().Label = planilhaProgramaCNC.get('nomePrograma')
     objectName = "Bloco_Faceado"
     App.ActiveDocument.addObject("Part::Box",objectName)
     App.ActiveDocument.getObject(objectName).Label = "Bloco Maciço"
