@@ -50,7 +50,7 @@ planilhaFerramentas.setColumnWidth('A',30)
 planilhaFerramentas.setColumnWidth('B',150)
 planilhaFerramentas.setColumnWidth('C',50)
 planilhaFerramentas.setColumnWidth('D',30)
-planilhaFerramentas.setColumnWidth('E',30)
+planilhaFerramentas.setColumnWidth('E',40)
 planilhaFerramentas.setColumnWidth('F',30)
 planilhaFerramentas.setColumnWidth('G',30)
 planilhaFerramentas.set('D2:D25','S')
@@ -59,6 +59,81 @@ x = 1
 while x<25:
     planilhaFerramentas.set('A'+str(x+1), str(x))
     x += 1
+linha = 1
+planilhaFerramentas.set('B'+str(linha+1),'BROCA CENTRO')
+planilhaFerramentas.set('C'+str(linha+1),'5')
+planilhaFerramentas.set('E'+str(linha+1),'1000')
+planilhaFerramentas.set('G'+str(linha+1),'50')
+linha = 11
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'5')
+planilhaFerramentas.set('E'+str(linha+1),'800')
+planilhaFerramentas.set('G'+str(linha+1),'30')
+linha = 12
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'8,5')
+planilhaFerramentas.set('E'+str(linha+1),'750')
+planilhaFerramentas.set('G'+str(linha+1),'35')
+linha = 13
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'24')
+planilhaFerramentas.set('E'+str(linha+1),'320')
+planilhaFerramentas.set('G'+str(linha+1),'20')
+linha = 14
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'11,5')
+planilhaFerramentas.set('E'+str(linha+1),'700')
+planilhaFerramentas.set('G'+str(linha+1),'30')
+linha = 15
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'4,2')
+planilhaFerramentas.set('E'+str(linha+1),'2000')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 16
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'5')
+planilhaFerramentas.set('E'+str(linha+1),'2000')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 17
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'6,5')
+planilhaFerramentas.set('E'+str(linha+1),'2000')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 18
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'6,8')
+planilhaFerramentas.set('E'+str(linha+1),'2000')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 19
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'6,5')
+planilhaFerramentas.set('E'+str(linha+1),'700')
+planilhaFerramentas.set('G'+str(linha+1),'30')
+linha = 20
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'8,5')
+planilhaFerramentas.set('E'+str(linha+1),'1750')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 21
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'11,5')
+planilhaFerramentas.set('E'+str(linha+1),'1500')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 22
+planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
+planilhaFerramentas.set('C'+str(linha+1),'14,5')
+planilhaFerramentas.set('E'+str(linha+1),'1500')
+planilhaFerramentas.set('G'+str(linha+1),'120')
+linha = 23
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'18,5')
+planilhaFerramentas.set('E'+str(linha+1),'400')
+planilhaFerramentas.set('G'+str(linha+1),'25')
+linha = 24
+planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
+planilhaFerramentas.set('C'+str(linha+1),'10')
+planilhaFerramentas.set('E'+str(linha+1),'700')
+planilhaFerramentas.set('G'+str(linha+1),'30')
 planilhaFerramentas.recompute()
 pastaPlanilhas.addObject(planilhaFerramentas)
 
