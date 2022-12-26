@@ -1,0 +1,329 @@
+%02-167-0824,MX--,;
+;EMPRESA.......> HL HIDRAUMAK
+;MAQUINA.......> TRAVIS_M1000 - FAGOR
+;PROGRAMADOR...> HENRIQUE
+;PECA..........> BLOCO 02-167-0824
+;
+;***FERRAMENTAS***
+(P101 = 46); EIXO Z LADO 1
+(P102 = 49); EIXO X LADO 1
+(P103 = 71); EIXO Y LADO 1
+(MSG "DEIXE O LADO 5 PARA CIMA"")
+M0
+;
+;AJUSTAR ALTURA DA FACE
+(P100 = P102); AJUSTE DA ALTURA
+(MCALL 2)
+(MDOFF )
+;*** INICIO DO LADO 5 ***
+G53 G00 Z-10.
+;
+G54
+G71 G40 G80
+T23D23; BROCA ACO RAPIDO 18.5
+(MSG "L5 - DIAM 18.5 - BROCA ACO RAPIDO")
+M06
+G54
+G90 G94
+G07
+S400 M03
+(P1=P103-40.75)
+(P2=14-P101)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-32); Profundidade final
+(P106=25); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+M09; Desligar refrigeracao
+    Z-32
+G05
+M05; Parar ferramenta
+;*** FIM DO LADO 5 ***
+G53 G00 Z-10.; Subir a ferramenta
+G53 G00 Y-10.; Trazer a mesa para frente
+(MSG "DEIXE O LADO 2 PARA CIMA"")
+M0
+(P100 = P103); AJUSTE DA ALTURA
+(MCALL 2)
+(MDOFF )
+;*** INICIO DO LADO 2 ***
+G71 G40 G80
+T23D23; BROCA ACO RAPIDO 18.5
+(MSG "L2 - DIAM 18.5 - BROCA ACO RAPIDO")
+M06
+G54
+G90 G94
+G07
+S400 M03
+(P1=31.525)
+(P2=-23.5)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-30.4); Profundidade final
+(P106=25); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+M09; Desligar refrigeracao
+    Z-30.4
+G05
+M05; Parar ferramenta
+;*** FIM DO LADO 2 ***
+G53 G00 Z-10.; Subir a ferramenta
+G53 G00 Y-10.; Trazer a mesa para frente
+(MSG "DEIXE O LADO 1 PARA CIMA"")
+M0
+(P100 = P101); AJUSTE DA ALTURA
+(MCALL 2)
+(MDOFF )
+;*** INICIO DO LADO 1 ***
+G71 G40 G80
+T23D23; BROCA ACO RAPIDO 18.5
+(MSG "L1 - DIAM 18.5 - BROCA ACO RAPIDO")
+M06
+G54
+G90 G94
+G07
+S400 M03
+(P1=31.525)
+(P2=29.9-P103)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-23.5); Profundidade final
+(P106=25); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+M09; Desligar refrigeracao
+    Z-30.4
+G05
+M05; Parar ferramenta
+;*** FIM DO LADO 1 ***
+G53 G00 Z-10.; Subir a ferramenta
+G53 G00 Y-10.; Trazer a mesa para frente
+(MSG "DEIXE O LADO 3 PARA CIMA"")
+M0
+(P100 = P101); AJUSTE DA ALTURA
+(MCALL 2)
+(MDOFF )
+;*** INICIO DO LADO 3 ***
+G71 G40 G80
+T15D15; BROCA METAL DURO 4.2
+(MSG "L3 - DIAM 4.2 - BROCA METAL DURO")
+M06
+G54
+G90 G94
+G07
+S2000 M03
+(P1=10.13)
+(P2=-15.25)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-14); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-14
+(P1=42.625)
+(P2=-15.25)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-14); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-14
+(P1=41.875)
+(P2=-55.75)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-14); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-14
+(P1=10.875)
+(P2=-55.75)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-14); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+M09; Desligar refrigeracao
+    Z-14
+;Troca de ferramenta
+M09; Desligar refrigeracao
+G53 G00 Z-10.; Subir a ferramenta
+T17D17; BROCA METAL DURO 6.5
+(MSG "L3 - DIAM 6.5 - BROCA METAL DURO")
+M06
+G54
+G90 G94
+G07
+S2000 M03
+(P1=26.375)
+(P2=-25.55)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-30); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-30
+(P1=36.675)
+(P2=-34.25)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-30); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-30
+(P1=26.375)
+(P2=-43.05)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-17); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-17
+(P1=-15.975)
+(P2=-34.25)
+G00 XP1 YP2
+    Z100
+    Z2
+M08; Ligar refrigeracao
+;Pica-pau sem retorno
+(P104=0); Profundidade inicial
+(P105=-5); Profundidade final
+(P106=40); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+;Pica-pau sem retorno
+(P104=-5); Profundidade inicial
+(P105=-17); Profundidade final
+(P106=120); Avanco
+(P107=2); Profundidade inicial
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF)
+;
+    Z-17

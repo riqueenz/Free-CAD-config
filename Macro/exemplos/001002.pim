@@ -1,0 +1,303 @@
+%BLOCO_02.167.0824   ,MX--,
+;
+;EMPRESA.......> HL HIDRAUMAK
+;MAQUINA.......> TRAVIS_M1000 - FAGOR
+;PROGRAMADOR...> HENRIQUE
+;DATA..........>  8/03/2022 - 13:36H
+;PECA..........> BLOCO HIDRAULICO
+;DESENHO.......> 02.167.0824
+;
+;*** OBSERVACOES ***
+;ANTES DE PRESETAR AS FERRAMENTAS
+;ZERAR TODOS OS K NA TABELA DE FERRAMENTAS
+;
+;***FERRAMENTAS***
+;T15 - BROCA 4.2 METAL DURO
+;T17 - BROCA 6.5 METAL DURO
+;T23 - BROCA 18.5 ACO RAPIDO
+;
+(P101 = 46); EIXO Z LADO 1
+(P102 = 49); EIXO X LADO 1
+(P103 = 71); EIXO Y LADO 1
+(MSG "DEIXE O LADO 5 PARA CIMA")
+M0
+;
+;VERIFICAR SE TODOS O K ESTAO ZERADOS
+;(MCALL 1)
+;(MDOFF )
+;
+;AJUSTAR ALTURA DA FACE
+(P100 = P102)
+(MCALL 2)
+(MDOFF)
+;
+;*** INICIO DO LADO 5 ***
+G53 G00 Z-10. 
+;
+G71 G40 G80
+T23D23 ;BROCA 18.5 COMP.191 (UTIL 125) ACO RAPIDO
+M06 
+G54 
+G90 G94 
+G07 
+;** LADO-5
+S400 M03 
+(P1=P103-40.75)
+(P2=14-P101)
+G00 XP1 YP2 
+    Z100. 
+    Z2. 
+M8
+(P104=0); Profundidade inicial
+(P105=-32) ; Profundidade final
+(P106=25) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+M9
+G00 Z100. 
+G05 
+M05
+;*** FIM DO LADO 5 ***
+G53 G00 Z-10.
+G53 G00 Y-10.
+(MSG "DEIXE O LADO 2 PARA CIMA")
+M00
+;*** INICIO DO LADO 2 *** 
+;AJUSTAR ALTURA DA FACE
+(P100 = P103)
+(MCALL 2)
+(MDOFF)
+G53 G00 Z-10. 
+;
+G71 G40 G80
+T23D23 ;BROCA 18.5 COMP.191 (UTIL 125) ACO RAPIDO
+M06 
+G54 
+G90 G94 
+G07 
+;** LADO-2
+S400 M03 
+G00 X31.525 Y-23.5 
+    Z100. 
+    Z2. 
+M8 
+(P104=0); Profundidade inicial
+(P105=-31) ; Profundidade final
+(P106=25) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+M9
+G00 Z100. 
+G05 
+M05
+;*** FIM DO LADO 2 ***
+G53 G00 Z-10.
+G53 G00 Y-10.
+(MSG "DEIXE O LADO 1 PARA CIMA")
+M00
+;*** INICIO DO LADO 1 *** 
+;
+;AJUSTAR ALTURA DA FACE
+(P100 = P101)
+(MCALL 2)
+(MDOFF)
+G53 G00 Z-10. 
+;
+G71 G40 G80
+T23D23 ;BROCA 18.5 COMP.191 (UTIL 125) ACO RAPIDO
+M06 
+G54 
+G90 G94 
+G07 
+;** LADO-1
+S400 M03 
+(P2=29.9-P103)
+G00 X31.525 YP2 
+    Z100. 
+    Z2. 
+M8 
+(P104=0); Profundidade inicial
+(P105=-23.5) ; Profundidade final
+(P106=25) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF ) 
+M9 
+G00 Z100. 
+G05 
+M05
+;*** FIM DO LADO 1 ***
+G53 G00 Z-10.
+G53 G00 Y-10.
+(MSG "DEIXE O LADO 3 PARA CIMA")
+M00
+;*** INICIO DO LADO 3 *** 
+;
+;AJUSTAR ALTURA DA FACE
+(P100 = P101)
+(MCALL 2)
+(MDOFF)
+G53 G00 Z-10. 
+;
+G71 G40 G80
+T15D15 ;BROCA 4.2 METAL DURO COMP.67 (ÚTIL 20)
+M06 
+G54 
+G90 G94 
+G07 
+;** FURO-M5
+S2000 M03 
+G00 X10.125 Y-15.25 
+    Z100. 
+    Z2. 
+M8
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-14) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )  
+G00 Z100. 
+    X42.625 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-14) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )  
+G00 Z100. 
+    X41.875 Y-55.75 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-14) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )  
+G00 Z100. 
+    X10.875 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-14) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF ) 
+M9 
+G00 Z100. 
+G05 
+M05
+G53 Z-10. 
+M01
+;
+G71 G40 G80
+T17D17 ;BROCA 6.5 METAL DURO COMP.91 (ÚTIL 45)
+M06 
+G54 
+G90 G94 
+G07 
+;** FURO-6E5-CURTO
+S750 M03 
+G00 X26.375 Y-43.05 
+    Z100. 
+    Z2. 
+M8 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-17) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )   
+G00 Z100. 
+    X15.975 Y-34.25 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-17) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+G00 Z100. 
+G05 
+G07 
+;** FURO-6E5-LONGO
+G00 X26.375 Y-25.55 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-30) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )  
+G00 Z100. 
+    X36.675 Y-34.25 
+    Z2. 
+(P104=0); Profundidade inicial
+(P105=-5) ; Profundidade final
+(P106=40) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF )
+(P104=-5); Profundidade inicial
+(P105=-30) ; Profundidade final
+(P106=120) ; Avanco
+(P107=1) ; Incremento
+(MCALL 3); PICA-PAU SEM RETORNO
+(MDOFF ) 
+M9
+G00 Z100. 
+G05 
+M05
+G53 G00 Z-10.
+G53 G00 Y-10.
+;ZERAR K FERRAMENTAS
+(P100 = 0)
+(MCALL 2)
+(MDOFF)
+M30
+%
