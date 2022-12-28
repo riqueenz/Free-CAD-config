@@ -291,6 +291,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
         prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
         prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
         prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
         prg +=  "M0" + '\n'
         prg +=  ";" + '\n'
@@ -420,13 +421,164 @@ prg +=  "M30; Fim do programa" + '\n'
 prg +=  "%" + '\n'
 
 #Salvar arquivo CNC
+numPrograma = int(planilhaProgramaCNC.get('numPrograma'))
+numPrograma += 1
+arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
+escrever = open(arquivo, "w")
+escrever.write(prg)
+escrever.close()
+App.ActiveDocument.recompute()
+#Fim do programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
+
+#Iniciar programa ----- PROGRAMA FURO DE CENTRO ---------------------------------------------------------------------------
+P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
+linhaAtual = 3
+Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
+nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
+
+listaFerramentas = ';***FERRAMENTAS***' + '\n'
+planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaFerramentas.set('H2:H25','Não')
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    if sub == "FURO DE CENTRO":
+        planilhaFerramentas.set('H'+str(T+1),'Sim')
+    linhaAtual += 1
+planilhaFerramentas.recompute()
+linhaAtual = 2
+while linhaAtual <= 25:
+    ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
+    if ferramentaUsada == 'Sim':
+        T = planilhaFerramentas.get('A'+str(linhaAtual))
+        tipoFerramenta = planilhaFerramentas.get('B'+str(linhaAtual))
+        diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
+        descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
+        listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+    linhaAtual += 1
+listaFerramentas += ';' + '\n'
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
+    #print(sub)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        prg = "%CENTRO-" + nomePrograma + ",MX--,"
+        prg +=  ";" + '\n'
+        prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
+        prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
+        prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
+        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PROGRAMA DOS FUROS DE CENTRO" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  listaFerramentas
+        prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
+        prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
+        prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  "M0" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G53 G00 Z-10." + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T" + str(T) + "D" + str(T) + "; " + str(descFerr) + ' ' + str(diam) + '\n'
+        prg +=  '(MSG "L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S" + str(S) + " M03" + '\n'
+    elif sub == "APROXIMAR DO FURO":
+        prg +=  "(P1=" + str(varX) + ")" + '\n'
+        prg +=  "(P2=" + str(varY) + ")" + '\n'
+        prg +=  "G00 XP1 YP2" + '\n'
+        prg +=  "    Z" + str(Zi) + '\n'
+        prg +=  "    Z" + str(Zf) + '\n'
+    elif sub == "LIGAR REFRIGERAÇÃO":
+        prg +=  "M08; Ligar refrigeracao" + '\n'
+    elif sub == "SAIR DO FURO":
+        prg +=  "G00 Z" + str(Zf) + '\n'
+    elif sub == "DESLIGAR REFRIGERAÇÃO":
+        prg +=  "M09; Desligar refrigeracao" + '\n'
+    elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        prg +=  "G05" + '\n'
+        prg +=  "M05; Parar ferramenta" + '\n'
+        prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  "M0" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T" + str(T) + "D" + str(T) + "; " + str(descFerr) + ' ' + str(diam) + '\n'
+        prg +=  '(MSG "L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S" + str(S) + " M03" + '\n'
+    elif sub == "FURO DE CENTRO":
+        prg +=  ";Pica-pau sem retorno" + '\n'
+        prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
+        prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
+        prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  ";" + '\n'
+    linhaAtual += 1
+# Fim do bloco hidráulico
+prg +=  "G05" + '\n'
+prg +=  "M05" + '\n'
+prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+prg +=  ";ZERAR K FERRAMENTAS" + '\n'
+prg +=  "(P100 = 0)" + '\n'
+prg +=  "(MCALL 2)" + '\n'
+prg +=  "(MDOFF)" + '\n'
+prg +=  "M30; Fim do programa" + '\n'
+prg +=  "%" + '\n'
+
+#Salvar arquivo CNC
 numPrograma = planilhaProgramaCNC.get('numPrograma')
 arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
 App.ActiveDocument.recompute()
-#Fim de programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
+#Fim do programa ----- PROGRAMA FURO DE CENTRO ---------------------------------------------------------------------------
 
 #Ocultar furos de centro
 Gui.Selection.clearSelection()
