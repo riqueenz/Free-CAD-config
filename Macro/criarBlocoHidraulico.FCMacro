@@ -247,12 +247,34 @@ def lerLinha(x):
     ##print('L = '+str(L))
     return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
 
-#Iniciar programa
+#Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
 P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
 modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
 linhaAtual = 3
 Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
 nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
+
+listaFerramentas = ';***FERRAMENTAS***' + '\n'
+planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaFerramentas.set('H2:H25','Não')
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    planilhaFerramentas.set('H'+str(T+1),'Sim')
+    linhaAtual += 1
+planilhaFerramentas.recompute()
+linhaAtual = 2
+while linhaAtual <= 25:
+    ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
+    if ferramentaUsada == 'Sim':
+        T = planilhaFerramentas.get('A'+str(linhaAtual))
+        tipoFerramenta = planilhaFerramentas.get('B'+str(linhaAtual))
+        diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
+        descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
+        listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+    linhaAtual += 1
+listaFerramentas += ';' + '\n'
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
 
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
@@ -265,7 +287,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
         prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
         prg +=  ";" + '\n'
-        prg +=  ';***FERRAMENTAS***' + '\n'
+        prg +=  listaFerramentas
         prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
         prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
         prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
@@ -319,7 +341,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     elif sub == "LIGAR REFRIGERAÇÃO":
         prg +=  "M08; Ligar refrigeracao" + '\n'
     elif sub == "SAIR DO FURO":
-        prg +=  "    Z" + str(Zf) + '\n'
+        prg +=  "G00 Z" + str(Zf) + '\n'
     elif sub == "DESLIGAR REFRIGERAÇÃO":
         prg +=  "M09; Desligar refrigeracao" + '\n'
     elif sub == "TROCAR LADO BLOCO HIDRAULICO":
@@ -358,7 +380,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
         prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
         prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
-        prg +=  "(P107=2); Profundidade inicial" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
         prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
@@ -371,7 +393,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
         prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
         prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
-        prg +=  "(P107=2); Profundidade inicial" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
         prg +=  "(MCALL 4); PICA-PAU COM RETORNO A Z2" + '\n'
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
@@ -385,12 +407,26 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
     linhaAtual += 1
+# Fim do bloco hidráulico
+prg +=  "G05" + '\n'
+prg +=  "M05" + '\n'
+prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+prg +=  ";ZERAR K FERRAMENTAS" + '\n'
+prg +=  "(P100 = 0)" + '\n'
+prg +=  "(MCALL 2)" + '\n'
+prg +=  "(MDOFF)" + '\n'
+prg +=  "M30; Fim do programa" + '\n'
+prg +=  "%" + '\n'
 
-'''
-App.activeDocument().addObject("Part::Cut","Bloco_Hidraulico")
-App.activeDocument().Bloco_Hidraulico.Base = App.activeDocument().Bloco_Faceado
-App.activeDocument().Bloco_Hidraulico.Tool = App.activeDocument().Furo
-FreeCADGui.ActiveDocument.ActiveObject.Transparency = 90'''
+#Salvar arquivo CNC
+numPrograma = planilhaProgramaCNC.get('numPrograma')
+arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
+escrever = open(arquivo, "w")
+escrever.write(prg)
+escrever.close()
+App.ActiveDocument.recompute()
+#Fim de programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
 
 #Ocultar furos de centro
 Gui.Selection.clearSelection()
@@ -414,13 +450,6 @@ App.activeDocument().Bloco_hidraulico.Tool = App.activeDocument().Fusion
 FreeCAD.ActiveDocument.getObject('Fusion').Label = "Furos"
 App.activeDocument().recompute()
 
-#Salvar arquivo CNC
-arquivo = "/home/henrique/Downloads/001000.pim"
-escrever = open(arquivo, "w")
-escrever.write(prg)
-escrever.close()
-App.ActiveDocument.recompute()
-Gui.SendMsgToActiveView("ViewFit")
 
 #App.ActiveDocument.getObject('Programa_CNC').ViewObject.doubleClicked()
 
