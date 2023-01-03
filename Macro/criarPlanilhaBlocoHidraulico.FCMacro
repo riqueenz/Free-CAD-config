@@ -107,7 +107,7 @@ planilhaFerramentas.set('G'+str(linha+1),'20')
 linha = 14
 planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
 planilhaFerramentas.set('C'+str(linha+1),'11,5')
-planilhaFerramentas.set('E'+str(linha+1),'700')
+planilhaFerramentas.set('E'+str(linha+1),'630')
 planilhaFerramentas.set('G'+str(linha+1),'30')
 linha = 15
 planilhaFerramentas.set('B'+str(linha+1),'BROCA METAL DURO')
@@ -157,7 +157,7 @@ planilhaFerramentas.set('G'+str(linha+1),'25')
 linha = 24
 planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
 planilhaFerramentas.set('C'+str(linha+1),'10')
-planilhaFerramentas.set('E'+str(linha+1),'700')
+planilhaFerramentas.set('E'+str(linha+1),'660')
 planilhaFerramentas.set('G'+str(linha+1),'30')
 planilhaFerramentas.recompute()
 pastaPlanilhas.addObject(planilhaFerramentas)
