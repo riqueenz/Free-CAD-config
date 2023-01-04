@@ -66,12 +66,12 @@ planilhaFerramentas.set('E'+str(linha+1),'1000')
 planilhaFerramentas.set('G'+str(linha+1),'50')
 linha = 2
 planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
-planilhaFerramentas.set('C'+str(linha+1),'20')
+planilhaFerramentas.set('C'+str(linha+1),'15,5')
 planilhaFerramentas.set('E'+str(linha+1),'350')
 planilhaFerramentas.set('G'+str(linha+1),'25')
 linha = 3
 planilhaFerramentas.set('B'+str(linha+1),'BROCA ACO RAPIDO')
-planilhaFerramentas.set('C'+str(linha+1),'15,5')
+planilhaFerramentas.set('C'+str(linha+1),'20')
 planilhaFerramentas.set('E'+str(linha+1),'350')
 planilhaFerramentas.set('G'+str(linha+1),'25')
 linha = 4
