@@ -623,7 +623,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
         prg +=  ";" + '\n'
     elif sub == "CARTUCHO":
-        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
         prg +=  "M0" + '\n'
         prg +=  ";" + '\n'
         prg +=  ";INICIO DO CARTUCHO LADO "+ str(Lado) + '\n'
@@ -666,10 +666,9 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
         prg +=  "(MDOFF)" + '\n'
         prg +=  "M9 ; DESLIGAR REFRIGERACAO" + '\n'
-        prg +=  "G00 Z100." + '\n'
+        prg +=  'G53 Z-10.' + '\n'
         prg +=  "G05" + '\n'
         prg +=  "M05" + '\n'
-        prg +=  "G53 Z-10." + '\n'
         prg +=  "M01" + '\n'
         prg +=  ";" + '\n'
         prg +=  "G71 G40 G80" + '\n'
@@ -692,10 +691,9 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
         prg +=  "(MDOFF)" + '\n'
         prg +=  "M9 ; DESLIGAR REFRIGERACAO" + '\n'
-        prg +=  "G00 Z100." + '\n'
+        prg +=  'G53 Z-10.' + '\n'
         prg +=  "G05" + '\n'
         prg +=  "M05" + '\n'
-        prg +=  "G53 Z-10." + '\n'
         prg +=  "M01" + '\n'
         prg +=  ";" + '\n'
         prg +=  "G71 G40 G80" + '\n'
@@ -715,10 +713,9 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  'G01 Z-17. F60' + '\n'
         prg +=  'G01 Z-34. F15' + '\n'
         prg +=  'G01 Z+2. F200' + '\n'
-        prg +=  'G00 Z100.' + '\n'
+        prg +=  'G53 Z-10.' + '\n'
         prg +=  'G05' + '\n'
         prg +=  'M05' + '\n'
-        prg +=  'G53 Z-10.' + '\n'
         prg +=  'M01' + '\n'
         prg +=  ';' + '\n'
         prg +=  'G71 G40 G80' + '\n'
@@ -765,6 +762,10 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  'G98 G84 X'+str(varX)+ " Y"+str(varY)+' Z2. I-16. K0 R1 J1. F1.786' + '\n'
         prg +=  'G80 ; FIM DO CICLO DE ROSCA' + '\n'
         prg +=  ";FIM DO CARTUCHO LADO "+ str(Lado) + '\n'
+        prg +=  "G05" + '\n'
+        prg +=  "M05" + '\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
         modelarFuro(str(linhaAtual)+"A", Lado, 16, X, Y, 0, -37, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)+"A"))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)+"A"))
@@ -775,10 +776,6 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)+"B"))
     linhaAtual += 1
 # Fim do bloco hidráulico
-prg +=  "G05" + '\n'
-prg +=  "M05" + '\n'
-prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
-prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
 prg +=  ";ZERAR K FERRAMENTAS" + '\n'
 prg +=  "(P100 = 0)" + '\n'
 prg +=  "(MCALL 2)" + '\n'
