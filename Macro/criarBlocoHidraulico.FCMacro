@@ -296,7 +296,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg += "(P2 = P102 / 2); METADE EIXO X LADO 1" + '\n'
         prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
         prg +=  ";" + '\n'
-        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
         prg +=  "M0" + '\n'
         prg +=  ";" + '\n'
         prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
@@ -355,7 +355,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
         prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
         prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
-        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
         prg +=  "M0" + '\n'
         if Lado == 1:
             prg += "(P100 = P101); AJUSTE DA ALTURA"
@@ -484,7 +484,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg += "(P2 = P102 / 2); METADE EIXO X LADO 1" + '\n'
         prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
         prg +=  ";" + '\n'
-        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
         prg +=  "M0" + '\n'
         prg +=  ";" + '\n'
         prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
@@ -532,7 +532,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
         prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
         prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
-        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA"")' + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
         prg +=  "M0" + '\n'
         if Lado == 1:
             prg += "(P100 = P101); AJUSTE DA ALTURA"
