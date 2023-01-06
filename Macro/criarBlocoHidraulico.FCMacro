@@ -280,7 +280,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%" + nomePrograma + ",MX--,"
+        prg = "%" + nomePrograma + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
@@ -467,7 +467,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%CENTRO-" + nomePrograma + ",MX--,"
+        prg = "%CENTRO-" + nomePrograma + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
@@ -599,7 +599,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%CARTUCHO-" + nomePrograma + ",MX--,"
+        prg = "%CARTUCHO-" + nomePrograma + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
