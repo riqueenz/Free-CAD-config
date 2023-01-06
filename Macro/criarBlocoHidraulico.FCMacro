@@ -648,8 +648,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "G54" + '\n'
         prg +=  "G71 G40 G80" + '\n'
         prg +=  "T2D2 ;BROCA 15.5 ACO RAPIDO" + '\n'
-        prg +=  "(P4 = " + str(varX) + "; X DO FURO"
-        prg +=  "(P5 = " + str(varX) + "; Y DO FURO"
+        prg +=  "(P4 = " + str(varX) + "); X DO FURO" + '\n'
+        prg +=  "(P5 = " + str(varX) + "); Y DO FURO" + '\n'
         prg +=  '(MSG "L' + str(Lado) + ' - BROCA 15.5 Z-37")' + '\n'
         prg +=  "M06" + '\n'
         prg +=  "G54" + '\n'
