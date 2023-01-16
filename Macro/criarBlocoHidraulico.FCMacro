@@ -211,6 +211,17 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
         FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,0.00)
         FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,0.00,0.00)
     App.ActiveDocument.recompute()
+    
+def criarPastaUsinagem():
+    pastaUsinagem = App.activeDocument().addObject('App::DocumentObjectGroup','Usinagem')
+    planilhaFolhaDeProcesso = App.activeDocument().addObject('Spreadsheet::Sheet','Folha_de_processo')
+    planilhaFolhaDeProcesso.Label = "Folha de processo"
+    planilhaFolhaDeProcesso.setColumnWidth('A',280)
+    planilhaFolhaDeProcesso.setColumnWidth('B',70)
+    planilhaFolhaDeProcesso.setColumnWidth('C',70)
+    planilhaFolhaDeProcesso.setColumnWidth('D',70)
+    pastaUsinagem.addObject(planilhaFolhaDeProcesso)
+    App.ActiveDocument.recompute()
 
 def lerLinha(x):
     Lado = planilhaProgramaCNC.get('B'+str(x))
@@ -248,6 +259,7 @@ def lerLinha(x):
     return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
 
 #Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
+criarPastaUsinagem()
 P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
 modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
 linhaAtual = 3
@@ -275,6 +287,7 @@ while linhaAtual <= 25:
 listaFerramentas += ';' + '\n'
 sub = "INICIO DO BLOCO HIDRÁULICO"
 linhaAtual = 3
+linhaFolhaDeProcesso = 1
 
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
@@ -381,6 +394,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "G07" + '\n'
         prg +=  "S" + str(S) + " M03" + '\n'
     elif sub == "PICA-PAU SEM RETORNO":
+        prg +=  '(MSG "' + str(linhaAtual) + '-L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
         prg +=  ";Pica-pau sem retorno" + '\n'
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
         prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
@@ -393,7 +407,15 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
+        planilhaFolhaDeProcesso = App.activeDocument().getObject('Folha_de_processo')
+        planilhaFolhaDeProcesso.set('A'+str(linhaFolhaDeProcesso),str(linhaAtual) + ' - L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr))
+        planilhaFolhaDeProcesso.set('B'+str(linhaFolhaDeProcesso),'X'+str(round(X,2)))
+        planilhaFolhaDeProcesso.set('C'+str(linhaFolhaDeProcesso),'Y'+str(round(Y,2)))
+        planilhaFolhaDeProcesso.set('D'+str(linhaFolhaDeProcesso),'Z'+str(round(Zf,2)))
+        planilhaFolhaDeProcesso.set('E'+str(linhaFolhaDeProcesso),'SEM RETORNO')
+        linhaFolhaDeProcesso += 1
     elif sub == "PICA-PAU COM RETORNO A Z2":
+        prg +=  '(MSG "' + str(linhaAtual) + '-L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
         prg +=  ";Pica-pau com retorno a Z2" + '\n'
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
         prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
@@ -406,6 +428,13 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
         App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
+        planilhaFolhaDeProcesso = App.activeDocument().getObject('Folha_de_processo')
+        planilhaFolhaDeProcesso.set('A'+str(linhaFolhaDeProcesso),str(linhaAtual) + ' - L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr))
+        planilhaFolhaDeProcesso.set('B'+str(linhaFolhaDeProcesso),'X'+str(round(X,2)))
+        planilhaFolhaDeProcesso.set('C'+str(linhaFolhaDeProcesso),'Y'+str(round(Y,2)))
+        planilhaFolhaDeProcesso.set('D'+str(linhaFolhaDeProcesso),'Z'+str(round(Zf,2)))
+        planilhaFolhaDeProcesso.set('E'+str(linhaFolhaDeProcesso),'RETORNO A Z2')
+        linhaFolhaDeProcesso += 1
     elif sub == "FURO DE CENTRO":
         modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, "FuroCentro", P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         App.ActiveDocument.getObject("Furos_de_centro").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
