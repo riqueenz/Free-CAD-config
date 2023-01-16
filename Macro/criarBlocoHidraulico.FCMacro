@@ -273,14 +273,21 @@ nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma'
 
 listaFerramentas = ';***FERRAMENTAS***' + '\n'
 planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaListaDeFerramentas = App.activeDocument().getObject('Lista_de_ferramentas')
 planilhaFerramentas.set('H1:H25','Não')
 planilhaFerramentas.set('I1:I25','0.0')
+planilhaFerramentas.recompute()
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
     planilhaFerramentas.set('H'+str(T+1),'Sim')
+    ZMax = planilhaFerramentas.get('I'+str(T+1))
+    if Zf < ZMax:
+        planilhaFerramentas.set('I'+str(T+1),str(Zf))
     linhaAtual += 1
+    planilhaFerramentas.recompute()
 planilhaFerramentas.recompute()
 linhaAtual = 2
+linhaListaFerramentas = 1
 while linhaAtual <= 25:
     ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
     if ferramentaUsada == 'Sim':
@@ -289,7 +296,11 @@ while linhaAtual <= 25:
         diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
         descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
         listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+        ZMax = planilhaFerramentas.get('I'+str(linhaAtual))
+        planilhaListaDeFerramentas.set('A'+str(linhaListaFerramentas),'T'+str(T)+" - "+str(descricaoFerramenta)+' (Z'+str(ZMax)+')')
+        linhaListaFerramentas += 1
     linhaAtual += 1
+planilhaListaDeFerramentas.set('A1','FERR. BLOCO '+str(nomePrograma))
 listaFerramentas += ';' + '\n'
 sub = "INICIO DO BLOCO HIDRÁULICO"
 linhaAtual = 3

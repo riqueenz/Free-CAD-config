@@ -1,12 +1,69 @@
-print("----------Inicio--------------")
-#App.activeDocument().addObject("Part::MultiFuse","Fusion")
-#App.activeDocument().Fusion.Shapes = Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group
-#lista = []
+import FreeCAD
+import Part
+import PartDesignGui
 
-x=0
-for i in App.ActiveDocument.getObject("Furos").Group:
-    Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group[x])
-    x=x+1
-Gui.runCommand('Part_Fuse',0)
+def lerLinha(x):
+    Lado = planilhaProgramaCNC.get('B'+str(x))
+    if x>3:
+        ladoAnterior = planilhaProgramaCNC.get('B'+str(x-1))
+    else:
+        ladoAnterior = Lado
+    T = planilhaProgramaCNC.get('D'+str(x))
+    descFerr = planilhaProgramaCNC.get('E'+str(x))
+    diam = planilhaProgramaCNC.get('F'+str(x))
+    S = planilhaProgramaCNC.get('H'+str(x))
+    F = planilhaProgramaCNC.get('J'+str(x))
+    X = planilhaProgramaCNC.get('L'+str(x))
+    Y = planilhaProgramaCNC.get('N'+str(x))
+    Zi = planilhaProgramaCNC.get('P'+str(x))
+    Zf = planilhaProgramaCNC.get('R'+str(x))
+    sub = planilhaProgramaCNC.get('S'+str(x))
+    L = planilhaProgramaCNC.get('T'+str(x))
+    varX = planilhaProgramaCNC.get('U'+str(x))
+    varY = planilhaProgramaCNC.get('V'+str(x))
+    return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
 
-print("----------Fim--------------")
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+linhaFolhaDeProcesso = 1
+
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+nomePrograma = 'TN6-SEG-VAPL-PLAT'
+#######################################################################################################################
+
+
+listaFerramentas = ';***FERRAMENTAS***' + '\n'
+planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaListaDeFerramentas = App.activeDocument().getObject('Lista_de_ferramentas')
+planilhaFerramentas.set('H1:H25','Não')
+planilhaFerramentas.set('I1:I25','0.0')
+planilhaFerramentas.recompute()
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    planilhaFerramentas.set('H'+str(T+1),'Sim')
+    ZMax = planilhaFerramentas.get('I'+str(T+1))
+    if Zf < ZMax:
+        planilhaFerramentas.set('I'+str(T+1),str(Zf))
+    linhaAtual += 1
+    planilhaFerramentas.recompute()
+planilhaFerramentas.recompute()
+linhaAtual = 2
+linhaListaFerramentas = 1
+while linhaAtual <= 25:
+    ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
+    if ferramentaUsada == 'Sim':
+        T = planilhaFerramentas.get('A'+str(linhaAtual))
+        tipoFerramenta = planilhaFerramentas.get('B'+str(linhaAtual))
+        diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
+        descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
+        listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+        ZMax = planilhaFerramentas.get('I'+str(linhaAtual))
+        planilhaListaDeFerramentas.set('A'+str(linhaListaFerramentas),'T'+str(T)+" - "+str(descricaoFerramenta)+' (Z'+str(ZMax)+')')
+        linhaListaFerramentas += 1
+    linhaAtual += 1
+planilhaListaDeFerramentas.set('A1','FERR. BLOCO '+str(nomePrograma))
+listaFerramentas += ';' + '\n'
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+linhaFolhaDeProcesso = 1
+
