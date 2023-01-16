@@ -227,6 +227,20 @@ def criarPastaUsinagem():
     planilhaFolhaDeProcesso.setColumnWidth('D',70)
     pastaUsinagem.addObject(planilhaFolhaDeProcesso)
     App.ActiveDocument.recompute()
+    
+def colocarZeroNumPrograma(numPrograma):
+    numPrograma = int(numPrograma)
+    if numPrograma < 10:
+        numPrograma = '00000'+str(numPrograma)
+    elif 10 <= numPrograma < 100:
+        numPrograma = '0000'+str(numPrograma)
+    elif 100 <= numPrograma < 1000:
+        numPrograma = '000'+str(numPrograma)
+    elif 1000 <= numPrograma < 10000:
+        numPrograma = '00'+str(numPrograma)
+    elif 10000 <= numPrograma < 100000:
+        numPrograma = '0'+str(numPrograma)
+    return numPrograma
 
 def lerLinha(x):
     Lado = planilhaProgramaCNC.get('B'+str(x))
@@ -448,7 +462,8 @@ prg +=  "%" + '\n'
 #Salvar arquivo CNC
 numPrograma = int(planilhaProgramaCNC.get('numPrograma'))
 numPrograma += 2
-arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
@@ -602,7 +617,8 @@ prg +=  "%" + '\n'
 
 #Salvar arquivo CNC
 numPrograma = planilhaProgramaCNC.get('numPrograma')
-arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
@@ -809,7 +825,8 @@ prg +=  "%" + '\n'
 #Salvar arquivo CNC
 numPrograma = planilhaProgramaCNC.get('numPrograma')
 numPrograma += 1
-arquivo = "/home/henrique/Downloads/00"+str(numPrograma)+".pim"
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
