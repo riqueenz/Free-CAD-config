@@ -214,6 +214,11 @@ def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_L
     
 def criarPastaUsinagem():
     pastaUsinagem = App.activeDocument().addObject('App::DocumentObjectGroup','Usinagem')
+    planilhaListaDeFerramentas = App.activeDocument().addObject('Spreadsheet::Sheet','Lista_de_ferramentas')
+    planilhaListaDeFerramentas.Label = "Lista de ferramentas"
+    planilhaListaDeFerramentas.setColumnWidth('A',280)
+    planilhaListaDeFerramentas.setColumnWidth('B',70)
+    pastaUsinagem.addObject(planilhaListaDeFerramentas)
     planilhaFolhaDeProcesso = App.activeDocument().addObject('Spreadsheet::Sheet','Folha_de_processo')
     planilhaFolhaDeProcesso.Label = "Folha de processo"
     planilhaFolhaDeProcesso.setColumnWidth('A',280)
@@ -242,20 +247,6 @@ def lerLinha(x):
     L = planilhaProgramaCNC.get('T'+str(x))
     varX = planilhaProgramaCNC.get('U'+str(x))
     varY = planilhaProgramaCNC.get('V'+str(x))
-    #print(" ")
-    #print("Lendo linha " + str(x))
-    ##print('Lado = '+str(Lado))
-    ##print('T = '+str(T))
-    ##print('descFerr = '+str(descFerr))
-    ##print('diam = '+str(diam))
-    ##print('S = '+str(S))
-    ##print('F = '+str(F))
-    #print('X = '+str(X))
-    ##print('Y = '+str(Y))
-    ##print('Zi = '+str(Zi))
-    ##print('Zf = '+str(Zf))
-    ##print('sub = '+str(sub))
-    ##print('L = '+str(L))
     return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
 
 #Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
@@ -269,6 +260,7 @@ nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma'
 listaFerramentas = ';***FERRAMENTAS***' + '\n'
 planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
 planilhaFerramentas.set('H1:H25','Não')
+planilhaFerramentas.set('I1:I25','0.0')
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
     planilhaFerramentas.set('H'+str(T+1),'Sim')
