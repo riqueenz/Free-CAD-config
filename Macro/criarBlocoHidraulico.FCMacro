@@ -560,7 +560,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "G54" + '\n'
         prg +=  "G90 G94" + '\n'
         prg +=  "G07" + '\n'
-        prg +=  "S" + str(S) + " M03" + '\n'
+        prg +=  "S1000 M03" + '\n'
     elif sub == "APROXIMAR DO FURO":
         prg +=  "(P1=" + str(varX) + ")" + '\n'
         prg +=  "(P2=" + str(varY) + ")" + '\n'
@@ -603,7 +603,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "G54" + '\n'
         prg +=  "G90 G94" + '\n'
         prg +=  "G07" + '\n'
-        prg +=  "S" + str(S) + " M03" + '\n'
+        prg +=  "S1000 M03" + '\n'
     elif sub == "FURO DE CENTRO":
         prg +=  ";Pica-pau sem retorno" + '\n'
         prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
