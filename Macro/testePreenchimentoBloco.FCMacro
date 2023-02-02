@@ -1,0 +1,52 @@
+import FreeCAD
+import Part
+import PartDesignGui
+
+def transfEmVarTabela(var):
+    var = var.replace("=P1","=Px1")
+    var = var.replace("=P2","=Px2")
+    var = var.replace("=P3","=Px3")
+    var = var.replace("P1","Z_P1")
+    var = var.replace("P2","X_P2")
+    var = var.replace("P3","Y_P3")
+    var = var.replace("Z_P101","Z_P101")
+    var = var.replace("Z_P102","X_P102")
+    var = var.replace("Z_P103","Y_P103")
+    var = var.replace("=Px1","=P1")
+    var = var.replace("=Px2","=P2")
+    var = var.replace("=Px3","=P3")
+    #print(var)
+    return var
+
+def testePreenchimento(linha):
+    planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+    linha = str(linha)
+    testeVarX = planilhaProgramaCNC.get('U'+linha)
+    testeVarX = '=L'+str(linha)+'-(' + str(testeVarX) + ')'
+    testeVarX = transfEmVarTabela(testeVarX)
+    planilhaProgramaCNC.set('Y'+linha,str(testeVarX))
+    print('varX = '+str(testeVarX))
+    testeVarY = planilhaProgramaCNC.get('V'+linha)
+    testeVarY = '=N'+str(linha)+'-(' + str(testeVarY) + ')'
+    testeVarY = transfEmVarTabela(testeVarY)
+    planilhaProgramaCNC.set('Z'+linha,str(testeVarY))
+    print('varY = '+str(testeVarY))
+    testeZi = planilhaProgramaCNC.get('W'+linha)
+    testeZi = '=P'+str(linha)+'-(' + str(testeZi) + ')'
+    testeZi = transfEmVarTabela(testeZi)
+    planilhaProgramaCNC.set('AA'+linha,str(testeZi))
+    print('varZi = '+str(testeZi))
+    testeZf = planilhaProgramaCNC.get('X'+linha)
+    testeZf = '=R'+str(linha)+'-(' + str(testeZf) + ')'
+    testeZf = transfEmVarTabela(testeZf)
+    print('varZi = '+str(testeZf))
+    planilhaProgramaCNC.set('AB'+linha,str(testeZf))
+    if int(linha) == 3:
+        planilhaProgramaCNC.set('AA3','0')
+    planilhaProgramaCNC.recompute()
+    
+x=3
+while x<300:
+    testePreenchimento(x)
+    x+=1
+
