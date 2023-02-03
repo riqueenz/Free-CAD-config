@@ -571,9 +571,8 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "M08; Ligar refrigeracao" + '\n'
     elif sub == "SAIR DO FURO":
         prg +=  "G00 Z" + str(Zf) + '\n'
-    elif sub == "DESLIGAR REFRIGERAÇÃO":
-        prg +=  "M09; Desligar refrigeracao" + '\n'
     elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        prg +=  "M09; Desligar refrigeracao" + '\n'
         prg +=  "G05" + '\n'
         prg +=  "M05; Parar ferramenta" + '\n'
         prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
