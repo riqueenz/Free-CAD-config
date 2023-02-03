@@ -2,17 +2,13 @@
 
 # Macro Begin: /home/henrique/Documentos/GitHub/Free-CAD-config/Macro/teste2.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
 import FreeCAD
-import Part
+from PySide import QtGui
+mw=Gui.getMainWindow()
 
+c=mw.findChild(QtGui.QPlainTextEdit, "Python console")
+c.clear()
+
+r=mw.findChild(QtGui.QTextEdit, "Report view")
+r.clear()
 # Gui.runCommand('Std_DlgMacroRecord',0)
-# Gui.Selection.addSelection('_2_167_0824b','Numeros')
-# Gui.Selection.addSelection('_2_167_0824b','Bloco_Faceado')
-# Gui.runCommand('Part_Boolean',0)
-App.activeDocument().addObject("Part::Cut","Cut")
-App.activeDocument().Cut.Base = App.activeDocument().Bloco_Faceado
-App.activeDocument().Cut.Tool = App.activeDocument().Numeros
-# Gui.activeDocument().hide("Bloco_Faceado")
-# Gui.activeDocument().hide("Numeros")
-# App.getDocument('_2_167_0824b').getObject('Cut').ViewObject.ShapeColor=getattr(App.getDocument('_2_167_0824b').getObject('Bloco_Faceado').getLinkedObject(True).ViewObject,'ShapeColor',App.getDocument('_2_167_0824b').getObject('Cut').ViewObject.ShapeColor)
-# App.getDocument('_2_167_0824b').getObject('Cut').ViewObject.DisplayMode=getattr(App.getDocument('_2_167_0824b').getObject('Bloco_Faceado').getLinkedObject(True).ViewObject,'DisplayMode',App.getDocument('_2_167_0824b').getObject('Cut').ViewObject.DisplayMode)
 # Macro End: /home/henrique/Documentos/GitHub/Free-CAD-config/Macro/teste2.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++

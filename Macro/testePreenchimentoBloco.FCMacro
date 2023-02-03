@@ -1,3 +1,5 @@
+# Antes de trocar de ferramenta e trocar de lado desligar refrigeração
+
 import FreeCAD
 import Part
 import PartDesignGui
@@ -25,21 +27,21 @@ def testePreenchimento(linha):
     testeVarX = '=L'+str(linha)+'-(' + str(testeVarX) + ')'
     testeVarX = transfEmVarTabela(testeVarX)
     planilhaProgramaCNC.set('Y'+linha,str(testeVarX))
-    print('varX = '+str(testeVarX))
+    #print('varX = '+str(testeVarX))
     testeVarY = planilhaProgramaCNC.get('V'+linha)
     testeVarY = '=N'+str(linha)+'-(' + str(testeVarY) + ')'
     testeVarY = transfEmVarTabela(testeVarY)
     planilhaProgramaCNC.set('Z'+linha,str(testeVarY))
-    print('varY = '+str(testeVarY))
+    #print('varY = '+str(testeVarY))
     testeZi = planilhaProgramaCNC.get('W'+linha)
     testeZi = '=P'+str(linha)+'-(' + str(testeZi) + ')'
     testeZi = transfEmVarTabela(testeZi)
     planilhaProgramaCNC.set('AA'+linha,str(testeZi))
-    print('varZi = '+str(testeZi))
+    #print('varZi = '+str(testeZi))
     testeZf = planilhaProgramaCNC.get('X'+linha)
     testeZf = '=R'+str(linha)+'-(' + str(testeZf) + ')'
     testeZf = transfEmVarTabela(testeZf)
-    print('varZi = '+str(testeZf))
+    #print('varZi = '+str(testeZf))
     planilhaProgramaCNC.set('AB'+linha,str(testeZf))
     if int(linha) == 3:
         planilhaProgramaCNC.set('AA3','0')

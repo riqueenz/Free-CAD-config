@@ -867,10 +867,6 @@ App.activeDocument().Bloco_hidraulico.Tool = App.activeDocument().Fusion
 FreeCAD.ActiveDocument.getObject('Fusion').Label = "Furos"
 App.activeDocument().recompute()
 
-#Ajustar a vista
-Gui.activeDocument().activeView().viewIsometric()
-Gui.SendMsgToActiveView("ViewFit")
-
 horaFim = datetime.datetime.now()
 print("Fim: "+str(horaFim))
 tempoExecucao = horaFim - horaInicio
