@@ -817,6 +817,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  ";FIM DO CARTUCHO LADO "+ str(Lado) + '\n'
         prg +=  "G05" + '\n'
         prg +=  "M05" + '\n'
+        prg +=  '(MSG "TERMINAR ROSCA NO DESANDADOR")' + '\n'
         prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
         prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
         modelarFuro(str(linhaAtual)+"A", Lado, 16, X, Y, 0, -37, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
