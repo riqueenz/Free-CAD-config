@@ -2,6 +2,32 @@ import FreeCAD
 import Part
 import PartDesignGui
 
+def lerLinha(x):
+    Lado = planilhaProgramaCNC.get('B'+str(x))
+    if x>3:
+        ladoAnterior = planilhaProgramaCNC.get('B'+str(x-1))
+    else:
+        ladoAnterior = Lado
+    T = planilhaProgramaCNC.get('D'+str(x))
+    descFerr = planilhaProgramaCNC.get('E'+str(x))
+    diam = planilhaProgramaCNC.get('F'+str(x))
+    S = planilhaProgramaCNC.get('H'+str(x))
+    F = planilhaProgramaCNC.get('J'+str(x))
+    X = planilhaProgramaCNC.get('L'+str(x))
+    Y = planilhaProgramaCNC.get('N'+str(x))
+    Zi = planilhaProgramaCNC.get('P'+str(x))
+    Zf = planilhaProgramaCNC.get('R'+str(x))
+    sub = planilhaProgramaCNC.get('S'+str(x))
+    L = planilhaProgramaCNC.get('T'+str(x))
+    varX = planilhaProgramaCNC.get('U'+str(x))
+    varY = planilhaProgramaCNC.get('V'+str(x))
+    return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
+    
+#################################################################################################################3
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+linhaFolhaDeProcesso = 1
+
 def transfEmVarTabela(var):
     var = var.replace("=P1","=Px1")
     var = var.replace("=P2","=Px2")
@@ -45,8 +71,27 @@ def testePreenchimento(linha):
         planilhaProgramaCNC.set('AA3','0')
     planilhaProgramaCNC.recompute()
     
-x=3
-while x<300:
-    testePreenchimento(x)
-    x+=1
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        testePreenchimento(linhaAtual)
+    elif sub == "TROCA DE FERRAMENTA":
+        testePreenchimento(linhaAtual)
+    elif sub == "APROXIMAR DO FURO":
+        testePreenchimento(linhaAtual)
+    elif sub == "LIGAR REFRIGERAÇÃO":
+        testePreenchimento(linhaAtual)
+    elif sub == "SAIR DO FURO":
+        testePreenchimento(linhaAtual)
+    elif sub == "DESLIGAR REFRIGERAÇÃO":
+        testePreenchimento(linhaAtual)
+    elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        testePreenchimento(linhaAtual)
+    elif sub == "PICA-PAU SEM RETORNO":
+        testePreenchimento(linhaAtual)
+        
+        
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+linhaFolhaDeProcesso = 1
 
