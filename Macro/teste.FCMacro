@@ -2,6 +2,7 @@ import FreeCAD
 import Part
 import PartDesignGui
 
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
 def lerLinha(x):
     Lado = planilhaProgramaCNC.get('B'+str(x))
     if x>3:
@@ -73,6 +74,7 @@ def testePreenchimento(linha):
     
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
         testePreenchimento(linhaAtual)
     elif sub == "TROCA DE FERRAMENTA":
@@ -88,6 +90,10 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     elif sub == "TROCAR LADO BLOCO HIDRAULICO":
         testePreenchimento(linhaAtual)
     elif sub == "PICA-PAU SEM RETORNO":
+        testePreenchimento(linhaAtual)
+    elif sub == "PICA-PAU COM RETORNO A Z2":
+        testePreenchimento(linhaAtual)
+    elif sub == "FURO DE CENTRO":
         testePreenchimento(linhaAtual)
         
         
