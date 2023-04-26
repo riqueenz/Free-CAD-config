@@ -370,9 +370,9 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     elif sub == "APROXIMAR DO FURO":
         prg +=  "(P1=" + str(varX) + ")" + '\n'
         prg +=  "(P2=" + str(varY) + ")" + '\n'
+        prg +=  "G00 Z" + str(Zi) + '\n'
         prg +=  "G00 XP1 YP2" + '\n'
-        prg +=  "    Z" + str(Zi) + '\n'
-        prg +=  "    Z" + str(Zf) + '\n'
+        prg +=  "    Z0.5" + '\n'
     elif sub == "LIGAR REFRIGERAÇÃO":
         prg +=  "M08; Ligar refrigeracao" + '\n'
     elif sub == "SAIR DO FURO":
@@ -564,9 +564,9 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     elif sub == "APROXIMAR DO FURO":
         prg +=  "(P1=" + str(varX) + ")" + '\n'
         prg +=  "(P2=" + str(varY) + ")" + '\n'
+        prg +=  "G00 Z" + str(Zi) + '\n'
         prg +=  "G00 XP1 YP2" + '\n'
-        prg +=  "    Z" + str(Zi) + '\n'
-        prg +=  "    Z" + str(Zf) + '\n'
+        prg +=  "    Z0.5" + '\n'
     elif sub == "LIGAR REFRIGERAÇÃO":
         prg +=  "M08; Ligar refrigeracao" + '\n'
     elif sub == "SAIR DO FURO":
