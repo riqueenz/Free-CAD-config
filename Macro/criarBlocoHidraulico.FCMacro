@@ -6,6 +6,7 @@ import FreeCAD
 import Part
 import PartDesignGui
 import Draft
+import os
 
 Gui.activateWorkbench("PartWorkbench")
 planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
@@ -474,7 +475,7 @@ prg +=  "%" + '\n'
 numPrograma = int(planilhaProgramaCNC.get('numPrograma'))
 numPrograma += 2
 numPrograma = colocarZeroNumPrograma(numPrograma)
-arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
@@ -628,7 +629,7 @@ prg +=  "%" + '\n'
 #Salvar arquivo CNC
 numPrograma = planilhaProgramaCNC.get('numPrograma')
 numPrograma = colocarZeroNumPrograma(numPrograma)
-arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
@@ -841,7 +842,7 @@ prg +=  "%" + '\n'
 numPrograma = planilhaProgramaCNC.get('numPrograma')
 numPrograma += 1
 numPrograma = colocarZeroNumPrograma(numPrograma)
-arquivo = "/home/henrique/Downloads/"+str(numPrograma)+".pim"
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
 escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
