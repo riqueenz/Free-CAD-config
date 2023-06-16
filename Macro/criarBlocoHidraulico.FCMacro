@@ -7,7 +7,14 @@ import Part
 import PartDesignGui
 import Draft
 import os
+from PySide import QtCore, QtGui
 
+pastaInicioPrograma = os.getcwd()
+if os.path.exists("Downloads") == True:
+    os.chdir("Downloads")
+if os.path.exists("Programas blocos hidráulicos") == False:
+    os.mkdir("Programas blocos hidráulicos")
+os.chdir("Programas blocos hidráulicos")
 Gui.activateWorkbench("PartWorkbench")
 planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
 
@@ -872,7 +879,16 @@ App.activeDocument().Bloco_hidraulico.Tool = App.activeDocument().Fusion
 FreeCAD.ActiveDocument.getObject('Fusion').Label = "Furos"
 App.activeDocument().recompute()
 
+msg = "Salvo em:\n"+os.getcwd() + "\n\n"
+msg += "Início: "+str(horaInicio) + "\n"
+os.chdir(pastaInicioPrograma)
 horaFim = datetime.datetime.now()
 print("Fim: "+str(horaFim))
 tempoExecucao = horaFim - horaInicio
 print("Tempo: "+str(tempoExecucao))
+msg += "Fim: "+str(horaFim) + "\n"
+msg += "Tempo de execução: "+str(tempoExecucao)
+print(msg)
+diag = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Fim do script', msg)
+diag.setWindowModality(QtCore.Qt.ApplicationModal)
+diag.exec_()
