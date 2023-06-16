@@ -279,6 +279,7 @@ linhaAtual = 3
 Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
 nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
 
+dicionario_ferramentas_usadas = {}
 listaFerramentas = ';***FERRAMENTAS***' + '\n'
 planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
 planilhaListaDeFerramentas = App.activeDocument().getObject('Lista_de_ferramentas')
@@ -305,6 +306,11 @@ while linhaAtual <= 25:
         descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
         listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
         ZMax = planilhaFerramentas.get('I'+str(linhaAtual))
+        dicionario_ferramentas_usadas[int(T)] = {
+    "tipo": str(tipoFerramenta),
+    "diametro": diamFerramenta,
+    "comp": 0.0-float(ZMax)
+}
         planilhaListaDeFerramentas.set('A'+str(linhaListaFerramentas),'T'+str(T)+" - "+str(descricaoFerramenta)+' (Z'+str(ZMax)+')')
         linhaListaFerramentas += 1
     linhaAtual += 1
@@ -313,6 +319,9 @@ listaFerramentas += ';' + '\n'
 sub = "INICIO DO BLOCO HIDRÁULICO"
 linhaAtual = 3
 linhaFolhaDeProcesso = 1
+del dicionario_ferramentas_usadas[1] # Retirar broca de centro do dicionário
+ferramentas_por_diametro = sorted(dicionario_ferramentas_usadas.items(), key=lambda x: x[1]["diametro"], reverse=True)
+print(ferramentas_por_diametro)
 
 while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
