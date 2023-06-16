@@ -271,7 +271,7 @@ def lerLinha(x):
     varY = planilhaProgramaCNC.get('V'+str(x))
     return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
 
-#Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
+#Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL (FAGOR) ---------------------------------------------------------------------------
 criarPastaUsinagem()
 P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
 modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
@@ -487,9 +487,9 @@ escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
 App.ActiveDocument.recompute()
-#Fim do programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL ---------------------------------------------------------------------------
+#Fim do programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL (FAGOR) ---------------------------------------------------------------------------
 
-#Iniciar programa ----- PROGRAMA FURO DE CENTRO ---------------------------------------------------------------------------
+#Iniciar programa ----- PROGRAMA FURO DE CENTRO (FAGOR) ---------------------------------------------------------------------------
 P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
 linhaAtual = 3
 Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
@@ -641,10 +641,10 @@ escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
 App.ActiveDocument.recompute()
-#Fim do programa ----- PROGRAMA FURO DE CENTRO ---------------------------------------------------------------------------
+#Fim do programa ----- PROGRAMA FURO DE CENTRO (FAGOR) ---------------------------------------------------------------------------
 planilhaFerramentas.set('H1:H25','')
 
-#Iniciar programa ----- PROGRAMA CARTUCHO ---------------------------------------------------------------------------
+#Iniciar programa ----- PROGRAMA CARTUCHO (FAGOR) ---------------------------------------------------------------------------
 P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
 linhaAtual = 3
 Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
@@ -854,7 +854,7 @@ escrever = open(arquivo, "w")
 escrever.write(prg)
 escrever.close()
 App.ActiveDocument.recompute()
-#Fim do programa ----- PROGRAMA CARTUCHO ---------------------------------------------------------------------------
+#Fim do programa ----- PROGRAMA CARTUCHO (FAGOR) ---------------------------------------------------------------------------
 planilhaFerramentas.set('H2:H25','')
 
 #Ocultar furos de centro
