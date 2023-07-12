@@ -35,6 +35,30 @@ def modelarBlocoSCAD(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     OpenSCAD = "//Bloco\n"
     OpenSCAD += "%translate([0, -"+str(P103_Lado_1_Y)+", 0])\n"
     OpenSCAD += "cube(["+str(P102_Lado_1_X)+","+str(P103_Lado_1_Y)+","+str(P101_Lado_1_Z)+"]);\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate(["+str(P102_Lado_1_X)+",-"+str(P103_Lado_1_Y-5.0)+",0])\n"
+    OpenSCAD += "rotate([180,0,0])\n"
+    OpenSCAD += 'text("1", size = 5, halign = "right");'+"\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate(["+str(P102_Lado_1_X)+",0,5])\n"
+    OpenSCAD += "rotate([270,0,0])\n"
+    OpenSCAD += 'text("2", size = 5, halign = "right");'+"\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate(["+str(P102_Lado_1_X)+",-5,"+str(P101_Lado_1_Z)+"])\n"
+    OpenSCAD += "rotate([0,0,0])\n"
+    OpenSCAD += 'text("3", size = 5, halign = "right");'+"\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate(["+str(P102_Lado_1_X)+",-"+str(P103_Lado_1_Y)+","+str(P101_Lado_1_Z-5.0)+"])\n"
+    OpenSCAD += "rotate([90,0,0])\n"
+    OpenSCAD += 'text("4", size = 5, halign = "right");'+"\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate([0,0,5])\n"
+    OpenSCAD += "rotate([90,180,270])\n"
+    OpenSCAD += 'text("5", size = 5, halign = "right");'+"\n"
+    OpenSCAD += "color([0,0,0])\n"
+    OpenSCAD += "translate(["+str(P102_Lado_1_X)+",0,"+str(P101_Lado_1_Z-5.0)+"])\n"
+    OpenSCAD += "rotate([90,0,90])\n"
+    OpenSCAD += 'text("6", size = 5, halign = "right");'+"\n"
     return OpenSCAD
 
 def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
@@ -131,10 +155,13 @@ def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
     App.ActiveDocument.recompute()
 
 def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
-    alturaPontaBroca = float(diam) * 0.3004
+    alturaPontaBroca = round(float(diam) * 0.3004, 2)
     Label = str(numFuro) + " - Furo Ø" + str(diam) + " - " + str(sub)
-    OpenSCAD = "//" + str(numFuro) + " - Lado "+str(lado)+" - Furo Ø" + str(diam) + " - " + str(sub) + "\n"
+    OpenSCAD = "//" + str(numFuro) + " - Lado "+str(lado)+" - Furo Ø" + str(diam) + "\n"
+    OpenSCAD += "//" + str(sub) + "\n"
+    OpenSCAD += "// X" + str(X) + " Y" + str(Y) + " Z"+str(Zf) + "\n"
     corFuroSCAD = "color([0,0,0])\n"
+    h = round(0-Zf-alturaPontaBroca,2)
     if L=="P":
         corFuroSCAD = "color([1,0,0])\n"
     elif L=="T":
@@ -144,10 +171,9 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
     elif L=="B":
         corFuroSCAD = "color([0,0,1])\n"
     if lado == 1:
-        X_Furo = X
-        Y_Furo = -Y-P103_Lado_1_Y
-        Z_Furo = -Zi
-        h = 0-Zf
+        X_Furo = round(X,2)
+        Y_Furo = round(-Y-P103_Lado_1_Y,2)
+        Z_Furo = round(-Zi,2)
         OpenSCAD += corFuroSCAD
         OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
@@ -157,23 +183,33 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     elif lado == 2:
-        X_Furo = X
-        Y_Furo = Zi
-        Z_Furo = -Y
-        h = 0-Zf
+        X_Furo = round(X,2)
+        Y_Furo = round(Zi,2)
+        Z_Furo = round(-Y,2)
         OpenSCAD += corFuroSCAD
         OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Zf)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", -"+str(h)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     elif lado == 3:
-        X_Furo = X
-        Y_Furo = Y
-        Z_Furo = P101_Lado_1_Z + Zf
-        h = 0-Zf
+        X_Furo = round(X,2)
+        Y_Furo = round(Y,2)
+        Z_Furo = round(P101_Lado_1_Z + Zf,2)
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(round(float(Z_Furo)-float(alturaPontaBroca),2))+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
+    elif lado == 4:
+        X_Furo = round(X,2)
+        Y_Furo = round(-Zf-P103_Lado_1_Y-alturaPontaBroca,2)
+        Z_Furo = round(float(P101_Lado_1_Z) + float(Y),2)
         OpenSCAD += corFuroSCAD
         OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
@@ -182,6 +218,18 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(float(Z_Furo)-float(alturaPontaBroca))+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
+    elif lado == 5:
+        X_Furo = round(-Zi,2)
+        Y_Furo = round(-P103_Lado_1_Y + X,2)
+        Z_Furo = round(-Y,2)
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,90,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(h)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,90,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     return OpenSCAD
     
 def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
