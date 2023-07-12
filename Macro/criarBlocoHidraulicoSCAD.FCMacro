@@ -1,0 +1,968 @@
+# -*- coding: utf-8 -*-
+import datetime
+horaInicio = datetime.datetime.now()
+print("Inicio: "+str(horaInicio))
+import FreeCAD
+import Part
+import PartDesignGui
+import Draft
+import os
+from PySide import QtCore, QtGui
+
+pastaInicioPrograma = os.getcwd()
+if os.path.exists("Downloads") == True:
+    os.chdir("Downloads")
+if os.path.exists("Programas blocos hidráulicos") == False:
+    os.mkdir("Programas blocos hidráulicos")
+os.chdir("Programas blocos hidráulicos")
+Gui.activateWorkbench("PartWorkbench")
+planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+
+def lerTamanhoBloco():
+    planilhaProgramaCNC = App.activeDocument().getObject('Programa_CNC')
+    P101_Lado_1_Z = planilhaProgramaCNC.get('Z_P101')
+    P102_Lado_1_X = planilhaProgramaCNC.get('X_P102')
+    P103_Lado_1_Y = planilhaProgramaCNC.get('Y_P103')
+    #print(" ")
+    #print("Lendo tamanho do bloco")
+    #print('P101 = '+str(P101_Lado_1_Z))
+    #print('P102 = '+str(P102_Lado_1_X))
+    #print('P103 = '+str(P103_Lado_1_Y))
+    #FreeCAD.ActiveDocument.getObject('Furos_de_centro').Label = "Furos de centro"
+    return P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y
+    
+def modelarBlocoSCAD(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    OpenSCAD = "//Bloco\n"
+    OpenSCAD += "%translate([0, -"+str(P103_Lado_1_Y)+", 0])\n"
+    OpenSCAD += "cube(["+str(P102_Lado_1_X)+","+str(P103_Lado_1_Y)+","+str(P101_Lado_1_Z)+"]);\n"
+    return OpenSCAD
+
+def modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    App.activeDocument().Label = planilhaProgramaCNC.get('nomePrograma')
+    objectName = "Bloco_Faceado"
+    App.ActiveDocument.addObject("Part::Box",objectName)
+    App.ActiveDocument.getObject(objectName).Label = "Bloco Maciço"
+    App.ActiveDocument.getObject(objectName).Length = P102_Lado_1_X
+    App.ActiveDocument.getObject(objectName).Width = P103_Lado_1_Y
+    App.ActiveDocument.getObject(objectName).Height = P101_Lado_1_Z
+    App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(0.00,-P103_Lado_1_Y,0.00),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    FreeCADGui.ActiveDocument.getObject(objectName).Transparency = 70
+    
+    #Adicionar os numeros de cada lado
+    fonte="/usr/share/fonts/TTF/DejaVuSans.ttf"
+    tamanho=3.0
+    espessura=0.3
+    numLado="1"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-P103_Lado_1_Y+tamanho+1.0,0.00),App.Rotation(App.Vector(1.00,0.00,0.00),180.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString')
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="2"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-espessura,tamanho+1.00),App.Rotation(App.Vector(1.00,0.00,0.00),270.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString001')
+    f.Dir = (0.00, 1.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="3"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho, -tamanho-1.0, P101_Lado_1_Z-espessura),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString002')
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="4"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-tamanho,-P103_Lado_1_Y,P101_Lado_1_Z-tamanho-1.0),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString003')
+    f.Dir = (0.00, 1.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="5"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(0.00, -tamanho, tamanho+1.0),App.Rotation(App.Vector(0.58,0.58,-0.58),240.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString004')
+    f.Dir = (1.00, 0.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    numLado="6"
+    texto=Draft.make_shapestring(String=numLado, FontFile=fonte, Size=tamanho, Tracking=0.0)
+    texto.Placement=FreeCAD.Placement(App.Vector(P102_Lado_1_X-espessura,-tamanho-1.0,P101_Lado_1_Z-tamanho-1.0),App.Rotation(App.Vector(0.58,0.58,0.58),120.00))
+    FreeCAD.ActiveDocument.addObject('Part::Extrusion','Lado_'+numLado)
+    f = FreeCAD.ActiveDocument.getObject('Lado_'+numLado)
+    f.Base = FreeCAD.ActiveDocument.getObject('ShapeString005')
+    f.Dir = (1.00, 0.00, 0.00)
+    f.LengthFwd = espessura
+    FreeCADGui.ActiveDocument.getObject('Lado_'+numLado).ShapeColor = (0.00,0.00,0.00)
+    
+    #Unir todos os números    
+    App.activeDocument().addObject("Part::MultiFuse","Numeros")
+    App.activeDocument().Numeros.Shapes = [App.activeDocument().Lado_1,App.activeDocument().Lado_2,App.activeDocument().Lado_3,App.activeDocument().Lado_4,App.activeDocument().Lado_5,App.activeDocument().Lado_6,]
+    Gui.activeDocument().Lado_1.Visibility=False
+    Gui.activeDocument().Lado_2.Visibility=False
+    Gui.activeDocument().Lado_3.Visibility=False
+    Gui.activeDocument().Lado_4.Visibility=False
+    Gui.activeDocument().Lado_5.Visibility=False
+    Gui.activeDocument().Lado_6.Visibility=False
+    
+    App.activeDocument().addObject("Part::Cut","Bloco_numerado")
+    App.activeDocument().Bloco_numerado.Base = App.activeDocument().Bloco_Faceado
+    App.activeDocument().Bloco_numerado.Tool = App.activeDocument().Numeros
+    App.activeDocument().recompute()
+    
+    #Criar pastas dos furos
+    App.activeDocument().addObject('App::DocumentObjectGroup','Furos_de_centro').Label = "Furos de centro"
+    App.activeDocument().addObject('App::DocumentObjectGroup','Furos').Label = "Furos"
+    App.ActiveDocument.recompute()
+
+def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    alturaPontaBroca = float(diam) * 0.3004
+    Label = str(numFuro) + " - Furo Ø" + str(diam) + " - " + str(sub)
+    OpenSCAD = "//" + str(numFuro) + " - Lado "+str(lado)+" - Furo Ø" + str(diam) + " - " + str(sub) + "\n"
+    corFuroSCAD = "color([0,0,0])\n"
+    if L=="P":
+        corFuroSCAD = "color([1,0,0])\n"
+    elif L=="T":
+        corFuroSCAD = "color([0,1,0])\n"
+    elif L=="A":
+        corFuroSCAD = "color([1,1,0])\n"
+    elif L=="B":
+        corFuroSCAD = "color([0,0,1])\n"
+    if lado == 1:
+        X_Furo = X
+        Y_Furo = -Y-P103_Lado_1_Y
+        Z_Furo = -Zi
+        h = 0-Zf
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(h)+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
+    elif lado == 2:
+        X_Furo = X
+        Y_Furo = Zi
+        Z_Furo = -Y
+        h = 0-Zf
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([90,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Zf)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([90,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
+    elif lado == 3:
+        X_Furo = X
+        Y_Furo = Y
+        Z_Furo = P101_Lado_1_Z + Zf
+        h = 0-Zf
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(float(Z_Furo)-float(alturaPontaBroca))+"])\n"
+        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
+    return OpenSCAD
+    
+def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
+    alturaPontaBroca = float(diam) * 0.3004
+    objectName = "Furo" + str(numFuro)
+    App.ActiveDocument.addObject("Part::Cylinder",objectName)
+    App.ActiveDocument.ActiveObject.Label = str(numFuro) + " - Furo Ø" + str(diam) + " - " + str(sub)
+    App.ActiveDocument.getObject(objectName).Radius = diam/2
+    App.ActiveDocument.getObject(objectName).Height = Zi - Zf - alturaPontaBroca
+    coneName = "Cone" + str(numFuro)
+    App.ActiveDocument.addObject("Part::Cone",coneName)
+    App.ActiveDocument.getObject(coneName).Height = alturaPontaBroca
+    tapaCone = "tapaCone" + str(numFuro)
+    App.ActiveDocument.addObject("Part::Cylinder",tapaCone)
+    App.ActiveDocument.getObject(tapaCone).Radius = diam/2
+    App.ActiveDocument.getObject(tapaCone).Height = alturaPontaBroca
+    if lado == 1:
+        X_Furo = X
+        Y_Furo = -Y-P103_Lado_1_Y
+        Z_Furo = -Zi
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo-alturaPontaBroca),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        Z_Furo = -Zf - alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
+    elif lado == 2:
+        X_Furo = X
+        Y_Furo = Zi
+        Z_Furo = -Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo+alturaPontaBroca,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        Y_Furo = Zf + alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
+    elif lado == 3:
+        X_Furo = X
+        Y_Furo = Y
+        Z_Furo = P101_Lado_1_Z + Zf + alturaPontaBroca
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,P101_Lado_1_Z+Zi),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        Z_Furo = P101_Lado_1_Z + Zf
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,0.00,1.00),0.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
+    elif lado == 4:
+        X_Furo = X
+        Y_Furo = -Zf-P103_Lado_1_Y-alturaPontaBroca
+        Z_Furo = float(P101_Lado_1_Z) + float(Y)
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo,Y_Furo-Zi+Zf+alturaPontaBroca,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        Y_Furo = -Zf-P103_Lado_1_Y
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(1.00,0.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
+    elif lado == 5:
+        X_Furo = -Zi
+        Y_Furo = -P103_Lado_1_Y + X
+        Z_Furo = -Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo-alturaPontaBroca,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        X_Furo = -Zf - alturaPontaBroca
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = diam/2
+        App.ActiveDocument.getObject(coneName).Radius2 = '0.00 mm'
+    elif lado == 6:
+        X_Furo = P102_Lado_1_X + Zf + alturaPontaBroca
+        Y_Furo = -P103_Lado_1_Y + X
+        Z_Furo = P101_Lado_1_Z + Y
+        App.ActiveDocument.getObject(objectName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(tapaCone).Placement = App.Placement(App.Vector(X_Furo+Zi-Zf-alturaPontaBroca,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        X_Furo = P102_Lado_1_X + Zf
+        App.ActiveDocument.getObject(coneName).Placement = App.Placement(App.Vector(X_Furo,Y_Furo,Z_Furo),App.Rotation(App.Vector(0.00,1.00,0.00),90.00))
+        App.ActiveDocument.getObject(coneName).Radius1 = '0.00 mm'
+        App.ActiveDocument.getObject(coneName).Radius2 = diam/2
+    if L=="P":
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (1.00,0.00,0.00)
+    elif L=="T":
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,1.00,0.00)
+    elif L=="A":
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (1.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (1.00,1.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (1.00,1.00,0.00)
+    elif L=="B":
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,1.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,1.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,0.00,1.00)
+    elif L=="FuroCentro":
+        FreeCADGui.ActiveDocument.getObject(objectName).ShapeColor = (0.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(coneName).ShapeColor = (0.00,0.00,0.00)
+        FreeCADGui.ActiveDocument.getObject(tapaCone).ShapeColor = (0.00,0.00,0.00)
+    App.ActiveDocument.recompute()
+    
+def criarPastaUsinagem():
+    pastaUsinagem = App.activeDocument().addObject('App::DocumentObjectGroup','Usinagem')
+    planilhaListaDeFerramentas = App.activeDocument().addObject('Spreadsheet::Sheet','Lista_de_ferramentas')
+    planilhaListaDeFerramentas.Label = "Lista de ferramentas"
+    planilhaListaDeFerramentas.setColumnWidth('A',280)
+    planilhaListaDeFerramentas.setColumnWidth('B',70)
+    pastaUsinagem.addObject(planilhaListaDeFerramentas)
+    planilhaFolhaDeProcesso = App.activeDocument().addObject('Spreadsheet::Sheet','Folha_de_processo')
+    planilhaFolhaDeProcesso.Label = "Folha de processo"
+    planilhaFolhaDeProcesso.setColumnWidth('A',280)
+    planilhaFolhaDeProcesso.setColumnWidth('B',70)
+    planilhaFolhaDeProcesso.setColumnWidth('C',70)
+    planilhaFolhaDeProcesso.setColumnWidth('D',70)
+    pastaUsinagem.addObject(planilhaFolhaDeProcesso)
+    App.ActiveDocument.recompute()
+    
+def colocarZeroNumPrograma(numPrograma):
+    numPrograma = int(numPrograma)
+    if numPrograma < 10:
+        numPrograma = '00000'+str(numPrograma)
+    elif 10 <= numPrograma < 100:
+        numPrograma = '0000'+str(numPrograma)
+    elif 100 <= numPrograma < 1000:
+        numPrograma = '000'+str(numPrograma)
+    elif 1000 <= numPrograma < 10000:
+        numPrograma = '00'+str(numPrograma)
+    elif 10000 <= numPrograma < 100000:
+        numPrograma = '0'+str(numPrograma)
+    return numPrograma
+
+def lerLinha(x):
+    Lado = planilhaProgramaCNC.get('B'+str(x))
+    if x>3:
+        ladoAnterior = planilhaProgramaCNC.get('B'+str(x-1))
+    else:
+        ladoAnterior = Lado
+    T = planilhaProgramaCNC.get('D'+str(x))
+    descFerr = planilhaProgramaCNC.get('E'+str(x))
+    diam = planilhaProgramaCNC.get('F'+str(x))
+    S = planilhaProgramaCNC.get('H'+str(x))
+    F = planilhaProgramaCNC.get('J'+str(x))
+    X = planilhaProgramaCNC.get('L'+str(x))
+    Y = planilhaProgramaCNC.get('N'+str(x))
+    Zi = planilhaProgramaCNC.get('P'+str(x))
+    Zf = planilhaProgramaCNC.get('R'+str(x))
+    sub = planilhaProgramaCNC.get('S'+str(x))
+    L = planilhaProgramaCNC.get('T'+str(x))
+    varX = planilhaProgramaCNC.get('U'+str(x))
+    varY = planilhaProgramaCNC.get('V'+str(x))
+    return Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior
+
+#Iniciar programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL (FAGOR) ---------------------------------------------------------------------------
+criarPastaUsinagem()
+P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
+#modelarBloco(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+OpenSCAD = modelarBlocoSCAD(P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+linhaAtual = 3
+Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
+nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
+
+dicionario_ferramentas_usadas = {}
+listaFerramentas = ';***FERRAMENTAS***' + '\n'
+planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaListaDeFerramentas = App.activeDocument().getObject('Lista_de_ferramentas')
+planilhaFerramentas.set('H1:H25','Não')
+planilhaFerramentas.set('I1:I25','0.0')
+planilhaFerramentas.recompute()
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    planilhaFerramentas.set('H'+str(T+1),'Sim')
+    ZMax = planilhaFerramentas.get('I'+str(T+1))
+    if Zf < ZMax:
+        planilhaFerramentas.set('I'+str(T+1),str(Zf))
+    linhaAtual += 1
+    planilhaFerramentas.recompute()
+planilhaFerramentas.recompute()
+linhaAtual = 2
+linhaListaFerramentas = 1
+while linhaAtual <= 25:
+    ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
+    if ferramentaUsada == 'Sim':
+        T = planilhaFerramentas.get('A'+str(linhaAtual))
+        tipoFerramenta = planilhaFerramentas.get('B'+str(linhaAtual))
+        diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
+        descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
+        listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+        ZMax = planilhaFerramentas.get('I'+str(linhaAtual))
+        dicionario_ferramentas_usadas[int(T)] = {
+    "tipo": str(tipoFerramenta),
+    "diametro": diamFerramenta,
+    "comp": 0.0-float(ZMax)
+}
+        planilhaListaDeFerramentas.set('A'+str(linhaListaFerramentas),'T'+str(T)+" - "+str(descricaoFerramenta)+' (Z'+str(ZMax)+')')
+        linhaListaFerramentas += 1
+    linhaAtual += 1
+planilhaListaDeFerramentas.set('A1','FERR. BLOCO '+str(nomePrograma))
+listaFerramentas += ';' + '\n'
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+linhaFolhaDeProcesso = 1
+del dicionario_ferramentas_usadas[1] # Retirar broca de centro do dicionário
+ferramentas_por_diametro = sorted(dicionario_ferramentas_usadas.items(), key=lambda x: x[1]["diametro"], reverse=True)
+print(ferramentas_por_diametro)
+
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
+    #print(sub)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        prg = "%" + nomePrograma + ",MX--," + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
+        prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
+        prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
+        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";" + '\n'
+        prg +=  listaFerramentas
+        prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
+        prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
+        prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg += "(P1 = P101 / 2); METADE EIXO Z LADO 1" + '\n'
+        prg += "(P2 = P102 / 2); METADE EIXO X LADO 1" + '\n'
+        prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
+        prg +=  "M0" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G53 G00 Z-10." + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T" + str(T) + "D" + str(T) + "; " + str(descFerr) + ' ' + str(diam) + '\n'
+        prg +=  '(MSG "L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S" + str(S) + " M03" + '\n'
+    elif sub == "TROCA DE FERRAMENTA":
+        prg +=  ";Troca de ferramenta" + '\n'
+        prg +=  "M09; Desligar refrigeracao" + '\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "T" + str(T) + "D" + str(T) + "; " + str(descFerr) + ' ' + str(diam) + '\n'
+        prg +=  '(MSG "L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S" + str(S) + " M03" + '\n'
+    elif sub == "APROXIMAR DO FURO":
+        prg +=  "(P1=" + str(varX) + ")" + '\n'
+        prg +=  "(P2=" + str(varY) + ")" + '\n'
+        prg +=  "G00 Z" + str(Zi) + '\n'
+        prg +=  "G00 XP1 YP2" + '\n'
+        prg +=  "    Z0.5" + '\n'
+    elif sub == "LIGAR REFRIGERAÇÃO":
+        prg +=  "M08; Ligar refrigeracao" + '\n'
+    elif sub == "SAIR DO FURO":
+        prg +=  "G00 Z" + str(Zf) + '\n'
+    elif sub == "DESLIGAR REFRIGERAÇÃO":
+        prg +=  "M09; Desligar refrigeracao" + '\n'
+    elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        prg +=  "G05" + '\n'
+        prg +=  "M05; Parar ferramenta" + '\n'
+        prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
+        prg +=  "M0" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T" + str(T) + "D" + str(T) + "; " + str(descFerr) + ' ' + str(diam) + '\n'
+        prg +=  '(MSG "L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S" + str(S) + " M03" + '\n'
+    elif sub == "PICA-PAU SEM RETORNO":
+        prg +=  '(MSG "' + str(linhaAtual) + '-L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  ";Pica-pau sem retorno" + '\n'
+        prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
+        prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
+        prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  ";" + '\n'
+        #modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
+        planilhaFolhaDeProcesso = App.activeDocument().getObject('Folha_de_processo')
+        planilhaFolhaDeProcesso.set('A'+str(linhaFolhaDeProcesso),str(linhaAtual) + ' - L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr))
+        planilhaFolhaDeProcesso.set('B'+str(linhaFolhaDeProcesso),'X'+str(round(X,2)))
+        planilhaFolhaDeProcesso.set('C'+str(linhaFolhaDeProcesso),'Y'+str(round(Y,2)))
+        planilhaFolhaDeProcesso.set('D'+str(linhaFolhaDeProcesso),'Z'+str(round(Zf,2)))
+        planilhaFolhaDeProcesso.set('E'+str(linhaFolhaDeProcesso),'SEM RETORNO')
+        linhaFolhaDeProcesso += 1
+    elif sub == "PICA-PAU COM RETORNO A Z2":
+        prg +=  '(MSG "' + str(linhaAtual) + '-L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr) + '")' + '\n'
+        prg +=  ";Pica-pau com retorno a Z2" + '\n'
+        prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
+        prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
+        prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 4); PICA-PAU COM RETORNO A Z2" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  ";" + '\n'
+        #modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)))
+        planilhaFolhaDeProcesso = App.activeDocument().getObject('Folha_de_processo')
+        planilhaFolhaDeProcesso.set('A'+str(linhaFolhaDeProcesso),str(linhaAtual) + ' - L' + str(Lado) + " - DIAM " + str(diam) + ' - ' + str(descFerr))
+        planilhaFolhaDeProcesso.set('B'+str(linhaFolhaDeProcesso),'X'+str(round(X,2)))
+        planilhaFolhaDeProcesso.set('C'+str(linhaFolhaDeProcesso),'Y'+str(round(Y,2)))
+        planilhaFolhaDeProcesso.set('D'+str(linhaFolhaDeProcesso),'Z'+str(round(Zf,2)))
+        planilhaFolhaDeProcesso.set('E'+str(linhaFolhaDeProcesso),'RETORNO A Z2')
+        linhaFolhaDeProcesso += 1
+    linhaAtual += 1
+# Fim do bloco hidráulico
+prg +=  "G05" + '\n'
+prg +=  "M05" + '\n'
+prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+prg +=  ";ZERAR K FERRAMENTAS" + '\n'
+prg +=  "(P100 = 0)" + '\n'
+prg +=  "(MCALL 2)" + '\n'
+prg +=  "(MDOFF)" + '\n'
+prg +=  "M30; Fim do programa" + '\n'
+prg +=  "%" + '\n'
+
+#Salvar arquivo CNC
+numPrograma = int(planilhaProgramaCNC.get('numPrograma'))
+numPrograma += 2
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
+escrever = open(arquivo, "w")
+escrever.write(prg)
+escrever.close()
+App.ActiveDocument.recompute()
+#Fim do programa ----- PROGRAMA BLOCO HIDRÁULICO PRINCIPAL (FAGOR) ---------------------------------------------------------------------------
+
+#Iniciar programa ----- PROGRAMA FURO DE CENTRO (FAGOR) ---------------------------------------------------------------------------
+P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
+linhaAtual = 3
+Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
+nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
+
+listaFerramentas = ';***FERRAMENTAS***' + '\n'
+planilhaFerramentas = App.activeDocument().getObject('Ferramentas')
+planilhaFerramentas.set('H1:H25','Não')
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)
+    if sub == "FURO DE CENTRO":
+        planilhaFerramentas.set('H'+str(T+1),'Sim')
+    linhaAtual += 1
+planilhaFerramentas.recompute()
+linhaAtual = 2
+while linhaAtual <= 25:
+    ferramentaUsada = planilhaFerramentas.get('H'+str(linhaAtual))
+    if ferramentaUsada == 'Sim':
+        T = planilhaFerramentas.get('A'+str(linhaAtual))
+        tipoFerramenta = planilhaFerramentas.get('B'+str(linhaAtual))
+        diamFerramenta = planilhaFerramentas.get('C'+str(linhaAtual))
+        descricaoFerramenta = str(tipoFerramenta) + " " + str(diamFerramenta)
+        listaFerramentas += ';T'+str(T)+" - "+str(descricaoFerramenta) + '\n'
+    linhaAtual += 1
+listaFerramentas += ';' + '\n'
+sub = "INICIO DO BLOCO HIDRÁULICO"
+linhaAtual = 3
+
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
+    #print(sub)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        prg = "%CENTRO-" + nomePrograma + ",MX--," + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
+        prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
+        prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
+        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PROGRAMA DOS FUROS DE CENTRO" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  listaFerramentas
+        prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
+        prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
+        prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg += "(P1 = P101 / 2); METADE EIXO Z LADO 1" + '\n'
+        prg += "(P2 = P102 / 2); METADE EIXO X LADO 1" + '\n'
+        prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
+        prg +=  "M0" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G53 G00 Z-10." + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  'T1D1; BROCA CENTRO ACO RAPIDO' + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - BROCA CENTRO ACO RAPIDO")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S1000 M03" + '\n'
+    elif sub == "APROXIMAR DO FURO":
+        prg +=  "(P1=" + str(varX) + ")" + '\n'
+        prg +=  "(P2=" + str(varY) + ")" + '\n'
+        prg +=  "G00 Z" + str(Zi) + '\n'
+        prg +=  "G00 XP1 YP2" + '\n'
+        prg +=  "    Z0.5" + '\n'
+    elif sub == "LIGAR REFRIGERAÇÃO":
+        prg +=  "M08; Ligar refrigeracao" + '\n'
+    elif sub == "SAIR DO FURO":
+        prg +=  "G00 Z" + str(Zf) + '\n'
+    elif sub == "TROCAR LADO BLOCO HIDRAULICO":
+        prg +=  "M09; Desligar refrigeracao" + '\n'
+        prg +=  "G05" + '\n'
+        prg +=  "M05; Parar ferramenta" + '\n'
+        prg +=  ";*** FIM DO LADO " + str(ladoAnterior) + ' ***\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
+        prg +=  "M0" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** INICIO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  'T1D1; BROCA CENTRO ACO RAPIDO' + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - BROCA CENTRO ACO RAPIDO")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S1000 M03" + '\n'
+    elif sub == "FURO DE CENTRO":
+        prg +=  ";Pica-pau sem retorno" + '\n'
+        prg +=  "(P104=" + str(Zi) + "); Profundidade inicial" + '\n'
+        prg +=  "(P105=" + str(Zf) + "); Profundidade final" + '\n'
+        prg +=  "(P106=" + str(F) + "); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  ";" + '\n'
+    linhaAtual += 1
+# Fim do bloco hidráulico
+prg +=  "G05" + '\n'
+prg +=  "M05" + '\n'
+prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+prg +=  ";ZERAR K FERRAMENTAS" + '\n'
+prg +=  "(P100 = 0)" + '\n'
+prg +=  "(MCALL 2)" + '\n'
+prg +=  "(MDOFF)" + '\n'
+prg +=  "M30; Fim do programa" + '\n'
+prg +=  "%" + '\n'
+
+#Salvar arquivo CNC
+numPrograma = planilhaProgramaCNC.get('numPrograma')
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
+escrever = open(arquivo, "w")
+escrever.write(prg)
+escrever.close()
+App.ActiveDocument.recompute()
+#Fim do programa ----- PROGRAMA FURO DE CENTRO (FAGOR) ---------------------------------------------------------------------------
+planilhaFerramentas.set('H1:H25','')
+
+#Iniciar programa ----- PROGRAMA CARTUCHO (FAGOR) ---------------------------------------------------------------------------
+P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y = lerTamanhoBloco()
+linhaAtual = 3
+Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(3)
+nomePrograma = App.activeDocument().getObject('Programa_CNC').get('nomePrograma')
+
+while sub != "FIM DO BLOCO HIDRÁULICO":
+    Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
+    #print(sub)
+    if sub == "INICIO DO BLOCO HIDRÁULICO":
+        prg = "%CARTUCHO-" + nomePrograma + ",MX--," + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
+        prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
+        prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
+        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PROGRAMA DE FAZER CARTUCHO" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";***FERRAMENTAS***" + '\n'
+        prg +=  ";T02 - BROCA 15.5 ACO RAPIDO" + '\n'
+        prg +=  ";T03 - BROCA 20 ACO RAPIDO" + '\n'
+        prg +=  ";T04 - ALARGADOR 16" + '\n'
+        prg +=  ";T05 - BROCA DE ESCAREAR FURO 37 GRAUS" + '\n'
+        prg +=  ";T06 - MACHO 7/8 UNF 14 FIOS/POL" + '\n'
+        prg +=  ";" + '\n'
+        prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
+        prg += "(P102 = " + str(P102_Lado_1_X) + "); EIXO X LADO 1" + '\n'
+        prg +=  "(P103 = " + str(P103_Lado_1_Y) +  "); EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+        prg += "(P1 = P101 / 2); METADE EIXO Z LADO 1" + '\n'
+        prg += "(P2 = P102 / 2); METADE EIXO X LADO 1" + '\n'
+        prg += "(P3 = P103 / 2); METADE EIXO Y LADO 1" + '\n'
+        prg +=  ";" + '\n'
+    elif sub == "CARTUCHO":
+        prg +=  '(MSG "DEIXE O LADO ' + str(Lado) + ' PARA CIMA")' + '\n'
+        prg +=  "M0" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  ";INICIO DO CARTUCHO LADO "+ str(Lado) + '\n'
+        prg +=  ";AJUSTAR ALTURA DA FACE" + '\n'
+        if Lado == 1:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 2:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 3:
+            prg += "(P100 = P101); AJUSTE DA ALTURA"
+        if Lado == 4:
+            prg += "(P100 = P103); AJUSTE DA ALTURA"
+        if Lado == 5:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        if Lado == 6:
+            prg += "(P100 = P102); AJUSTE DA ALTURA"
+        prg += '\n' + "(MCALL 2)" + '\n'
+        prg +=  "(MDOFF )" + '\n'
+        prg +=  ";*** CARTUCHO DO LADO " + str(Lado) + " ***" + '\n'
+        prg +=  "G53 G00 Z-10." + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T2D2 ;BROCA 15.5 ACO RAPIDO" + '\n'
+        prg +=  "(P4 = " + str(varX) + "); X DO FURO" + '\n'
+        prg +=  "(P5 = " + str(varY) + "); Y DO FURO" + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - BROCA 15.5 Z-37")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S570 M03" + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z100." + '\n'
+        prg +=  "    Z2." + '\n'
+        prg +=  "M8 ; LIGAR REFRIGERACAO" + '\n'
+        prg +=  ";Pica-pau sem retorno" + '\n'
+        prg +=  "(P104=0); Profundidade inicial" + '\n'
+        prg +=  "(P105=-37); Profundidade final" + '\n'
+        prg +=  "(P106=30); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  "M9 ; DESLIGAR REFRIGERACAO" + '\n'
+        prg +=  'G00' + '\n'
+        prg +=  'G53 Z-10.' + '\n'
+        prg +=  "G05" + '\n'
+        prg +=  "M05" + '\n'
+        prg +=  "M01" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T3D3 ;BROCA 20 ACO RAPIDO" + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - BROCA 20 Z-29.5")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S350 M03" + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z100." + '\n'
+        prg +=  "    Z2." + '\n'
+        prg +=  "M8 ; LIGAR REFRIGERACAO" + '\n'
+        prg +=  ";Pica-pau sem retorno" + '\n'
+        prg +=  "(P104=0); Profundidade inicial" + '\n'
+        prg +=  "(P105=-29.5); Profundidade final" + '\n'
+        prg +=  "(P106=25); Avanco" + '\n'
+        prg +=  "(P107=2); Incremento" + '\n'
+        prg +=  "(MCALL 3); PICA-PAU SEM RETORNO" + '\n'
+        prg +=  "(MDOFF)" + '\n'
+        prg +=  "M9 ; DESLIGAR REFRIGERACAO" + '\n'
+        prg +=  'G00' + '\n'
+        prg +=  'G53 Z-10.' + '\n'
+        prg +=  "G05" + '\n'
+        prg +=  "M05" + '\n'
+        prg +=  "M01" + '\n'
+        prg +=  ";" + '\n'
+        prg +=  "G71 G40 G80" + '\n'
+        prg +=  "T4D4 ;ALARGADOR 16" + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - ALARG 16 Z-34")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  "S120 M03" + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z100." + '\n'
+        prg +=  "    Z20." + '\n'
+        prg +=  '(MSG "PASSAR BANHA NO ALARGADOR")' + '\n'
+        prg +=  'M00' + '\n'
+        prg +=  'G00 Z2.' + '\n'
+        prg +=  'G01 Z-17. F60' + '\n'
+        prg +=  'G01 Z-34. F15' + '\n'
+        prg +=  'G01 Z+2. F200' + '\n'
+        prg +=  'G00' + '\n'
+        prg +=  'G53 Z-10.' + '\n'
+        prg +=  'G05' + '\n'
+        prg +=  'M05' + '\n'
+        prg +=  'M01' + '\n'
+        prg +=  ';' + '\n'
+        prg +=  'G71 G40 G80' + '\n'
+        prg +=  'T5D5 ;BROCA DE ESCAREAR FURO 37 GRAUS' + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - ESCAREAR Z-10")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  'S120 M03' + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z100." + '\n'
+        prg +=  "    Z20." + '\n'
+        prg +=  '(MSG "PASSAR BANHA NO ESCAREADOR")' + '\n'
+        prg +=  'M00' + '\n'
+        prg +=  'G00 Z2.' + '\n'
+        prg +=  'G01 Z-6. F80' + '\n'
+        prg +=  'G01 Z-8.2 F10' + '\n'
+        prg +=  'G01 Z-10. F4' + '\n'
+        prg +=  'G04 K400' + '\n'
+        prg +=  'G00' + '\n'
+        prg +=  'G53 Z-10.' + '\n'
+        prg +=  "M5 ; PARAR FERRAMENTA" + '\n'
+        prg +=  'G05' + '\n'
+        prg +=  '(MSG "LIMPAR BEM O FURO")' + '\n'
+        prg +=  'M00' + '\n'
+        prg +=  'G71 G40 G80' + '\n'
+        prg +=  'T6D6 ;MACHO 7/8 UNF 14 FIOS/POL' + '\n'
+        prg +=  '(MSG "L' + str(Lado) + ' - MACHO 7/8 UNF Z-16")' + '\n'
+        prg +=  "M06" + '\n'
+        prg +=  "G54" + '\n'
+        prg +=  "G90 G94" + '\n'
+        prg +=  "G07" + '\n'
+        prg +=  'S100 M03' + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z100." + '\n'
+        prg +=  "    Z20." + '\n'
+        prg +=  '(MSG "PASSAR BANHA NO MACHO")' + '\n'
+        prg +=  'M00' + '\n'
+        prg +=  'M03' + '\n'
+        prg +=  'G90 G95 ; INICIO CICLO DE ROSCA' + '\n'
+        prg +=  'S100 M03' + '\n'
+        prg +=  "G00 XP4 YP5" + '\n'
+        prg +=  "    Z10." + '\n'
+        prg +=  'G98 G84 XP4 YP5 Z2. I-16. K0 R1 J1. F1.786' + '\n'
+        prg +=  'G80 ; FIM DO CICLO DE ROSCA' + '\n'
+        prg +=  ";FIM DO CARTUCHO LADO "+ str(Lado) + '\n'
+        prg +=  "G05" + '\n'
+        prg +=  "M05" + '\n'
+        prg +=  '(MSG "TERMINAR ROSCA NO DESANDADOR")' + '\n'
+        prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
+        prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
+        #modelarFuro(str(linhaAtual)+"A", Lado, 16, X, Y, 0, -37, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)+"A"))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)+"A"))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)+"A"))
+        #modelarFuro(str(linhaAtual)+"B", Lado, 20.5, X, Y, 0, -29.5, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)+"B"))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)+"B"))
+        #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)+"B"))
+    linhaAtual += 1
+# Fim do bloco hidráulico
+prg +=  ";ZERAR K FERRAMENTAS" + '\n'
+prg +=  "(P100 = 0)" + '\n'
+prg +=  "(MCALL 2)" + '\n'
+prg +=  "(MDOFF)" + '\n'
+prg +=  "M30; Fim do programa" + '\n'
+prg +=  "%" + '\n'
+
+#Salvar arquivo CNC
+numPrograma = planilhaProgramaCNC.get('numPrograma')
+numPrograma += 1
+numPrograma = colocarZeroNumPrograma(numPrograma)
+arquivo = os.getcwd()+"/"+str(numPrograma)+".pim"
+escrever = open(arquivo, "w")
+escrever.write(prg)
+escrever.close()
+App.ActiveDocument.recompute()
+#Fim do programa ----- PROGRAMA CARTUCHO (FAGOR) ---------------------------------------------------------------------------
+planilhaFerramentas.set('H2:H25','')
+
+#Ocultar furos de centro
+#Gui.Selection.clearSelection()
+#Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos_de_centro"))
+#Gui.runCommand('Std_ToggleVisibility',0)
+#Gui.Selection.clearSelection()
+
+#Unir todos furos
+#x=0
+#for i in App.ActiveDocument.getObject("Furos").Group:
+    #Gui.Selection.addSelection(App.ActiveDocument.getObject("Furos").Group[x])
+    #x=x+1
+#Gui.runCommand('Part_Fuse',0)
+
+#Recortar os furos do bloco
+#App.ActiveDocument.removeObject('Furos')
+#App.ActiveDocument.recompute()
+#App.activeDocument().addObject("Part::Cut","Bloco_hidraulico")
+#App.activeDocument().Bloco_hidraulico.Base = App.activeDocument().Bloco_numerado
+#App.activeDocument().Bloco_hidraulico.Tool = App.activeDocument().Fusion
+#FreeCAD.ActiveDocument.getObject('Fusion').Label = "Furos"
+App.activeDocument().recompute()
+
+#Escrever arquivo openscad
+arquivo = os.getcwd()+"/"+str(nomePrograma)+".scad"
+escrever = open(arquivo, "w")
+escrever.write(OpenSCAD)
+escrever.close()
+
+msg = "Salvo em:\n"+os.getcwd() + "\n\n"
+msg += "Início: "+str(horaInicio) + "\n"
+os.chdir(pastaInicioPrograma)
+horaFim = datetime.datetime.now()
+print("Fim: "+str(horaFim))
+tempoExecucao = horaFim - horaInicio
+print("Tempo: "+str(tempoExecucao))
+msg += "Fim: "+str(horaFim) + "\n"
+msg += "Tempo de execução: "+str(tempoExecucao)
+print(msg)
+diag = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Fim do script', msg)
+diag.setWindowModality(QtCore.Qt.ApplicationModal)
+diag.exec_()
