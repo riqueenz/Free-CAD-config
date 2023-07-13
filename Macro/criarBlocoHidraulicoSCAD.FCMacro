@@ -161,7 +161,7 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
     OpenSCAD += "//" + str(sub) + "\n"
     OpenSCAD += "// X" + str(X) + " Y" + str(Y) + " Z"+str(Zf) + "\n"
     corFuroSCAD = "color([0,0,0])\n"
-    h = round(0-Zf-alturaPontaBroca,2)
+    h = round(Zi-Zf-alturaPontaBroca,2)
     if L=="P":
         corFuroSCAD = "color([1,0,0])\n"
     elif L=="T":
@@ -179,7 +179,7 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(h)+"])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(round(h+Z_Furo,2))+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     elif lado == 2:
@@ -191,7 +191,7 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", -"+str(h)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", -"+str(round(h-Zi,2))+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     elif lado == 3:
@@ -227,7 +227,7 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "rotate([0,90,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(h)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "translate(["+str(round(h-Zi,2))+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([0,90,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
     elif lado == 6:
