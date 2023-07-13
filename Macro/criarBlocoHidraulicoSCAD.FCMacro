@@ -212,11 +212,11 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         Z_Furo = round(float(P101_Lado_1_Z) + float(Y),2)
         OpenSCAD += corFuroSCAD
         OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
-        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(float(Z_Furo)-float(alturaPontaBroca))+"])\n"
-        OpenSCAD += "rotate([0,0,0])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(round(Y_Furo+alturaPontaBroca,2))+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([90,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
     elif lado == 5:
         X_Furo = round(-Zi,2)
@@ -230,6 +230,18 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         OpenSCAD += "translate(["+str(h)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([0,90,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = "+str(diam)+", d2 = 0.1);\n"
+    elif lado == 6:
+        X_Furo = P102_Lado_1_X + Zf + alturaPontaBroca
+        Y_Furo = -P103_Lado_1_Y + X
+        Z_Furo = P101_Lado_1_Z + Y
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,90,0])\n"
+        OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
+        OpenSCAD += corFuroSCAD
+        OpenSCAD += "translate(["+str(round(X_Furo-alturaPontaBroca,2))+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "rotate([0,90,0])\n"
+        OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
     return OpenSCAD
     
 def modelarFuro(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y):
