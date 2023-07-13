@@ -956,12 +956,12 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "G53 G00 Z-10.; Subir a ferramenta" + '\n'
         prg +=  "G53 G00 Y-10.; Trazer a mesa para frente"+ '\n'
         #modelarFuro(str(linhaAtual)+"A", Lado, 16, X, Y, 0, -37, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
-        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        OpenSCAD += modelarFuroSCAD(str(linhaAtual)+"A", Lado, 16, X, Y, 0, -37, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)+"A"))
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)+"A"))
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)+"A"))
         #modelarFuro(str(linhaAtual)+"B", Lado, 20.5, X, Y, 0, -29.5, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
-        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
+        OpenSCAD += modelarFuroSCAD(str(linhaAtual)+"B", Lado, 20.5, X, Y, 0, -29.5, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)+"B"))
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Cone"+str(linhaAtual)+"B"))
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)+"B"))
