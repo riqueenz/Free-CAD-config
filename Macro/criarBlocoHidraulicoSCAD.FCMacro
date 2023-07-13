@@ -199,11 +199,11 @@ def modelarFuroSCAD(numFuro, lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P1
         Y_Furo = round(Y,2)
         Z_Furo = round(P101_Lado_1_Z + Zf,2)
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(round(Z_Furo+alturaPontaBroca,2))+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(h)+", d = "+str(diam)+");\n"
         OpenSCAD += corFuroSCAD
-        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(round(float(Z_Furo)-float(alturaPontaBroca),2))+"])\n"
+        OpenSCAD += "translate(["+str(X_Furo)+", "+str(Y_Furo)+", "+str(Z_Furo)+"])\n"
         OpenSCAD += "rotate([0,0,0])\n"
         OpenSCAD += "cylinder(h = "+str(alturaPontaBroca)+", d1 = 0.1, d2 = "+str(diam)+");\n"
     elif lado == 4:
