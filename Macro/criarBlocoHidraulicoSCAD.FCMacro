@@ -580,6 +580,7 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
         prg +=  "(MCALL 4); PICA-PAU COM RETORNO A Z2" + '\n'
         prg +=  "(MDOFF)" + '\n'
         prg +=  ";" + '\n'
+        OpenSCAD += modelarFuroSCAD(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         #modelarFuro(linhaAtual, Lado, diam, X, Y, Zi, Zf, sub, L, P101_Lado_1_Z, P102_Lado_1_X, P103_Lado_1_Y)
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("Furo"+str(linhaAtual)))
         #App.ActiveDocument.getObject("Furos").addObject(App.ActiveDocument.getObject("tapaCone"+str(linhaAtual)))
