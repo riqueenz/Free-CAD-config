@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+# Macro Begin: /home/hidraumak/Documentos/GitHub/Free-CAD-config/Macro/teste-converter-step-para-freecad.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
+import FreeCAD
+import ImportGui
+
+# Gui.runCommand('Std_DlgMacroRecord',0)
+### Begin command Std_Open
+ImportGui.open(u"/home/hidraumak/Documentos/GitHub/projetosFreeCAD/Projetos/000D_Biblioteca 3D/Componentes El\xe9tricos/Bot\xf5es/Botoeira Cogumelo de Acionamento Vermelha.STEP")
+# App.setActiveDocument("Unnamed")
+# App.ActiveDocument=App.getDocument("Unnamed")
+# Gui.ActiveDocument=Gui.getDocument("Unnamed")
+# Gui.SendMsgToActiveView("ViewFit")
+### End command Std_Open
+# Gui.Selection.addSelection('Unnamed','Part__Feature')
+# Gui.Selection.clearSelection()
+# Gui.Selection.addSelection('Unnamed','Part__Feature')
+# Gui.Selection.clearSelection()
+# Gui.Selection.addSelection('Unnamed','Part__Feature')
+### Begin command Std_SaveAs
+# Gui.SendMsgToActiveView("SaveAs")
+App.getDocument("Unnamed").saveAs(u"/home/hidraumak/Documentos/GitHub/projetosFreeCAD/Projetos/000D_Biblioteca 3D/Componentes El\xe9tricos/Bot\xf5es/Botoeira Cogumelo de Acionamento Vermelha.FCStd")
+### End command Std_SaveAs
+# Macro End: /home/hidraumak/Documentos/GitHub/Free-CAD-config/Macro/teste-converter-step-para-freecad.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
