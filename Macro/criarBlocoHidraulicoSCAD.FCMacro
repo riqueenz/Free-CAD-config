@@ -448,12 +448,12 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%" + nomePrograma + ",MX--," + '\n'
+        prg = "%" + str(nomePrograma) + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
         prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
-        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PECA..........> BLOCO " + str(nomePrograma) + '\n'
         prg +=  ";" + '\n'
         prg +=  listaFerramentas
         prg += '(P101 = ' + str(P101_Lado_1_Z) + '); EIXO Z LADO 1' + '\n'
@@ -649,12 +649,12 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%CENTRO-" + nomePrograma + ",MX--," + '\n'
+        prg = "%CENTRO-" + str(nomePrograma) + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
         prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
-        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PECA..........> BLOCO " + str(nomePrograma) + '\n'
         prg +=  ";PROGRAMA DOS FUROS DE CENTRO" + '\n'
         prg +=  ";" + '\n'
         prg +=  listaFerramentas
@@ -781,12 +781,12 @@ while sub != "FIM DO BLOCO HIDRÁULICO":
     Lado, T, descFerr, diam, S, F, X, Y, Zi, Zf, sub, L, varX, varY, ladoAnterior = lerLinha(linhaAtual)  
     #print(sub)
     if sub == "INICIO DO BLOCO HIDRÁULICO":
-        prg = "%CARTUCHO-" + nomePrograma + ",MX--," + '\n'
+        prg = "%CARTUCHO-" + str(nomePrograma) + ",MX--," + '\n'
         prg +=  ";" + '\n'
         prg +=  ";EMPRESA.......> HL HIDRAUMAK" + '\n'
         prg +=  ";MAQUINA.......> TRAVIS_M1000 - FAGOR" + '\n'
         prg +=  ";PROGRAMADOR...> HENRIQUE" + '\n'
-        prg +=  ";PECA..........> BLOCO " + nomePrograma + '\n'
+        prg +=  ";PECA..........> BLOCO " + str(nomePrograma) + '\n'
         prg +=  ";PROGRAMA DE FAZER CARTUCHO" + '\n'
         prg +=  ";" + '\n'
         prg +=  ";***FERRAMENTAS***" + '\n'
