@@ -11,9 +11,15 @@ def transfEmVarTabela(var):
     var = var.replace("P1","Z_P1")
     var = var.replace("P2","X_P2")
     var = var.replace("P3","Y_P3")
+    var = var.replace("P104","Z_P104")
+    var = var.replace("P105","X_P105")
+    var = var.replace("P106","Y_P106")
     var = var.replace("Z_P101","Z_P101")
     var = var.replace("Z_P102","X_P102")
     var = var.replace("Z_P103","Y_P103")
+    var = var.replace("Z_Z_P104","Z_P104")
+    var = var.replace("Z_X_P105","X_P105")
+    var = var.replace("Z_Y_P106","Y_P106")
     var = var.replace("=Px1","=P1")
     var = var.replace("=Px2","=P2")
     var = var.replace("=Px3","=P3")
@@ -48,7 +54,7 @@ def testePreenchimento(linha):
     planilhaProgramaCNC.recompute()
     
 x=3
-while x<300:
+while x<301:
     testePreenchimento(x)
     x+=1
 
