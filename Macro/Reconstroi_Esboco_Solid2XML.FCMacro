@@ -1,0 +1,183 @@
+# -*- coding: utf-8 -*-
+# FreeCAD macro: reconstruir o primeiro esboço de um XML exportado pelo Solid2XML
+#
+# Uso:
+#   1. Abra o FreeCAD.
+#   2. Execute esta macro.
+#   3. Selecione o arquivo XML.
+#
+# A macro importa somente o primeiro <Esboco> encontrado dentro da árvore
+# de operações. Não importa cotas/restrições nem operações 3D.
+# As coordenadas XML estão em mm e são preservadas no plano XY do esboço.
+# O atributo geometria_construcao define se cada linha é auxiliar.
+
+import os
+import xml.etree.ElementTree as ET
+
+import FreeCAD as App
+import Part
+import Sketcher
+
+try:
+    from PySide import QtGui
+    from PySide import QtCore
+except ImportError:
+    from PySide6 import QtWidgets as QtGui
+    from PySide6 import QtCore
+
+
+def texto_bool(valor):
+    """Converte valores booleanos comuns do XML para bool."""
+    return str(valor or "").strip().lower() in (
+        "true", "1", "sim", "yes", "verdadeiro"
+    )
+
+
+def ler_coordenada(segmento, nome_ponto, eixo):
+    no = segmento.find("./{}/{}_mm".format(nome_ponto, eixo))
+    if no is None or no.text is None:
+        raise ValueError(
+            "Falta a coordenada {} de {} no XML.".format(
+                eixo, segmento.get("id", "segmento sem ID")
+            )
+        )
+    return float(no.text.strip())
+
+
+def primeiro_esboco_raiz(raiz):
+    """
+    Seleciona o primeiro esboço de uma operação ProfileFeature.
+    O XML pode repetir o mesmo esboço sob uma operação posterior, como
+    uma extrusão; por isso não importamos todos os elementos Esboco.
+    """
+    arvore = raiz.find("./ArvoreOperacoes")
+    if arvore is None:
+        raise ValueError("O XML não contém <ArvoreOperacoes>.")
+
+    for operacao in arvore.findall("./Operacao"):
+        if operacao.get("tipo") != "ProfileFeature":
+            continue
+        esboco = operacao.find("./Esboco")
+        if esboco is not None:
+            return esboco
+
+    raise ValueError(
+        "Não foi encontrado um <Esboco> dentro de uma operação "
+        "do tipo ProfileFeature."
+    )
+
+
+def reconstruir_esboco(caminho_xml):
+    arvore_xml = ET.parse(caminho_xml)
+    raiz = arvore_xml.getroot()
+
+    if raiz.tag != "SolidWorksExport":
+        raise ValueError(
+            "O arquivo selecionado não parece ser um XML Solid2XML "
+            "(elemento raiz esperado: SolidWorksExport)."
+        )
+
+    elemento_esboco = primeiro_esboco_raiz(raiz)
+    nome_esboco = elemento_esboco.get("nome", "Esboco_Importado")
+    segmentos = elemento_esboco.findall("./Segmentos/Segmento")
+
+    if not segmentos:
+        raise ValueError("O esboço selecionado não contém segmentos.")
+
+    documento = App.newDocument("Reconstrucao_XML")
+    nome_objeto = "EsbocoReconstruido"
+    sketch = documento.addObject("Sketcher::SketchObject", nome_objeto)
+    sketch.Label = "{} (importado do XML)".format(nome_esboco)
+
+    importadas = 0
+    construcoes = 0
+    ignoradas = 0
+    erros = []
+
+    for segmento in segmentos:
+        tipo = (segmento.get("tipo") or "").strip().lower()
+
+        # Esta primeira versão reconstrói apenas segmentos lineares.
+        if tipo not in ("linha", "line"):
+            ignoradas += 1
+            continue
+
+        try:
+            x1 = ler_coordenada(segmento, "PontoInicial", "X")
+            y1 = ler_coordenada(segmento, "PontoInicial", "Y")
+            x2 = ler_coordenada(segmento, "PontoFinal", "X")
+            y2 = ler_coordenada(segmento, "PontoFinal", "Y")
+
+            # Esboço 2D no plano XY. Os valores numéricos do FreeCAD
+            # usam mm, a mesma unidade declarada no XML.
+            inicio = App.Vector(x1, y1, 0.0)
+            fim = App.Vector(x2, y2, 0.0)
+
+            construcao = texto_bool(segmento.get("geometria_construcao"))
+            indice = sketch.addGeometry(
+                Part.LineSegment(inicio, fim),
+                construcao
+            )
+
+            importadas += 1
+            if construcao:
+                construcoes += 1
+
+        except Exception as erro:
+            erros.append(
+                "{}: {}".format(segmento.get("id", "?"), str(erro))
+            )
+
+    documento.recompute()
+    Gui.activeDocument().activeView().viewTop()
+    Gui.activeDocument().activeView().fitAll()
+
+    mensagem = (
+        "Importação concluída.\n\n"
+        "Esboço XML: {}\n"
+        "Linhas importadas: {}\n"
+        "Linhas de construção: {}\n"
+        "Linhas normais: {}\n"
+        "Segmentos ignorados (não lineares): {}\n"
+    ).format(
+        nome_esboco,
+        importadas,
+        construcoes,
+        importadas - construcoes,
+        ignoradas
+    )
+
+    if erros:
+        mensagem += "\nProblemas encontrados:\n" + "\n".join(erros)
+
+    QtGui.QMessageBox.information(
+        Gui.getMainWindow(),
+        "Solid2XML — reconstrução do esboço",
+        mensagem
+    )
+
+    return sketch
+
+
+def executar():
+    caminho, _ = QtGui.QFileDialog.getOpenFileName(
+        Gui.getMainWindow(),
+        "Selecionar XML exportado pelo Solid2XML",
+        "",
+        "Arquivos XML (*.xml);;Todos os arquivos (*)"
+    )
+
+    if not caminho:
+        return
+
+    try:
+        reconstruir_esboco(caminho)
+    except Exception as erro:
+        QtGui.QMessageBox.critical(
+            Gui.getMainWindow(),
+            "Erro ao reconstruir esboço",
+            str(erro)
+        )
+
+
+executar()
