@@ -1,0 +1,108 @@
+# Macro Begin: /home/hidraumak/Documentos/GitHub/Free-CAD-config/Macro/CriarChapaPart.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
+import FreeCAD
+import Sketcher
+import Part
+
+nomeDoCorpo='Corpo'
+nomeDoEsboco='Esboço'
+nomeDaExtrusao='Extrusão'
+
+# Criar esboço de um retângulo
+App.getDocument('Unnamed').addObject('PartDesign::Body',nomeDoCorpo)
+App.getDocument('Unnamed').getObject(nomeDoCorpo).AllowCompound = False
+Gui.getDocument('Unnamed').ActiveView.setActiveObject('pdbody',App.getDocument('Unnamed').getObject(nomeDoCorpo),'')
+App.getDocument('Unnamed').getObject(nomeDoCorpo).newObject('Sketcher::SketchObject',nomeDoEsboco)
+App.getDocument('Unnamed').getObject(nomeDoEsboco).AttachmentSupport = (App.getDocument('Unnamed').getObject('Origin'),['XY_Plane'])
+App.getDocument('Unnamed').getObject(nomeDoEsboco).MapMode = 'FlatFace'
+App.ActiveDocument.recompute()
+Gui.getDocument('Unnamed').setEdit(App.getDocument('Unnamed').getObject(nomeDoCorpo), 0, nomeDoEsboco)
+ActiveSketch = App.getDocument('Unnamed').getObject(nomeDoEsboco)
+tv = Show.TempoVis(App.ActiveDocument, tag= ActiveSketch.ViewObject.TypeId)
+ActiveSketch.ViewObject.TempoVis = tv
+if ActiveSketch.ViewObject.EditingWorkbench:
+  tv.activateWorkbench(ActiveSketch.ViewObject.EditingWorkbench)
+if ActiveSketch.ViewObject.HideDependent:
+  tv.hide(tv.get_all_dependent(App.getDocument('Unnamed').getObject(nomeDoCorpo), nomeDoEsboco))
+if ActiveSketch.ViewObject.ShowSupport:
+  tv.show([ref[0] for ref in ActiveSketch.AttachmentSupport if not (ref[0].isDerivedFrom("App::Plane") or ref[0].isDerivedFrom("App::LocalCoordinateSystem"))])
+if ActiveSketch.ViewObject.ShowLinks:
+  tv.show([ref[0] for ref in ActiveSketch.ExternalGeometry])
+tv.sketchClipPlane(ActiveSketch, ActiveSketch.ViewObject.SectionView)
+tv.hide(ActiveSketch)
+del(tv)
+del(ActiveSketch)
+
+ActiveSketch = App.getDocument('Unnamed').getObject(nomeDoEsboco)
+if ActiveSketch.ViewObject.RestoreCamera:
+  ActiveSketch.ViewObject.TempoVis.saveCamera()
+  if ActiveSketch.ViewObject.ForceOrtho:
+    ActiveSketch.ViewObject.Document.ActiveView.setCameraType('Orthographic')
+
+# Gui.Selection.clearSelection()
+Gui.runCommand('Sketcher_CompCreateRectangles',1)
+ActiveSketch = App.getDocument('Unnamed').getObject(nomeDoEsboco)
+
+lastGeoId = len(ActiveSketch.Geometry)
+
+geoList = []
+geoList.append(Part.LineSegment(App.Vector(-50.000000, -40.000000, 0.000000),App.Vector(50.000000, -40.000000, 0.000000)))
+geoList.append(Part.LineSegment(App.Vector(50.000000, -40.000000, 0.000000),App.Vector(50.000000, 40.000000, 0.000000)))
+geoList.append(Part.LineSegment(App.Vector(50.000000, 40.000000, 0.000000),App.Vector(-50.000000, 40.000000, 0.000000)))
+geoList.append(Part.LineSegment(App.Vector(-50.000000, 40.000000, 0.000000),App.Vector(-50.000000, -40.000000, 0.000000)))
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addGeometry(geoList,False)
+del geoList
+
+constrGeoList = []
+constrGeoList.append(Part.Point(App.Vector(0.000000, 0.000000, 0.000000)))
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addGeometry(constrGeoList,True)
+del constrGeoList
+
+constraintList = []
+constraintList.append(Sketcher.Constraint('Coincident', 0, 2, 1, 1))
+constraintList.append(Sketcher.Constraint('Coincident', 1, 2, 2, 1))
+constraintList.append(Sketcher.Constraint('Coincident', 2, 2, 3, 1))
+constraintList.append(Sketcher.Constraint('Coincident', 3, 2, 0, 1))
+constraintList.append(Sketcher.Constraint('Horizontal', 0))
+constraintList.append(Sketcher.Constraint('Horizontal', 2))
+constraintList.append(Sketcher.Constraint('Vertical', 1))
+constraintList.append(Sketcher.Constraint('Vertical', 3))
+constraintList.append(Sketcher.Constraint('Symmetric', 2, 1, 0, 1, 4, 1))
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addConstraint(constraintList)
+del constraintList
+
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addConstraint(Sketcher.Constraint('Distance',1,1,3,2,100.000000)) 
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addConstraint(Sketcher.Constraint('Distance',0,1,2,2,80.000000)) 
+App.getDocument('Unnamed').getObject(nomeDoEsboco).addConstraint(Sketcher.Constraint('Coincident', 4, 1, -1, 1))
+
+
+### Begin command Sketcher_LeaveSketch
+Gui.activeDocument().resetEdit()
+App.ActiveDocument.recompute()
+ActiveSketch = App.getDocument('Unnamed').getObject(nomeDoEsboco)
+tv = ActiveSketch.ViewObject.TempoVis
+if tv:
+  tv.restore()
+ActiveSketch.ViewObject.TempoVis = None
+del(tv)
+del(ActiveSketch)
+
+App.ActiveDocument.recompute()
+
+# Criar extrusão
+App.getDocument('Unnamed').recompute()
+Gui.runCommand('Part_Extrude',0)
+App.getDocument('Unnamed').addObject('Part::Extrusion',nomeDaExtrusao)
+f = App.getDocument('Unnamed').getObject(nomeDaExtrusao)
+f.Base = App.getDocument('Unnamed').getObject(nomeDoEsboco)
+f.DirMode = "Normal"
+f.DirLink = None
+f.LengthFwd = 10.000000000000000
+f.LengthRev = 0.000000000000000
+f.Solid = True
+f.Reversed = False
+f.Symmetric = True
+f.TaperAngle = 0.000000000000000
+f.TaperAngleRev = 0.000000000000000
+App.getDocument('Unnamed').getObject(nomeDoEsboco).Visibility = False
+App.ActiveDocument.recompute()
+# Macro End: /home/hidraumak/Documentos/GitHub/Free-CAD-config/Macro/CriarChapaPart.FCMacro +++++++++++++++++++++++++++++++++++++++++++++++++
