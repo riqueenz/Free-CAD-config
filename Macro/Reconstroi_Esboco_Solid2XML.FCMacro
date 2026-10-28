@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
-# FreeCAD macro: reconstruir o primeiro esboço de um XML exportado pelo Solid2XML
+# FreeCAD macro: reconstrói o primeiro esboço de um XML exportado pelo Solid2XML.
+# Importa linhas, arcos e círculos; preserva geometria de construção.
 #
-# Uso:
-#   1. Abra o FreeCAD.
-#   2. Execute esta macro.
-#   3. Selecione o arquivo XML.
-#
-# A macro importa somente o primeiro <Esboco> encontrado dentro da árvore
-# de operações. Não importa cotas/restrições nem operações 3D.
-# As coordenadas XML estão em mm e são preservadas no plano XY do esboço.
-# O atributo geometria_construcao define se cada linha é auxiliar.
+# Observação sobre arcos: o XML precisa fornecer centro e ângulos, ou centro e
+# pontos inicial/final. Para um círculo completo com ponto inicial = ponto final,
+# a macro usa diâmetro cotado ou comprimento da circunferência, quando disponíveis.
 
-import os
 import xml.etree.ElementTree as ET
-
+import math
 import FreeCAD as App
 import Part
 import Sketcher
@@ -26,158 +20,372 @@ except ImportError:
     from PySide6 import QtCore
 
 
-def texto_bool(valor):
-    """Converte valores booleanos comuns do XML para bool."""
-    return str(valor or "").strip().lower() in (
+TOL = 1e-7
+
+
+def local_tag(element):
+    """Retorna o nome da tag sem eventual namespace XML."""
+    return element.tag.split("}")[-1] if "}" in element.tag else element.tag
+
+
+def child(parent, *names):
+    """Procura um filho direto por qualquer nome informado, ignorando maiúsculas."""
+    if parent is None:
+        return None
+    wanted = {n.casefold() for n in names}
+    for item in list(parent):
+        if local_tag(item).casefold() in wanted:
+            return item
+    return None
+
+
+def descendants(parent, *names):
+    """Lista descendentes com nomes de tag correspondentes."""
+    wanted = {n.casefold() for n in names}
+    if parent is None:
+        return []
+    return [item for item in parent.iter()
+            if item is not parent and local_tag(item).casefold() in wanted]
+
+
+def attr_bool(value):
+    if value is None:
+        return False
+    return str(value).strip().casefold() in (
         "true", "1", "sim", "yes", "verdadeiro"
     )
 
 
-def ler_coordenada(segmento, nome_ponto, eixo):
-    no = segmento.find("./{}/{}_mm".format(nome_ponto, eixo))
-    if no is None or no.text is None:
-        raise ValueError(
-            "Falta a coordenada {} de {} no XML.".format(
-                eixo, segmento.get("id", "segmento sem ID")
-            )
+def get_text(element, default=None):
+    if element is None or element.text is None:
+        return default
+    value = element.text.strip()
+    return value if value else default
+
+
+def number_text(element, default=None):
+    value = get_text(element)
+    if value is None:
+        return default
+    try:
+        return float(value.replace(",", "."))
+    except (TypeError, ValueError):
+        return default
+
+
+def number_from(parent, names, default=None, recursive=False):
+    """Lê o primeiro valor numérico em tags candidatas."""
+    if parent is None:
+        return default
+    if isinstance(names, str):
+        names = [names]
+    for name in names:
+        found = descendants(parent, name) if recursive else (
+            [child(parent, name)] if child(parent, name) is not None else []
         )
-    return float(no.text.strip())
+        for item in found:
+            value = number_text(item)
+            if value is not None:
+                return value
+    return default
 
 
-def primeiro_esboco_raiz(raiz):
-    """
-    Seleciona o primeiro esboço de uma operação ProfileFeature.
-    O XML pode repetir o mesmo esboço sob uma operação posterior, como
-    uma extrusão; por isso não importamos todos os elementos Esboco.
-    """
-    arvore = raiz.find("./ArvoreOperacoes")
-    if arvore is None:
-        raise ValueError("O XML não contém <ArvoreOperacoes>.")
+def point_from(segment, point_names):
+    """Lê ponto 2D de uma estrutura PontoInicial/PontoFinal, etc."""
+    point = child(segment, *point_names)
+    if point is None:
+        # Também aceita estruturas com nomes alternativos em descendentes.
+        candidates = descendants(segment, *point_names)
+        point = candidates[0] if candidates else None
+    if point is None:
+        return None
 
-    for operacao in arvore.findall("./Operacao"):
-        if operacao.get("tipo") != "ProfileFeature":
+    x = number_from(point, ["X_mm", "X", "x", "CoordenadaX"])
+    y = number_from(point, ["Y_mm", "Y", "y", "CoordenadaY"])
+    if x is None or y is None:
+        return None
+    return App.Vector(x, y, 0)
+
+
+def find_center(segment):
+    return point_from(segment, [
+        "Centro", "PontoCentro", "CentroArco", "CentroCirculo",
+        "Center", "CircleCenter", "ArcCenter"
+    ])
+
+
+def first_sketch(root):
+    """Escolhe o esboço da primeira operação ProfileFeature de nível superior."""
+    tree = child(root, "ArvoreOperacoes")
+    if tree is None:
+        raise ValueError("O XML não contém o elemento ArvoreOperacoes.")
+
+    for operation in list(tree):
+        if local_tag(operation).casefold() != "operacao":
             continue
-        esboco = operacao.find("./Esboco")
-        if esboco is not None:
-            return esboco
+        if operation.attrib.get("tipo", "").casefold() != "profilefeature":
+            continue
+        sketch = child(operation, "Esboco")
+        if sketch is not None:
+            return sketch
+
+    raise ValueError("Não foi encontrado um esboço (ProfileFeature) de nível superior.")
+
+
+def construction_flag(segment):
+    return attr_bool(segment.attrib.get("geometria_construcao", "False"))
+
+
+def segment_type(segment):
+    raw = (segment.attrib.get("tipo") or "").strip().casefold()
+    if raw in ("linha", "line", "reta", "linesegment"):
+        return "line"
+    if raw in ("circulo", "círculo", "circle", "circunferencia", "circunferência"):
+        return "circle"
+    if raw in ("arco", "arc", "arccircle", "arcsegment"):
+        return "arc"
+
+    # Fallback para exports que usem apenas tipo_codigo.
+    code = (segment.attrib.get("tipo_codigo") or "").strip()
+    if code == "1":
+        # Neste exportador, tipo="Arco" pode representar um círculo completo.
+        return "arc"
+    return raw
+
+
+def dimension_for_segment(sketch_xml, segment_id, dimension_types):
+    """Obtém valor de cota associada ao segmento (ex.: Diâmetro=100 mm)."""
+    dimensions = child(sketch_xml, "Cotas", "Dimensoes", "Dimensões")
+    if dimensions is None:
+        return None
+    for dim in list(dimensions):
+        if local_tag(dim).casefold() not in ("cota", "dimensao", "dimensão"):
+            continue
+        dim_type = (dim.attrib.get("tipo") or "").strip().casefold()
+        if dim_type not in {x.casefold() for x in dimension_types}:
+            continue
+        value = dim.attrib.get("valor_mm")
+        try:
+            value = float(value.replace(",", "."))
+        except (AttributeError, ValueError):
+            value = None
+        if value is None:
+            continue
+
+        associated = descendants(dim, "SegmentoAssociado")
+        ids = [a.attrib.get("id") for a in associated]
+        if not ids or segment_id in ids:
+            return value
+    return None
+
+
+def circle_radius(segment, sketch_xml):
+    """Determina raio por centro+início, diâmetro cotado ou comprimento."""
+    start = point_from(segment, ["PontoInicial", "PontoInicio", "StartPoint"])
+    center = find_center(segment)
+    if center is not None and start is not None:
+        radius = math.hypot(start.x - center.x, start.y - center.y)
+        if radius > TOL:
+            return radius, center
+
+    seg_id = segment.attrib.get("id")
+    diameter = dimension_for_segment(
+        sketch_xml, seg_id, ["Diametro", "Diâmetro", "Diameter"]
+    )
+    if diameter is not None and diameter > 0:
+        # O centro é a origem caso não tenha sido exportado. Esta escolha é
+        # apropriada para o XML de círculo completo mostrado, mas não universal.
+        if center is None:
+            center = App.Vector(0, 0, 0)
+        return diameter / 2.0, center
+
+    circumference = None
+    try:
+        circumference = float(
+            segment.attrib.get("comprimento_mm", "").replace(",", ".")
+        )
+    except (AttributeError, ValueError):
+        pass
+    if circumference is not None and circumference > 0:
+        radius = circumference / (2.0 * math.pi)
+        if center is None:
+            center = App.Vector(0, 0, 0)
+        return radius, center
+
+    return None, center
+
+
+def angle_from(segment, names):
+    value = number_from(segment, names, recursive=True)
+    return value
+
+
+def add_line(sketch, segment):
+    start = point_from(segment, ["PontoInicial", "PontoInicio", "StartPoint"])
+    end = point_from(segment, ["PontoFinal", "PontoFim", "EndPoint"])
+    if start is None or end is None:
+        raise ValueError("linha sem PontoInicial/PontoFinal válidos")
+    if (end - start).Length <= TOL:
+        raise ValueError("linha com comprimento zero")
+    geo = Part.LineSegment(start, end)
+    return sketch.addGeometry(geo, construction_flag(segment))
+
+
+def add_circle(sketch, segment, sketch_xml):
+    radius, center = circle_radius(segment, sketch_xml)
+    if radius is None or radius <= TOL:
+        raise ValueError("círculo sem raio/diâmetro/comprimento suficiente")
+    geo = Part.Circle(center, App.Vector(0, 0, 1), radius)
+    return sketch.addGeometry(geo, construction_flag(segment))
+
+
+def add_arc(sketch, segment, sketch_xml):
+    start = point_from(segment, ["PontoInicial", "PontoInicio", "StartPoint"])
+    end = point_from(segment, ["PontoFinal", "PontoFim", "EndPoint"])
+    center = find_center(segment)
+
+    # Primeiro, procura ângulos exportados explicitamente. Nomes comuns aceitos.
+    start_angle = angle_from(segment, [
+        "AnguloInicial_graus", "AnguloInicial", "ÂnguloInicial",
+        "AnguloInicio", "StartAngle", "StartAngle_deg", "AnguloInicial_deg"
+    ])
+    end_angle = angle_from(segment, [
+        "AnguloFinal_graus", "AnguloFinal", "ÂnguloFinal",
+        "AnguloFim", "EndAngle", "EndAngle_deg", "AnguloFinal_deg"
+    ])
+
+    radius, derived_center = circle_radius(segment, sketch_xml)
+    if center is None:
+        center = derived_center
+
+    if center is not None and radius is not None:
+        # Ângulos explícitos permitem reconstruir arcos que não sejam semicículos.
+        if start_angle is not None and end_angle is not None:
+            a1 = math.radians(start_angle)
+            a2 = math.radians(end_angle)
+            if abs(a2 - a1) <= TOL:
+                raise ValueError("arco com ângulos inicial e final iguais")
+            geo = Part.ArcOfCircle(
+                Part.Circle(center, App.Vector(0, 0, 1), radius), a1, a2
+            )
+            return sketch.addGeometry(geo, construction_flag(segment))
+
+        # Se há centro e pontos distintos, calcula os ângulos a partir dos pontos.
+        if start is not None and end is not None:
+            a1 = math.atan2(start.y - center.y, start.x - center.x)
+            a2 = math.atan2(end.y - center.y, end.x - center.x)
+            if (end - start).Length <= TOL:
+                # Ponto inicial = final e sem ângulos distintos: círculo completo.
+                geo = Part.Circle(center, App.Vector(0, 0, 1), radius)
+                return sketch.addGeometry(geo, construction_flag(segment))
+            while a2 <= a1:
+                a2 += 2.0 * math.pi
+            geo = Part.ArcOfCircle(
+                Part.Circle(center, App.Vector(0, 0, 1), radius), a1, a2
+            )
+            return sketch.addGeometry(geo, construction_flag(segment))
+
+    # Um arco com pontos diferentes, mas sem centro/ângulos/radio suficientes,
+    # não pode ser reconstruído de forma única. Evita inventar uma geometria.
+    if start is not None and end is not None and (end - start).Length <= TOL:
+        if radius is not None and radius > TOL:
+            geo = Part.Circle(center or App.Vector(0, 0, 0),
+                              App.Vector(0, 0, 1), radius)
+            return sketch.addGeometry(geo, construction_flag(segment))
 
     raise ValueError(
-        "Não foi encontrado um <Esboco> dentro de uma operação "
-        "do tipo ProfileFeature."
+        "arco sem centro e parâmetros angulares suficientes; "
+        "o XML precisa exportar centro e ângulos (ou centro + pontos + raio)"
     )
 
 
-def reconstruir_esboco(caminho_xml):
-    arvore_xml = ET.parse(caminho_xml)
-    raiz = arvore_xml.getroot()
-
-    if raiz.tag != "SolidWorksExport":
-        raise ValueError(
-            "O arquivo selecionado não parece ser um XML Solid2XML "
-            "(elemento raiz esperado: SolidWorksExport)."
-        )
-
-    elemento_esboco = primeiro_esboco_raiz(raiz)
-    nome_esboco = elemento_esboco.get("nome", "Esboco_Importado")
-    segmentos = elemento_esboco.findall("./Segmentos/Segmento")
-
-    if not segmentos:
-        raise ValueError("O esboço selecionado não contém segmentos.")
-
-    documento = App.newDocument("Reconstrucao_XML")
-    nome_objeto = "EsbocoReconstruido"
-    sketch = documento.addObject("Sketcher::SketchObject", nome_objeto)
-    sketch.Label = "{} (importado do XML)".format(nome_esboco)
-
-    importadas = 0
-    construcoes = 0
-    ignoradas = 0
-    erros = []
-
-    for segmento in segmentos:
-        tipo = (segmento.get("tipo") or "").strip().lower()
-
-        # Esta primeira versão reconstrói apenas segmentos lineares.
-        if tipo not in ("linha", "line"):
-            ignoradas += 1
-            continue
-
-        try:
-            x1 = ler_coordenada(segmento, "PontoInicial", "X")
-            y1 = ler_coordenada(segmento, "PontoInicial", "Y")
-            x2 = ler_coordenada(segmento, "PontoFinal", "X")
-            y2 = ler_coordenada(segmento, "PontoFinal", "Y")
-
-            # Esboço 2D no plano XY. Os valores numéricos do FreeCAD
-            # usam mm, a mesma unidade declarada no XML.
-            inicio = App.Vector(x1, y1, 0.0)
-            fim = App.Vector(x2, y2, 0.0)
-
-            construcao = texto_bool(segmento.get("geometria_construcao"))
-            indice = sketch.addGeometry(
-                Part.LineSegment(inicio, fim),
-                construcao
-            )
-
-            importadas += 1
-            if construcao:
-                construcoes += 1
-
-        except Exception as erro:
-            erros.append(
-                "{}: {}".format(segmento.get("id", "?"), str(erro))
-            )
-
-    documento.recompute()
-    Gui.activeDocument().activeView().viewTop()
-    Gui.activeDocument().activeView().fitAll()
-
-    mensagem = (
-        "Importação concluída.\n\n"
-        "Esboço XML: {}\n"
-        "Linhas importadas: {}\n"
-        "Linhas de construção: {}\n"
-        "Linhas normais: {}\n"
-        "Segmentos ignorados (não lineares): {}\n"
-    ).format(
-        nome_esboco,
-        importadas,
-        construcoes,
-        importadas - construcoes,
-        ignoradas
-    )
-
-    if erros:
-        mensagem += "\nProblemas encontrados:\n" + "\n".join(erros)
-
-    QtGui.QMessageBox.information(
-        Gui.getMainWindow(),
-        "Solid2XML — reconstrução do esboço",
-        mensagem
-    )
-
-    return sketch
-
-
-def executar():
-    caminho, _ = QtGui.QFileDialog.getOpenFileName(
-        Gui.getMainWindow(),
-        "Selecionar XML exportado pelo Solid2XML",
+def main():
+    filename, _ = QtGui.QFileDialog.getOpenFileName(
+        None,
+        "Selecione o XML exportado pelo Solid2XML",
         "",
         "Arquivos XML (*.xml);;Todos os arquivos (*)"
     )
-
-    if not caminho:
+    if not filename:
         return
 
     try:
-        reconstruir_esboco(caminho)
-    except Exception as erro:
+        tree = ET.parse(filename)
+        root = tree.getroot()
+        sketch_xml = first_sketch(root)
+        sketch_name = sketch_xml.attrib.get("nome", "Esboço importado")
+        segments_parent = child(sketch_xml, "Segmentos")
+        if segments_parent is None:
+            raise ValueError("O esboço XML não contém Segmentos.")
+
+        doc = App.newDocument("Reconstrucao_XML")
+        sketch = doc.addObject("Sketcher::SketchObject", "SketchImportado")
+        sketch.Label = sketch_name + " (importado do XML)"
+
+        counts = {"line": 0, "arc": 0, "circle": 0, "construction": 0}
+        ignored = 0
+        errors = []
+
+        for segment in list(segments_parent):
+            if local_tag(segment).casefold() != "segmento":
+                continue
+            kind = segment_type(segment)
+            is_construction = construction_flag(segment)
+            try:
+                if kind == "line":
+                    add_line(sketch, segment)
+                    counts["line"] += 1
+                elif kind == "circle":
+                    add_circle(sketch, segment, sketch_xml)
+                    counts["circle"] += 1
+                elif kind == "arc":
+                    # Se o XML chama o elemento de arco, mas seus pontos inicial
+                    # e final coincidem, a geometria é interpretada como círculo.
+                    start = point_from(segment, ["PontoInicial", "PontoInicio", "StartPoint"])
+                    end = point_from(segment, ["PontoFinal", "PontoFim", "EndPoint"])
+                    if start is not None and end is not None and (end - start).Length <= TOL:
+                        add_arc(sketch, segment, sketch_xml)
+                        counts["circle"] += 1
+                    else:
+                        add_arc(sketch, segment, sketch_xml)
+                        counts["arc"] += 1
+                else:
+                    ignored += 1
+                    continue
+                if is_construction:
+                    counts["construction"] += 1
+            except Exception as exc:
+                errors.append("{} ({}): {}".format(
+                    segment.attrib.get("id", "?"), kind, str(exc)
+                ))
+
+        doc.recompute()
+        try:
+            Gui.activeDocument().activeView().viewTop()
+            Gui.activeDocument().activeView().fitAll()
+        except Exception:
+            pass
+
+        message = (
+            "Importação concluída.\n\n"
+            "Linhas: {line}\nArcos: {arc}\nCírculos: {circle}\n"
+            "Geometrias de construção: {construction}\n"
+            "Segmentos ignorados: {ignored}\n"
+            "Segmentos com erro: {err_count}"
+        ).format(err_count=len(errors), ignored=ignored, **counts)
+
+        if errors:
+            message += "\n\nDetalhes:\n" + "\n".join(errors[:12])
+            if len(errors) > 12:
+                message += "\n... e mais {} erro(s).".format(len(errors) - 12)
+
+        QtGui.QMessageBox.information(None, "Solid2XML → FreeCAD", message)
+
+    except Exception as exc:
         QtGui.QMessageBox.critical(
-            Gui.getMainWindow(),
-            "Erro ao reconstruir esboço",
-            str(erro)
+            None, "Erro ao reconstruir o esboço",
+            "Não foi possível importar o XML:\n\n{}".format(str(exc))
         )
 
 
-executar()
+main()
